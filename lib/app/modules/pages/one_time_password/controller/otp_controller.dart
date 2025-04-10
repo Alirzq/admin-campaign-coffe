@@ -4,7 +4,7 @@ import '../../homepage/view/admin_homepage_view.dart';
 
 class OtpController extends GetxController {
   final List<TextEditingController> otpControllers =
-      List.generate(5, (index) => TextEditingController());
+  List.generate(5, (index) => TextEditingController());
   final List<FocusNode> focusNodes = List.generate(5, (index) => FocusNode());
 
   var errorMessage = ''.obs; // Pesan error observable
