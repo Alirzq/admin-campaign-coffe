@@ -30,17 +30,21 @@ class CustomNavbar extends StatelessWidget {
           hoverColor: Colors.grey[200]!,
           haptic: true,
           tabBorderRadius: 12,
-          tabActiveBorder: Border.all(color: Colors.blue.shade900, width: 2), // Stroke biru saat aktif
+          tabActiveBorder: Border.all(
+              color: Colors.blue.shade900, width: 2),
           tabBorder: Border.all(color: Colors.grey.shade300, width: 1),
-          tabShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5)],
+          tabShadow: [
+            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5)
+          ],
           curve: Curves.easeOutExpo,
           duration: const Duration(milliseconds: 400),
-          gap: 6, // Mengurangi jarak antara ikon dan teks
+          gap: 6,
           color: Colors.grey[800],
           activeColor: Colors.blue.shade900,
           iconSize: 24,
           tabBackgroundColor: Colors.blue.shade100.withOpacity(0.3),
-          padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 10), // Padding antar tab lebih kecil
+          padding: const EdgeInsets.symmetric(
+              horizontal: 27, vertical: 10),
           tabs: [
             _buildNavItem("assets/home-icon.svg", "Home"),
             _buildNavItem("assets/box-icon.svg", "Stock"),
@@ -55,9 +59,9 @@ class CustomNavbar extends StatelessWidget {
   GButton _buildNavItem(String assetPath, String label) {
     return GButton(
       text: label,
-      icon: Icons.circle, // Dummy icon, tidak akan terlihat karena pakai SVG
+      icon: Icons.circle,
       leading: SizedBox(
-        width: 22, // Ukuran ikon lebih proporsional
+        width: 22,
         height: 22,
         child: SvgPicture.asset(
           assetPath,
