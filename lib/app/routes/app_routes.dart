@@ -1,3 +1,7 @@
+import 'package:admin_campaign_coffe_repo/app/global-component/custom_navbar.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_widgets_view.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/orderlist/view/order_view.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/stock_management/view/stock_view.dart';
 import 'package:get/get.dart';
 import '../modules/pages/homepage/view/admin_homepage_view.dart';
 import '../modules/pages/login/binding/login_binding.dart';
@@ -14,9 +18,11 @@ class AppRoutes {
     GetPage(name: '/splash', page: () => SplashView()),
     GetPage(name: '/welcome', page: () => WelcomeScreen()),
     GetPage(name: '/login', page: () => LoginView(), binding: LoginBinding()),
-    GetPage(
-        name: '/signup', page: () => SignupView(), binding: SignupBinding()),
+    GetPage(name: '/signup', page: () => SignupView(), binding: SignupBinding()),
     GetPage(name: '/otp', page: () => OtpView(), binding: OtpBinding()),
     GetPage(name: '/home', page: () => HomepageView()),
+    GetPage(name: '/order', page: () => const OrderView()),
+    GetPage(name: '/stock', page: () => const StockView()),
+    GetPage(name: '/widget', page: () => const CustomWidgetView()),
   ];
 }
