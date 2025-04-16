@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../../global-component/custom_button.dart';
 import '../../../../global-component/input_field.dart';
 import '../../../../global-component/warning_massage.dart';
-import '../controller/signup_controller.dart';
+import '../../../../../controller/signup_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignupView extends StatelessWidget {
@@ -31,10 +31,10 @@ class SignupView extends StatelessWidget {
                       textStyle: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900,),
+                        color: Colors.blue.shade900,
+                      ),
                     ),
                   ),
-
                   SizedBox(height: 10),
                   Center(
                     child: Text(
