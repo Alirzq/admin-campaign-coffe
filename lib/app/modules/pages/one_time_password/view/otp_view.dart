@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../global-component/custom_button.dart';
 import '../../../../global-component/warning_massage.dart';
-import '../controller/otp_controller.dart';
+import '../../../../../controller/otp_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 
 class OtpView extends StatelessWidget {
   final OtpController controller = Get.put(OtpController());
@@ -32,17 +31,15 @@ class OtpView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24),
-
             Obx(() => controller.errorMessage.value.isNotEmpty
                 ? WarningMessage(message: controller.errorMessage.value)
                 : SizedBox()),
-
             Form(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   5,
-                      (index) => Container(
+                  (index) => Container(
                     width: 50,
                     height: 60,
                     margin: EdgeInsets.symmetric(horizontal: 5),
@@ -74,7 +71,6 @@ class OtpView extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24),
-
             CustomButton(
               text: 'Confirm',
               onPressed: controller.verifyOtp,
@@ -82,7 +78,6 @@ class OtpView extends StatelessWidget {
               textColor: Colors.white,
             ),
             SizedBox(height: 16),
-
             GestureDetector(
               onTap: controller.resendOtp,
               child: Text(

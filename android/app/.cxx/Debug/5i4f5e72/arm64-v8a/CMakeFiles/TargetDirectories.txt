@@ -1,0 +1,2 @@
+D:/Tugas Akhir Project/campaign coffe repo/admin_campaign_coffe_repo/android/app/.cxx/Debug/5i4f5e72/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Tugas Akhir Project/campaign coffe repo/admin_campaign_coffe_repo/android/app/.cxx/Debug/5i4f5e72/arm64-v8a/CMakeFiles/rebuild_cache.dir

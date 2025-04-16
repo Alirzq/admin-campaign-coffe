@@ -24,7 +24,7 @@ class _AdminHomepageState extends State<HomepageView>
   }
 
   void _handleTabChange() {
-    setState(() {}); // Update UI agar warna tab berubah saat di-swipe
+    setState(() {});
   }
 
   @override
@@ -33,7 +33,6 @@ class _AdminHomepageState extends State<HomepageView>
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
             decoration: BoxDecoration(
@@ -46,7 +45,7 @@ class _AdminHomepageState extends State<HomepageView>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 25),
+                SizedBox(height: 24),
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -73,9 +72,7 @@ class _AdminHomepageState extends State<HomepageView>
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 40),
-
-                // Tab Selector
+                SizedBox(height: 25),
                 Container(
                   height: 50,
                   padding: EdgeInsets.all(5),
@@ -101,7 +98,6 @@ class _AdminHomepageState extends State<HomepageView>
               ],
             ),
           ),
-
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -114,10 +110,7 @@ class _AdminHomepageState extends State<HomepageView>
           ),
         ],
       ),
-      bottomNavigationBar: CustomNavbar(
-        currentIndex: 0,
-        onTap: (index) {},
-      ),
+      bottomNavigationBar: const CustomNavbar(),
     );
   }
 

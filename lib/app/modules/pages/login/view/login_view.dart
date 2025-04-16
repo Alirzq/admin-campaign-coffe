@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../global-component/custom_button.dart';
 import '../../../../global-component/input_field.dart';
-import '../controller/login_controller.dart';
+import '../../../../../controller/login_controller.dart';
 import '../../signup/view/signup_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,18 +19,17 @@ class LoginView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
-              mainAxisSize:
-              MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Obx(() => controller.errorMessage.value.isNotEmpty
                     ? Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Text(
-                    controller.errorMessage.value,
-                    style: TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                )
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          controller.errorMessage.value,
+                          style: TextStyle(color: Colors.red, fontSize: 14),
+                        ),
+                      )
                     : SizedBox()),
 
                 Text(
@@ -39,7 +38,8 @@ class LoginView extends StatelessWidget {
                     textStyle: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue.shade900,),
+                      color: Colors.blue.shade900,
+                    ),
                   ),
                 ),
                 SizedBox(height: 30),
@@ -61,7 +61,6 @@ class LoginView extends StatelessWidget {
                 InputField(
                   controller: controller.usernameController,
                   hintText: 'Username',
-
                   filledColor: Color.fromARGB(255, 241, 244, 255),
                 ),
                 SizedBox(height: 16),
@@ -75,14 +74,12 @@ class LoginView extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {}, // Tambahkan aksi lupa password
-                    child: Text(
-                        "Forgot your password?",
+                    child: Text("Forgot your password?",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: const Color.fromARGB(255, 31, 65, 187),
-                        )
-                    ),
+                        )),
                   ),
                 ),
 
@@ -98,26 +95,22 @@ class LoginView extends StatelessWidget {
                 // Create Account
                 GestureDetector(
                   onTap: () => Get.to(() => SignupView()),
-                  child: Text(
-                      "Create new account",
+                  child: Text("Create new account",
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: const Color.fromARGB(255, 73, 73, 73),
-                      )
-                  ),
+                      )),
                 ),
                 SizedBox(height: 60),
 
                 // OR continue with
-                Text(
-                    "Or continue with",
+                Text("Or continue with",
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: const Color.fromARGB(255, 0, 0, 0),
-                    )
-                ),
+                    )),
                 SizedBox(height: 16),
 
                 // Google Login Button
