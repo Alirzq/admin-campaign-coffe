@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../../controller/stock_controller.dart';
 import '../../../../global-component/custom_navbar.dart';
 import '../../../../global-component/stock_card.dart';
+import '../../../../global-component/header_stock_view.dart';
 
 class StockView extends GetView<StockController> {
   const StockView({super.key});
@@ -15,7 +17,7 @@ class StockView extends GetView<StockController> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          _buildHeader(),
+          const HeaderStockView(), // Menggunakan header yang dipisah
           Expanded(
             child: Obx(() {
               final selectedCategory =
@@ -35,7 +37,6 @@ class StockView extends GetView<StockController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-                    // Category List
                     SizedBox(
                       height: 120,
                       child: ListView.builder(
@@ -73,7 +74,7 @@ class StockView extends GetView<StockController> {
                                           color: Colors.black.withOpacity(0.1),
                                           blurRadius: 5,
                                           spreadRadius: 2,
-                                          offset: Offset(0, 3),
+                                          offset: const Offset(0, 3),
                                         ),
                                       ],
                                     ),
@@ -152,66 +153,6 @@ class StockView extends GetView<StockController> {
         ],
       ),
       bottomNavigationBar: const CustomNavbar(),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade900,
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(24),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 25),
-          Row(
-            children: [
-              SvgPicture.asset(
-                'assets/waving-hand.svg',
-                width: 24,
-                height: 24,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "Hello",
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 1),
-          Text(
-            "Campaign Admin",
-            style: GoogleFonts.poppins(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
-            ),
-            child: const TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Search..',
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

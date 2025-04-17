@@ -49,7 +49,7 @@ class CustomNavbar extends StatelessWidget {
             color: iconColor,
             fontSize: 12,
             fontFamily: 'Poppins',
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
           );
 
           return GestureDetector(

@@ -102,8 +102,7 @@ class _AdminHomepageState extends State<HomepageView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                EarningsPage(
-                    isStoreOpen: isStoreOpen, onToggleStore: _toggleStore),
+                EarningsPage(),
                 GraphPage(),
               ],
             ),

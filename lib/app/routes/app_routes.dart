@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_widgets_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/orderlist/view/order_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/stock_management/view/stock_view.dart';
+import '../../binding/order_binding.dart';
 import '../modules/pages/homepage/view/admin_homepage_view.dart';
 import '../../binding/login_binding.dart';
 import '../../binding/signup_binding.dart';
@@ -22,7 +23,11 @@ class AppRoutes {
         name: '/signup', page: () => SignupView(), binding: SignupBinding()),
     GetPage(name: '/otp', page: () => OtpView(), binding: OtpBinding()),
     GetPage(name: '/home', page: () => HomepageView()),
-    GetPage(name: '/order', page: () => const OrderView()),
+    GetPage(
+      name: '/order',
+      page: () => const OrderView(),
+      binding: OrderBinding(),
+    ),
     GetPage(
       name: '/stock',
       page: () => const StockView(),
