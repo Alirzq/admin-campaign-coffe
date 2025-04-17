@@ -24,21 +24,26 @@ class OrderCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 5,
-            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(orderName, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(orderName,
+              style: GoogleFonts.poppins(
+                  fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 4),
-          Text(orderItems, style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),
+          Text(orderItems,
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),
           Divider(),
           Align(
             alignment: Alignment.bottomRight,
-            child: Text(price, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: Text(price,
+                style: GoogleFonts.poppins(
+                    fontSize: 16, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
