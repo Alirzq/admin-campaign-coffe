@@ -17,7 +17,7 @@ class StockView extends GetView<StockController> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const HeaderStockView(), // Menggunakan header yang dipisah
+          const HeaderStockView(),
           Expanded(
             child: Obx(() {
               final selectedCategory =
@@ -39,10 +39,12 @@ class StockView extends GetView<StockController> {
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 120,
-                      child: ListView.builder(
+                      child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         itemCount: controller.categories.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 25),
                         itemBuilder: (context, index) {
                           final isSelected =
                               index == controller.selectedCategoryIndex.value;
@@ -51,59 +53,55 @@ class StockView extends GetView<StockController> {
 
                           return GestureDetector(
                             onTap: () => controller.selectCategory(index),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 18, vertical: 20),
-                                    decoration: BoxDecoration(
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 18, vertical: 20),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.blue.shade100
+                                        : Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
                                       color: isSelected
-                                          ? Colors.blue.shade100
-                                          : Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: isSelected
-                                            ? Colors.blue
-                                            : Colors.transparent,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 5,
-                                          spreadRadius: 2,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
+                                          ? Colors.blue
+                                          : Colors.transparent,
                                     ),
-                                    child: SvgPicture.asset(
-                                      iconPath,
-                                      width: 28,
-                                      height: 28,
-                                      colorFilter: ColorFilter.mode(
-                                        isSelected
-                                            ? Colors.blue.shade900
-                                            : Colors.black,
-                                        BlendMode.srcIn,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 5,
+                                        spreadRadius: 2,
+                                        offset: const Offset(0, 3),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    categoryName,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: isSelected
+                                  child: SvgPicture.asset(
+                                    iconPath,
+                                    width: 28,
+                                    height: 28,
+                                    colorFilter: ColorFilter.mode(
+                                      isSelected
                                           ? Colors.blue.shade900
-                                          : Colors.black87,
+                                          : Colors.black,
+                                      BlendMode.srcIn,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  categoryName,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected
+                                        ? Colors.blue.shade900
+                                        : Colors.black87,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           );
                         },

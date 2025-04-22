@@ -1,6 +1,9 @@
+import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_menu_view.dart';
+import 'package:admin_campaign_coffe_repo/binding/custom_add_menu_binding.dart';
+import 'package:admin_campaign_coffe_repo/binding/custom_widgets_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/stock_binding.dart';
 import 'package:get/get.dart';
-import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_widgets_view.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_widgets.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/orderlist/view/order_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/stock_management/view/stock_view.dart';
 import '../../binding/order_binding.dart';
@@ -33,6 +36,10 @@ class AppRoutes {
       page: () => const StockView(),
       binding: StockBinding(),
     ),
-    GetPage(name: '/widget', page: () => const CustomWidgetView()),
+    GetPage(
+      name: '/widget',
+      page: () => const CustomWidgetView(),
+      binding: CustomWidgetBinding(),
+    ),
   ];
 }

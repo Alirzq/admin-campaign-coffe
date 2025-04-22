@@ -71,6 +71,10 @@ flutter:
     - assets/main_course.svg
     - assets/noodles.svg
     - assets/dummy_drink.png
+    - assets/banner_icon.svg
+    - assets/menu_food_icon.svg
+    - assets/table_icon.svg
+
 
 
   # The following line ensures that the Material Icons font is
