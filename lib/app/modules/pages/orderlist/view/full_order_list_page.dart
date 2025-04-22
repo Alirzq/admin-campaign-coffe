@@ -17,8 +17,8 @@ class FullOrderListPage extends GetView<OrderController> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.white, // warna putih
-            size: 28, // agak besar/tebal
+            color: Colors.white,
+            size: 28,
           ),
           onPressed: () => Get.back(),
         ),

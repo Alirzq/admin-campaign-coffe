@@ -68,7 +68,7 @@ class CustomNavbar extends StatelessWidget {
                   height: 27,
                   colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 9),
                 Text(item.label, style: textStyle),
               ],
             ),
