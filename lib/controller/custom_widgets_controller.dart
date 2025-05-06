@@ -1,4 +1,4 @@
-import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_banner_view';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_banner_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_menu_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_category_view.dart';
 

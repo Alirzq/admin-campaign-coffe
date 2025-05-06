@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../controller/order_controller.dart';
 import '../../../../global-component/custom_navbar.dart';
 import '../../../../global-component/header_order_view.dart';
-import '../../../../global-component/order_section_card.dart'; // ✅ import reusable component
+import '../../../../global-component/order_section_card.dart';
 
 import 'full_order_list_page.dart';
 import 'full_in_progress_page.dart';
@@ -18,7 +18,7 @@ class OrderView extends GetView<OrderController> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const HeaderAdmin(), // ✅ tetap di atas
+          const HeaderAdmin(),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(top: 16),

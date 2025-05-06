@@ -9,6 +9,7 @@ class CustomAddCategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D47A1),
         elevation: 0,
@@ -28,7 +29,6 @@ class CustomAddCategoryView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Upload image
           GestureDetector(
             onTap: () {},
             child: Container(
@@ -36,16 +36,29 @@ class CustomAddCategoryView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset('assets/banner_icon.svg',
-                        width: 40, height: 40, color: Colors.grey),
+                    SvgPicture.asset(
+                      'assets/banner_icon.svg',
+                      width: 40,
+                      height: 40,
+                      color: Colors.grey,
+                    ),
                     const SizedBox(height: 8),
-                    const Text("Click to upload image",
-                        style: TextStyle(color: Colors.grey)),
+                    const Text(
+                      "Click to upload image",
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ],
                 ),
               ),
@@ -55,6 +68,30 @@ class CustomAddCategoryView extends StatelessWidget {
           _buildTextField("Title", "enter your title"),
           const SizedBox(height: 16),
           _buildTextField("Description", "enter your description", maxLines: 3),
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0D47A1),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+                shadowColor: Colors.black45,
+              ),
+              onPressed: () {},
+              child: Text(
+                'Add',
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -72,19 +109,31 @@ class CustomAddCategoryView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            filled: true,
-            fillColor: const Color(0xFFF1F3FF),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+        Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            maxLines: maxLines,
+            decoration: InputDecoration(
+              hintText: hint,
+              filled: true,
+              fillColor: const Color(0xFFF1F3FF),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
         ),

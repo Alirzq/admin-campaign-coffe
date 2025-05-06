@@ -107,7 +107,6 @@ class StockView extends GetView<StockController> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(

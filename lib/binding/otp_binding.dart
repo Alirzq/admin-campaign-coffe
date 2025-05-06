@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import '../controller/otp_controller.dart'; // Import controller untuk OTP
+import '../controller/otp_controller.dart';
 
 class OtpBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<OtpController>(() => OtpController()); // Mengatur OtpController
+    Get.lazyPut<OtpController>(() => OtpController());
   }
 }

@@ -7,7 +7,7 @@ class OtpController extends GetxController {
       List.generate(5, (index) => TextEditingController());
   final List<FocusNode> focusNodes = List.generate(5, (index) => FocusNode());
 
-  var errorMessage = ''.obs; // Pesan error observable
+  var errorMessage = ''.obs;
 
   void onOtpChange(String value, int index) {
     if (value.isNotEmpty && index < 4) {
@@ -21,7 +21,7 @@ class OtpController extends GetxController {
       errorMessage.value = "Please enter a valid OTP.";
     } else {
       errorMessage.value = '';
-      Get.offAll(() => HomepageView()); // ✅ Navigasi langsung ke Homepage
+      Get.offAllNamed('/home');
     }
   }
 

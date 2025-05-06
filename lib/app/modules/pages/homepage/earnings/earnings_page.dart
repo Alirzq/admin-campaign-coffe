@@ -1,4 +1,3 @@
-import 'package:admin_campaign_coffe_repo/app/modules/pages/orderlist/view/order_view.dart';
 import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,54 +17,7 @@ class EarningsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ Store Switch
-          Center(
-            child: Obx(() => Container(
-                  constraints: const BoxConstraints(maxWidth: 350),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 245, 245, 245),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 6,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.store,
-                              color: Colors.blue.shade900, size: 30),
-                          const SizedBox(width: 10),
-                          Text(
-                            "Store is ${controller.isStoreOpen.value ? "Open" : "Closed"}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Switch(
-                        value: controller.isStoreOpen.value,
-                        onChanged: controller.toggleStore,
-                        activeColor: Colors.blue.shade900,
-                      ),
-                    ],
-                  ),
-                )),
-          ),
-
           const SizedBox(height: 20),
-
-          // ✅ Total Sales
           Center(
             child: Column(
               children: [
@@ -86,15 +38,12 @@ class EarningsPage extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // ✅ Stats Cards
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               StatCard(
-                title: "Avg Per Week",
+                title: "Avg Per Month",
                 value: "Rp 500.000",
                 titleColor: const Color.fromARGB(255, 98, 98, 98),
                 valueColor: const Color.fromARGB(255, 98, 98, 98),
@@ -111,10 +60,7 @@ class EarningsPage extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
-          // ✅ New Orders
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -124,7 +70,6 @@ class EarningsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -141,7 +86,7 @@ class EarningsPage extends StatelessWidget {
                           Get.put(OrderController());
                         }
 
-                        Get.to(() => const OrderView());
+                        Get.offAllNamed('/order');
                       },
                       child: Text(
                         "View All",
@@ -155,10 +100,8 @@ class EarningsPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-
-                // List Order dari Controller
                 Obx(() => SizedBox(
-                      height: 200,
+                      height: 260,
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         physics: const ClampingScrollPhysics(),
