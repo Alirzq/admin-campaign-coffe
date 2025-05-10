@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 6, // Memberi lebih banyak ruang ke gambar
+            flex: 6,
             child: Stack(
               children: [
                 Positioned(
@@ -34,8 +34,6 @@ class WelcomeScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // Bagian tengah dengan teks
           Expanded(
             flex: 3,
             child: Padding(
@@ -65,8 +63,6 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // Bagian bawah dengan tombol ElevatedButton
           Padding(
             padding: const EdgeInsets.only(bottom: 70.0),
             child: SizedBox(

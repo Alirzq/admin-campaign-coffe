@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../global-component/custom_button.dart';
 import '../../../../global-component/input_field.dart';
 import '../../../../../controller/login_controller.dart';
 import '../../signup/view/signup_view.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../../homepage/view/admin_homepage_view.dart';
 
 class LoginView extends StatelessWidget {
   final LoginController controller = Get.put(LoginController());
@@ -22,6 +23,9 @@ class LoginView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 30),
+
+                // Error Message
                 Obx(() => controller.errorMessage.value.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
@@ -32,6 +36,7 @@ class LoginView extends StatelessWidget {
                       )
                     : SizedBox()),
 
+                // Title
                 Text(
                   "Login here",
                   style: GoogleFonts.poppins(
@@ -43,6 +48,8 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
+
+                // Welcome text
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 50),
                   child: Center(
@@ -57,23 +64,30 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 100),
+
+                // Username Field
                 InputField(
-                  controller: controller.usernameController,
-                  hintText: 'Username',
+                  controller: controller.emailController,
+                  hintText: 'email',
                   filledColor: Color.fromARGB(255, 241, 244, 255),
                 ),
                 SizedBox(height: 16),
+
+                // Password Field
                 InputField(
                   controller: controller.passwordController,
                   hintText: 'Password',
                   obscureText: true,
                   filledColor: Color.fromARGB(255, 241, 244, 255),
                 ),
+
+                // Forgot Password
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {}, // Tambahkan aksi lupa password
+                    onPressed: () {},
                     child: Text("Forgot your password?",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
@@ -83,13 +97,19 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
 
-                // Login Button
-                CustomButton(
-                  text: 'Sign in',
-                  onPressed: controller.login,
-                  backgroundColor: Colors.blue.shade900,
-                  textColor: Colors.white,
-                ),
+                // Sign In Button with Loading
+                Obx(() => CustomButton(
+                      text:
+                          controller.isLoading.value ? 'Loading...' : 'Sign in',
+                      onPressed: () {
+                        if (!controller.isLoading.value) {
+                          controller.login();
+                        }
+                      },
+                      backgroundColor: Colors.blue.shade900,
+                      textColor: Colors.white,
+                    )),
+
                 SizedBox(height: 18),
 
                 // Create Account
@@ -104,7 +124,7 @@ class LoginView extends StatelessWidget {
                 ),
                 SizedBox(height: 60),
 
-                // OR continue with
+                // OR
                 Text("Or continue with",
                     style: GoogleFonts.poppins(
                       fontSize: 14,
@@ -116,7 +136,7 @@ class LoginView extends StatelessWidget {
                 // Google Login Button
                 GestureDetector(
                   onTap: () {
-                    // Tambahkan fungsi login dengan Google di sini
+                    // Tambah login Google di sini nanti
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
