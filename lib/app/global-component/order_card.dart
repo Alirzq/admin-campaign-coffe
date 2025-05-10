@@ -39,7 +39,7 @@ class OrderCard extends StatelessWidget {
           children: [
             Text(orderName,
                 style: GoogleFonts.poppins(
-                    fontSize: 16, fontWeight: FontWeight.bold)),
+                    fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
             Text(orderItems,
                 style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),

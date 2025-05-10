@@ -38,7 +38,7 @@ class FullDeliverPage extends GetView<OrderController> {
                 Get.to(() => OrderDetailDeliverPage(
                       orderName: order['orderName'] ?? '-',
                       orderItems: order['orderItems'] ?? '-',
-                      price: 'Rp. ${order['price'] ?? '0'}',
+                      price: '${order['price'] ?? '0'}',
                     ));
               },
             );

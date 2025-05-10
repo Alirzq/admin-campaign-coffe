@@ -17,8 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/home',
+      initialRoute: '/splash',
       getPages: AppRoutes.routes,
+      defaultTransition: Transition.noTransition,
+      transitionDuration: const Duration(milliseconds: 300),
+      opaqueRoute: true,
     );
   }
 }

@@ -19,18 +19,18 @@ class OrderDetailDeliverPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         centerTitle: true,
         title: Text(
           "Detail Orders",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Get.back(),
         ),
       ),
@@ -74,7 +74,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
                         orderName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 20,
                           color: Colors.white,
                         ),
                       ),
@@ -88,8 +88,8 @@ class OrderDetailDeliverPage extends StatelessWidget {
                     Text(
                       'Order List',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),
@@ -99,7 +99,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
                       children: [
                         Text('1. Chocolate',
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
+                                fontWeight: FontWeight.w400, fontSize: 14)),
                         Text('Rp. 15000',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
@@ -110,12 +110,12 @@ class OrderDetailDeliverPage extends StatelessWidget {
                       children: [
                         Text('2. Taro Latte',
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
+                                fontWeight: FontWeight.w400, fontSize: 14)),
+                        Text('RP. 15000',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
                     ),
-                    const Divider(height: 24),
+                    const Divider(height: 20),
                     infoRow("Total Order :", "2 items"),
                     infoRow("Total Price :", price),
                     infoRow("Payment Method:", "OVO"),
@@ -129,7 +129,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 25, 164, 10),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 50),
+                          vertical: 1, horizontal: 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -139,7 +139,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -160,10 +160,10 @@ class OrderDetailDeliverPage extends StatelessWidget {
         children: [
           Text(title,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w500)),
+                  fontSize: 14, fontWeight: FontWeight.w400)),
           Text(value,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w500)),
+                  fontSize: 14, fontWeight: FontWeight.w400)),
         ],
       ),
     );

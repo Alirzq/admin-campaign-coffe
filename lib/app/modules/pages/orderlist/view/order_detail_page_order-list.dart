@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OrderDetailPage extends StatelessWidget {
-  const OrderDetailPage({super.key});
+  const OrderDetailPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +63,10 @@ class OrderDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Cindo',
+                        'cindo',
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 20,
                           color: Colors.white,
                         ),
                       ),
@@ -78,8 +80,8 @@ class OrderDetailPage extends StatelessWidget {
                     Text(
                       'Order List',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),
@@ -105,7 +107,7 @@ class OrderDetailPage extends StatelessWidget {
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
                     ),
-                    const Divider(height: 24),
+                    const Divider(height: 20),
                     infoRow("Total Order :", "2 items"),
                     infoRow("Total Price :", "Rp. 30000"),
                     infoRow("Payment Method:", "OVO"),
@@ -120,7 +122,8 @@ class OrderDetailPage extends StatelessWidget {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D47A1),
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -140,7 +143,8 @@ class OrderDetailPage extends StatelessWidget {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

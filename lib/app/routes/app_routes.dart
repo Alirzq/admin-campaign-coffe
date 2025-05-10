@@ -17,29 +17,50 @@ import '../modules/pages/signup/view/signup_view.dart';
 import '../modules/pages/one_time_password/view/otp_view.dart';
 import '../../binding/otp_binding.dart';
 
+class MyRoutes {
+  static const String splash = '/splash';
+  static const String welcome = '/welcome';
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String otp = '/otp';
+  static const String home = '/home';
+  static const String order = '/order';
+  static const String stock = '/stock';
+  static const String widget = '/widget';
+  static const String addMenu = '/add-menu';
+}
+
 class AppRoutes {
   static final routes = [
-    GetPage(name: '/splash', page: () => SplashView()),
-    GetPage(name: '/welcome', page: () => WelcomeScreen()),
-    GetPage(name: '/login', page: () => LoginView(), binding: LoginBinding()),
+    GetPage(name: MyRoutes.splash, page: () => SplashView()),
+    GetPage(name: MyRoutes.welcome, page: () => WelcomeScreen()),
     GetPage(
-        name: '/signup', page: () => SignupView(), binding: SignupBinding()),
-    GetPage(name: '/otp', page: () => OtpView(), binding: OtpBinding()),
-    GetPage(name: '/home', page: () => HomepageView()),
+        name: MyRoutes.login, page: () => LoginView(), binding: LoginBinding()),
     GetPage(
-      name: '/order',
+        name: MyRoutes.signup,
+        page: () => SignupView(),
+        binding: SignupBinding()),
+    GetPage(name: MyRoutes.otp, page: () => OtpView(), binding: OtpBinding()),
+    GetPage(name: MyRoutes.home, page: () => HomepageView()),
+    GetPage(
+      name: MyRoutes.order,
       page: () => const OrderView(),
       binding: OrderBinding(),
     ),
     GetPage(
-      name: '/stock',
+      name: MyRoutes.stock,
       page: () => const StockView(),
       binding: StockBinding(),
     ),
     GetPage(
-      name: '/widget',
+      name: MyRoutes.widget,
       page: () => const CustomWidgetView(),
       binding: CustomWidgetBinding(),
+    ),
+    GetPage(
+      name: MyRoutes.addMenu,
+      page: () => CustomAddMenuView(),
+      binding: CustomAddMenuBinding(),
     ),
   ];
 }

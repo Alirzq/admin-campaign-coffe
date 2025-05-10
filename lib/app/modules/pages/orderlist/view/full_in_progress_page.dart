@@ -38,7 +38,7 @@ class FullInProgressPage extends GetView<OrderController> {
                 Get.to(() => OrderInProgressDetailPage(
                       orderName: order['orderName'] ?? '-',
                       orderItems: order['orderItems'] ?? '-',
-                      price: 'Rp. ${order['price'] ?? '0'}',
+                      price: '${order['price'] ?? '0'}',
                     ));
               },
             );

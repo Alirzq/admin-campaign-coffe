@@ -75,7 +75,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                         orderName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 20,
                           color: Colors.white,
                         ),
                       ),
@@ -90,7 +90,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                       'Order List',
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500,
-                        fontSize: 14,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),
@@ -116,7 +116,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
                     ),
-                    const Divider(height: 24),
+                    const Divider(height: 20),
                     _infoRow("Total Order :", "2 items"),
                     _infoRow("Total Price :", price),
                     _infoRow("Payment Method :", "OVO"),
@@ -130,7 +130,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 164, 159, 10),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 50),
+                          vertical: 1, horizontal: 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -140,7 +140,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 20,
                       ),
                     ),
                   ),
