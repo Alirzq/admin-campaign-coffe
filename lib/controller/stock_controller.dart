@@ -8,6 +8,7 @@ class StockController extends GetxController {
   final categories =
       ["Coffee", "Non Coffee", "Snack", "Main Course", "Noodles"].obs;
   final selectedCategoryIndex = 0.obs;
+  final RxMap<String, int> stockAmounts = <String, int>{}.obs;
 
   @override
   void onInit() {
@@ -35,10 +36,16 @@ class StockController extends GetxController {
         .map((product) => {
               'title': product.name,
               'desc': product.description,
-              'amount': product.price,
+              'amount': stockAmounts[product.name]?.toString() ?? '0',
               'image': product.image,
             })
         .toList();
+  }
+
+  void incrementStock(String productName) {
+    final currentAmount = stockAmounts[productName] ?? 0;
+    stockAmounts[productName] = currentAmount + 1;
+    update();
   }
 
   void selectCategory(int index) {

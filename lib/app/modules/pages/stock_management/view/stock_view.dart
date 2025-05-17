@@ -137,7 +137,7 @@ class StockView extends GetView<StockController> {
                           title: item['title'],
                           category: selectedCategory,
                           amount: item['amount'],
-                          onAdd: () {},
+                          onAdd: () => controller.incrementStock(item['title']),
                         );
                       },
                     ),
