@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../global-component/graph_component/line_chart_widget.dart';
-import '../../../../global-component/stat_card.dart';
+import '../../../../global-component/widget/stat_card.dart';
 
 class GraphPage extends StatelessWidget {
   @override

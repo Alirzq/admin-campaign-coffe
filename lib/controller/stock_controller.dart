@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../app/data/models/product_model.dart';
-import '../app/data/services/product_service.dart';
+import '../app/modules/api/models/product_model.dart';
+import '../app/modules/api/services/product_service.dart';
 
 class StockController extends GetxController {
   final ProductService _productService = ProductService();

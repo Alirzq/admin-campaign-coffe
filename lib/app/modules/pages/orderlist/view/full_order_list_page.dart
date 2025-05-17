@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../controller/order_controller.dart';
-import '../../../../global-component/order_card.dart';
+import '../../../../global-component/order/order_card.dart';
 import 'order_detail_page_order-list.dart';
 
 class FullOrderListPage extends GetView<OrderController> {

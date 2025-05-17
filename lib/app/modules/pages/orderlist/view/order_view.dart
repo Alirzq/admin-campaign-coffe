@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../controller/order_controller.dart';
-import '../../../../global-component/custom_navbar.dart';
-import '../../../../global-component/header_order_view.dart';
-import '../../../../global-component/order_section_card.dart';
+import '../../../../global-component/widget/custom_navbar.dart';
+import '../../../../global-component/order/header_order_view.dart';
+import '../../../../global-component/order/order_section_card.dart';
 
 import 'full_order_list_page.dart';
 import 'full_in_progress_page.dart';

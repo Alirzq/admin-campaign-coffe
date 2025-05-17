@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../controller/stock_controller.dart';
-import '../../../../global-component/custom_navbar.dart';
-import '../../../../global-component/stock_card.dart';
-import '../../../../global-component/header_stock_view.dart';
+import '../../../../global-component/widget/custom_navbar.dart';
+import '../../../../global-component/stock/stock_card.dart';
+import '../../../../global-component/stock/header_stock_view.dart';
 
 class StockView extends GetView<StockController> {
   const StockView({super.key});

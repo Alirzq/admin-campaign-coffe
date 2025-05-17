@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../global-component/custom_button.dart';
-import '../../../../global-component/input_field.dart';
-import '../../../../global-component/warning_massage.dart';
+import '../../../../global-component/widget/custom_button.dart';
+import '../../../../global-component/widget/input_field.dart';
+import '../../../../global-component/widget/warning_massage.dart';
 import '../../../../../controller/signup_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 

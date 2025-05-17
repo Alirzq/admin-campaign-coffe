@@ -1,6 +1,6 @@
-import 'package:admin_campaign_coffe_repo/app/global-component/header_custom_widgets.dart';
-import 'package:admin_campaign_coffe_repo/app/global-component/custom_navbar.dart';
-import 'package:admin_campaign_coffe_repo/app/global-component/widget_card.dart';
+import 'package:admin_campaign_coffe_repo/app/global-component/widget/header_custom_widgets.dart';
+import 'package:admin_campaign_coffe_repo/app/global-component/widget/custom_navbar.dart';
+import 'package:admin_campaign_coffe_repo/app/global-component/widget/widget_card.dart';
 import 'package:admin_campaign_coffe_repo/controller/custom_widgets_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

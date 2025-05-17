@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../controller/earnings_controller.dart';
-import '../../../../global-component/order_card.dart';
-import '../../../../global-component/stat_card.dart';
+import '../../../../global-component/order/order_card.dart';
+import '../../../../global-component/widget/stat_card.dart';
 
 class EarningsPage extends StatelessWidget {
   EarningsPage({super.key});
