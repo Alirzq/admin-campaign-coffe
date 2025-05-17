@@ -13,11 +13,56 @@ class EarningsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 245, 245, 245),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.store,
+                      color: Colors.blue.shade900,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Store is Open",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+                Obx(() => Switch(
+                      value: controller.isStoreOpen.value,
+                      onChanged: (bool value) {
+                        controller.toggleStore(value);
+                      },
+                      activeColor: Colors.blue.shade900,
+                    )),
+              ],
+            ),
+          ),
+          const SizedBox(height: 35),
           Center(
             child: Column(
               children: [
@@ -31,7 +76,7 @@ class EarningsPage extends StatelessWidget {
                 Text(
                   "Rp 500.000",
                   style: GoogleFonts.poppins(
-                      fontSize: 40,
+                      fontSize: 34,
                       fontWeight: FontWeight.w700,
                       color: Colors.blue.shade900),
                 ),
@@ -50,6 +95,9 @@ class EarningsPage extends StatelessWidget {
                 titleFontWeight: FontWeight.w600,
                 valueFontWeight: FontWeight.w800,
               ),
+              SizedBox(
+                width: 20,
+              ),
               StatCard(
                 title: "Formings Growth",
                 value: "12%",
@@ -60,7 +108,7 @@ class EarningsPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -76,8 +124,8 @@ class EarningsPage extends StatelessWidget {
                     Text(
                       "New Order",
                       style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                           color: Colors.blue.shade900),
                     ),
                     TextButton(
@@ -93,7 +141,7 @@ class EarningsPage extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: Colors.blue.shade900,
+                          color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                     ),
