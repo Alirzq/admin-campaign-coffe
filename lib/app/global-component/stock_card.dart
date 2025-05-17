@@ -4,15 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 class StockCard extends StatelessWidget {
   final String imagePath;
   final String title;
-  final String description;
-  final int amount;
+  final String category;
+  final String amount;
   final VoidCallback onAdd;
 
   const StockCard({
     Key? key,
     required this.imagePath,
     required this.title,
-    required this.description,
+    required this.category,
     required this.amount,
     required this.onAdd,
   }) : super(key: key);
@@ -20,9 +20,8 @@ class StockCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -50,11 +49,19 @@ class StockCard extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
+              child: Image.network(
                 imagePath,
-                height: 140,
+                height: 120,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 120,
+                    width: double.infinity,
+                    color: Colors.grey[200],
+                    child: Icon(Icons.error_outline, color: Colors.grey[400]),
+                  );
+                },
               ),
             ),
           ),
@@ -62,16 +69,25 @@ class StockCard extends StatelessWidget {
           Text(
             title,
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            description,
-            style: GoogleFonts.poppins(
-              color: Colors.grey,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              category,
+              style: GoogleFonts.poppins(
+                fontSize: 9,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           const SizedBox(height: 3),
@@ -79,10 +95,10 @@ class StockCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Amount : $amount",
+                "Amount : 69",
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               GestureDetector(

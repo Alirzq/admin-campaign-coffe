@@ -135,7 +135,7 @@ class StockView extends GetView<StockController> {
                         return StockCard(
                           imagePath: item['image'],
                           title: item['title'],
-                          description: item['desc'],
+                          category: selectedCategory,
                           amount: item['amount'],
                           onAdd: () {},
                         );
