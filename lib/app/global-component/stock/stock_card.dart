@@ -22,6 +22,10 @@ class StockCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(4),
       padding: const EdgeInsets.all(8),
+      constraints: const BoxConstraints(
+        minHeight: 320,
+        minWidth: 320,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -52,12 +56,12 @@ class StockCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 imagePath,
-                height: 100,
-                width: double.infinity,
+                height: 145,
+                width: 158,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    height: 100,
+                    height: 160,
                     width: double.infinity,
                     color: Colors.grey[200],
                     child: Icon(Icons.error_outline, color: Colors.grey[400]),
@@ -66,17 +70,16 @@ class StockCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 3),
           Text(
             title,
             style: GoogleFonts.poppins(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
             decoration: BoxDecoration(
@@ -91,15 +94,14 @@ class StockCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 3),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Amount : $amount",
                 style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                   color: Colors.blue.shade900,
                 ),
               ),
@@ -124,7 +126,7 @@ class StockCard extends StatelessWidget {
                     ),
                     child: const Icon(
                       Icons.add,
-                      size: 20,
+                      size: 15,
                       color: Colors.white,
                     ),
                   ),
