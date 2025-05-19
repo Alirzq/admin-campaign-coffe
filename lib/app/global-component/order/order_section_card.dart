@@ -20,7 +20,7 @@ class OrderSectionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color.fromARGB(255, 245, 245, 245),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(

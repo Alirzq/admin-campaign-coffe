@@ -17,52 +17,6 @@ class EarningsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 245, 245, 245),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.store,
-                      color: Colors.blue.shade900,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Store is Open",
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue.shade900,
-                      ),
-                    ),
-                  ],
-                ),
-                Obx(() => Switch(
-                      value: controller.isStoreOpen.value,
-                      onChanged: (bool value) {
-                        controller.toggleStore(value);
-                      },
-                      activeColor: Colors.blue.shade900,
-                    )),
-              ],
-            ),
-          ),
-          const SizedBox(height: 35),
           Center(
             child: Column(
               children: [
