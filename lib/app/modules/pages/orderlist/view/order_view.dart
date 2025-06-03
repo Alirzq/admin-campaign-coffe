@@ -1,49 +1,124 @@
+import 'package:admin_campaign_coffe_repo/app/global-component/widget/custom_navbar.dart';
+import 'package:admin_campaign_coffe_repo/app/global-component/widget/tab_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../../controller/order_controller.dart';
-import '../../../../global-component/widget/custom_navbar.dart';
-import '../../../../global-component/order/header_order_view.dart';
-import '../../../../global-component/order/order_section_card.dart';
+import '../../../../../controller/pickup_controller.dart';
 
-import 'full_order_list_page.dart';
-import 'full_in_progress_page.dart';
-import 'full_deliver_page.dart';
+import 'order_page.dart';
+import 'pickup_page.dart';
 
-class OrderView extends GetView<OrderController> {
+class OrderView extends StatefulWidget {
   const OrderView({super.key});
+
+  @override
+  State<OrderView> createState() => _OrderViewState();
+}
+
+class _OrderViewState extends State<OrderView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final OrderController orderController = Get.put(OrderController());
+  final PickupController pickupController = Get.put(PickupController());
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          const HeaderAdmin(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 24),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade900,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                Row(
                   children: [
-                    OrderSectionCard(
-                      title: "Order List",
-                      data: controller.orderList[0],
-                      onTap: () => Get.to(() => const FullOrderListPage()),
+                    SvgPicture.asset(
+                      'assets/waving-hand.svg',
+                      width: 24,
+                      height: 24,
                     ),
-                    OrderSectionCard(
-                      title: "In-Progress",
-                      data: controller.inProgressList[0],
-                      onTap: () => Get.to(() => const FullInProgressPage()),
-                    ),
-                    OrderSectionCard(
-                      title: "Deliver",
-                      data: controller.deliverList[0],
-                      onTap: () => Get.to(() => const FullDeliverPage()),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Hello",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 1),
+                Text(
+                  "Campaign Admin",
+                  style: GoogleFonts.poppins(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      TabButton(
+                        title: "Deliver",
+                        isSelected: _tabController.index == 0,
+                        onTap: () => _tabController.animateTo(0),
+                      ),
+                      TabButton(
+                        title: "Pickup",
+                        isSelected: _tabController.index == 1,
+                        onTap: () => _tabController.animateTo(1),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: const [
+                OrderPage(),
+                PickupPage(),
+              ],
             ),
           ),
         ],

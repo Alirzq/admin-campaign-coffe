@@ -27,12 +27,6 @@ class CustomWidgetView extends GetView<CustomWidgetController> {
                 ),
                 const SizedBox(height: 30),
                 WidgetCard(
-                  title: 'Category',
-                  iconPath: 'assets/table_icon.svg',
-                  onTap: controller.goToCategory,
-                ),
-                const SizedBox(height: 30),
-                WidgetCard(
                   title: 'Menu',
                   iconPath: 'assets/menu_food_icon.svg',
                   onTap: controller.goToAddMenuWidget,
