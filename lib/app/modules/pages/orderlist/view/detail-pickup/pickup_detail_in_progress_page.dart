@@ -2,30 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OrderDetailDeliverPage extends StatelessWidget {
-  final String orderName;
-  final String orderItems;
+class PickupInProgressDetailPage extends StatelessWidget {
+  final String pickupName;
+  final String pickupItems;
   final String price;
 
-  const OrderDetailDeliverPage({
+  const PickupInProgressDetailPage({
     super.key,
-    required this.orderName,
-    required this.orderItems,
+    required this.pickupName,
+    required this.pickupItems,
     required this.price,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Detail Orders",
+          'Detail Pickup',
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
@@ -48,7 +49,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
                   color: Colors.black26,
                   blurRadius: 8,
                   offset: Offset(0, 4),
-                )
+                ),
               ],
             ),
             child: Column(
@@ -71,10 +72,10 @@ class OrderDetailDeliverPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        orderName,
+                        pickupName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
-                          fontSize: 20,
+                          fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
@@ -86,10 +87,10 @@ class OrderDetailDeliverPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Order List',
+                      'Pickup List',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
@@ -97,9 +98,9 @@ class OrderDetailDeliverPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('1. Chocolate',
+                        Text('1.  Chocolate',
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400, fontSize: 14)),
+                                fontWeight: FontWeight.w600, fontSize: 14)),
                         Text('Rp. 15000',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
@@ -108,38 +109,38 @@ class OrderDetailDeliverPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('2. Taro Latte',
+                        Text('2.  Taro Latte',
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400, fontSize: 14)),
-                        Text('RP. 15000',
+                                fontWeight: FontWeight.w600, fontSize: 14)),
+                        Text('Rp. 15000',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
                     ),
-                    const Divider(height: 20),
-                    infoRow("Total Order :", "2 items"),
-                    infoRow("Total Price :", price),
-                    infoRow("Payment Method:", "OVO"),
-                    infoRow("Location:", "Jl. Contoh No. 123"),
+                    const Divider(height: 24),
+                    _infoRow("Total Pickup :", "2 items"),
+                    _infoRow("Total Price :", price),
+                    _infoRow("Payment Method :", "OVO"),
+                    _infoRow("Location :", "Jl. Contoh No. 123"),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 25, 164, 10),
+                      backgroundColor: const Color.fromARGB(255, 164, 159, 10),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 1, horizontal: 50),
+                          vertical: 12, horizontal: 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: Text(
-                      'Deliver',
+                      'Process Pickup',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 20,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -152,7 +153,7 @@ class OrderDetailDeliverPage extends StatelessWidget {
     );
   }
 
-  Widget infoRow(String title, String value) {
+  Widget _infoRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
@@ -160,10 +161,10 @@ class OrderDetailDeliverPage extends StatelessWidget {
         children: [
           Text(title,
               style: GoogleFonts.poppins(
-                  fontSize: 14, fontWeight: FontWeight.w400)),
+                  fontSize: 13, fontWeight: FontWeight.w500)),
           Text(value,
               style: GoogleFonts.poppins(
-                  fontSize: 14, fontWeight: FontWeight.w400)),
+                  fontSize: 13, fontWeight: FontWeight.w500)),
         ],
       ),
     );

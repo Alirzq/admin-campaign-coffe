@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../controller/order_controller.dart';
-import '../../../../global-component/order/order_card.dart';
-import 'order_detail_page_in-progress.dart';
+import '../../../../../../controller/order_controller.dart';
+import '../../../../../global-component/order/order_card.dart';
+import '../detail-order/order_detail_deliver_page.dart';
 
-class FullInProgressPage extends GetView<OrderController> {
-  const FullInProgressPage({super.key});
+class FullDeliverPage extends GetView<OrderController> {
+  const FullDeliverPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class FullInProgressPage extends GetView<OrderController> {
           onPressed: () => Get.back(),
         ),
         title: const Text(
-          'In-Progress',
+          'Deliver',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -35,10 +35,10 @@ class FullInProgressPage extends GetView<OrderController> {
               orderItems: order['orderItems'] ?? '-',
               price: ' ${order['price'] ?? '0'}',
               onTap: () {
-                Get.to(() => OrderInProgressDetailPage(
+                Get.to(() => OrderDetailDeliverPage(
                       orderName: order['orderName'] ?? '-',
                       orderItems: order['orderItems'] ?? '-',
-                      price: '${order['price'] ?? '0'}',
+                      price: 'Rp. ${order['price'] ?? '0'}',
                     ));
               },
             );

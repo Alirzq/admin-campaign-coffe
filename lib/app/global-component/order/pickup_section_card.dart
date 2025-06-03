@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'order_card.dart';
 
-class OrderSectionCard extends StatelessWidget {
+class PickupSectionCard extends StatelessWidget {
   final String title;
   final Map<String, String> data;
   final VoidCallback onTap;
 
-  const OrderSectionCard({
+  const PickupSectionCard({
     super.key,
     required this.title,
     required this.data,
@@ -52,11 +51,42 @@ class OrderSectionCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          OrderCard(
-            orderName: data['orderName'] ?? data['pickupName'] ?? '',
-            orderItems: data['orderItems'] ?? data['pickupItems'] ?? '',
-            price: data['price'] ?? data['pickupPrice'] ?? '',
+          InkWell(
             onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 1,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(data['pickupName'] ?? '',
+                      style: GoogleFonts.poppins(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(data['pickupItems'] ?? '',
+                      style: GoogleFonts.poppins(
+                          fontSize: 14, color: Colors.grey)),
+                  const Divider(),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(data['price'] ?? '',
+                        style: GoogleFonts.poppins(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

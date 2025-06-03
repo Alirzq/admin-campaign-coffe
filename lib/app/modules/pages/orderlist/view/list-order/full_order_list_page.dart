@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../controller/order_controller.dart';
-import '../../../../global-component/order/order_card.dart';
-import 'order_detail_page_order-list.dart';
+import '../../../../../../controller/order_controller.dart';
+import '../../../../../global-component/order/order_card.dart';
+import '../detail-order/order_detail_page_order-list.dart';
 
 class FullOrderListPage extends GetView<OrderController> {
   const FullOrderListPage({super.key});
@@ -19,7 +19,7 @@ class FullOrderListPage extends GetView<OrderController> {
           onPressed: () => Get.back(),
         ),
         title: const Text(
-          'Order List',
+          'Deliver List',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

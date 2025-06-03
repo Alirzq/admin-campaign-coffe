@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../global-component/widget/custom_navbar.dart';
 import '../../../../global-component/widget/tab_button.dart';
 import '../earnings/earnings_page.dart';
-import '../graph/graph_page.dart';
+import '../history/history_page.dart';
 
 class HomepageView extends StatefulWidget {
   @override
@@ -88,7 +88,7 @@ class _AdminHomepageState extends State<HomepageView>
                         onTap: () => _tabController.animateTo(0),
                       ),
                       TabButton(
-                        title: "Graph",
+                        title: "History",
                         isSelected: _tabController.index == 1,
                         onTap: () => _tabController.animateTo(1),
                       ),
@@ -103,7 +103,7 @@ class _AdminHomepageState extends State<HomepageView>
               controller: _tabController,
               children: [
                 EarningsPage(),
-                GraphPage(),
+                HistoryPage(),
               ],
             ),
           ),

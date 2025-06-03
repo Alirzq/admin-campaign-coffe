@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OrderDetailPage extends StatelessWidget {
-  const OrderDetailPage({
-    super.key,
-  });
+class PickupDetailPage extends StatelessWidget {
+  const PickupDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ class OrderDetailPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Detail Orders",
+          "Detail Pickup",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -63,10 +61,10 @@ class OrderDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'cindo',
+                        'Cindo',
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
-                          fontSize: 20,
+                          fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
@@ -78,10 +76,10 @@ class OrderDetailPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Order List',
+                      'Pickup List',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
@@ -107,8 +105,8 @@ class OrderDetailPage extends StatelessWidget {
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
                     ),
-                    const Divider(height: 20),
-                    infoRow("Total Order :", "2 items"),
+                    const Divider(height: 24),
+                    infoRow("Total Pickup :", "2 items"),
                     infoRow("Total Price :", "Rp. 30000"),
                     infoRow("Payment Method:", "OVO"),
                     infoRow("Location:", "Jl. Melati No. 5"),
@@ -122,8 +120,7 @@ class OrderDetailPage extends StatelessWidget {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D47A1),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 50),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -143,8 +140,7 @@ class OrderDetailPage extends StatelessWidget {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 50),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

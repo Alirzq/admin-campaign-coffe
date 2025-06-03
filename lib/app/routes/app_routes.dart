@@ -16,6 +16,10 @@ import '../modules/pages/login/view/login_view.dart';
 import '../modules/pages/signup/view/signup_view.dart';
 import '../modules/pages/one_time_password/view/otp_view.dart';
 import '../../binding/otp_binding.dart';
+import '../modules/pages/homepage/history/history_page.dart';
+import '../../binding/history_binding.dart';
+import '../modules/pages/orderlist/view/pickup_page.dart';
+import '../../binding/pickup_binding.dart';
 
 class MyRoutes {
   static const String splash = '/splash';
@@ -28,6 +32,8 @@ class MyRoutes {
   static const String stock = '/stock';
   static const String widget = '/widget';
   static const String addMenu = '/add-menu';
+  static const String history = '/history';
+  static const String pickup = '/pickup';
 }
 
 class AppRoutes {
@@ -61,6 +67,16 @@ class AppRoutes {
       name: MyRoutes.addMenu,
       page: () => CustomAddMenuView(),
       binding: CustomAddMenuBinding(),
+    ),
+    GetPage(
+      name: MyRoutes.history,
+      page: () => const HistoryPage(),
+      binding: HistoryBinding(),
+    ),
+    GetPage(
+      name: MyRoutes.pickup,
+      page: () => const PickupPage(),
+      binding: PickupBinding(),
     ),
   ];
 }
