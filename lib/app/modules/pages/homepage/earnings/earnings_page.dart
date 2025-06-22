@@ -2,6 +2,7 @@ import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../../../../controller/earnings_controller.dart';
 import '../../../../global-component/order/order_card.dart';
 import '../../../../global-component/widget/stat_card.dart';
@@ -9,6 +10,14 @@ import '../../../../global-component/widget/stat_card.dart';
 class EarningsPage extends StatelessWidget {
   EarningsPage({super.key});
   final EarningsController controller = Get.put(EarningsController());
+
+  String getCurrentDayDate() {
+    final now = DateTime.now();
+    final day = DateFormat('EEEE').format(now);
+    final date = DateFormat('d').format(now);
+    final year = DateFormat('y').format(now);
+    return '$day/$date/$year';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +51,24 @@ class EarningsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               StatCard(
-                title: "Avg Per Month",
-                value: "Rp 500.000",
+                title: "Today's Date",
+                value: getCurrentDayDate(),
                 titleColor: const Color.fromARGB(255, 98, 98, 98),
                 valueColor: const Color.fromARGB(255, 98, 98, 98),
-                titleFontWeight: FontWeight.w600,
+                titleFontWeight: FontWeight.w700,
                 valueFontWeight: FontWeight.w800,
+                valueFontSize: 17,
+                valueAlign: TextAlign.center,
               ),
               SizedBox(
                 width: 20,
               ),
               StatCard(
-                title: "Formings Growth",
-                value: "12%",
+                title: "Total Order",
+                value: controller.newOrders.length.toString(),
                 titleColor: const Color.fromARGB(255, 98, 98, 98),
                 valueColor: const Color.fromARGB(255, 98, 98, 98),
-                titleFontWeight: FontWeight.w600,
+                titleFontWeight: FontWeight.w700,
                 valueFontWeight: FontWeight.w800,
               ),
             ],
@@ -78,8 +89,8 @@ class EarningsPage extends StatelessWidget {
                     Text(
                       "New Order",
                       style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
                           color: Colors.blue.shade900),
                     ),
                     TextButton(
@@ -95,7 +106,7 @@ class EarningsPage extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: const Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.blue.shade900,
                         ),
                       ),
                     ),

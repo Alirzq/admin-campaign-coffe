@@ -140,7 +140,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                   ),

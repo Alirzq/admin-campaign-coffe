@@ -8,6 +8,8 @@ class StatCard extends StatelessWidget {
   final Color valueColor;
   final FontWeight titleFontWeight;
   final FontWeight valueFontWeight;
+  final double? valueFontSize;
+  final TextAlign? valueAlign;
 
   const StatCard({
     Key? key,
@@ -17,6 +19,8 @@ class StatCard extends StatelessWidget {
     this.valueColor = Colors.black,
     this.titleFontWeight = FontWeight.w500,
     this.valueFontWeight = FontWeight.bold,
+    this.valueFontSize,
+    this.valueAlign,
   }) : super(key: key);
 
   @override
@@ -32,7 +36,7 @@ class StatCard extends StatelessWidget {
             BoxShadow(
               color: Colors.grey.shade700.withOpacity(0.20),
               blurRadius: 7,
-              offset: const Offset(0, 3), // shadow ke bawah
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -41,7 +45,7 @@ class StatCard extends StatelessWidget {
             Text(
               title,
               style: GoogleFonts.poppins(
-                fontSize: 12,
+                fontSize: 15,
                 fontWeight: titleFontWeight,
                 color: titleColor,
               ),
@@ -50,10 +54,11 @@ class StatCard extends StatelessWidget {
             Text(
               value,
               style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: valueFontSize ?? 20,
                 fontWeight: valueFontWeight,
                 color: valueColor,
               ),
+              textAlign: valueAlign ?? TextAlign.start,
             ),
           ],
         ),

@@ -135,11 +135,11 @@ class PickupDetailCompletedPage extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Completed',
+                      'completed',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_menu_view.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/profile/profile_page.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_add_menu_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_widgets_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/stock_binding.dart';
@@ -20,6 +21,7 @@ import '../modules/pages/homepage/history/history_page.dart';
 import '../../binding/history_binding.dart';
 import '../modules/pages/orderlist/view/pickup_page.dart';
 import '../../binding/pickup_binding.dart';
+import 'package:admin_campaign_coffe_repo/binding/profile_binding.dart';
 
 class MyRoutes {
   static const String splash = '/splash';
@@ -34,6 +36,7 @@ class MyRoutes {
   static const String addMenu = '/add-menu';
   static const String history = '/history';
   static const String pickup = '/pickup';
+  static const String profile = '/profile';
 }
 
 class AppRoutes {
@@ -77,6 +80,11 @@ class AppRoutes {
       name: MyRoutes.pickup,
       page: () => const PickupPage(),
       binding: PickupBinding(),
+    ),
+    GetPage(
+      name: MyRoutes.profile,
+      page: () => const ProfilePage(),
+      binding: ProfileBinding(),
     ),
   ];
 }
