@@ -19,7 +19,7 @@ class HeaderCustomWidgets extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 25),
+          const SizedBox(height: 24),
           Row(
             children: [
               SvgPicture.asset(
@@ -46,7 +46,7 @@ class HeaderCustomWidgets extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 26),
           Container(
             width: double.infinity,
             height: 48,

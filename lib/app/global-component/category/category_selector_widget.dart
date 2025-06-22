@@ -20,8 +20,7 @@ class CategorySelectorWidget extends StatelessWidget {
       "Coffee": 'assets/coffee.svg',
       "Non Coffee": 'assets/non_coffee.svg',
       "Snack": 'assets/snack.svg',
-      "Main Course": 'assets/main_course.svg',
-      "Noodles": 'assets/noodles.svg',
+      "Main Course": 'assets/main_course.svg'
     };
 
     return SizedBox(

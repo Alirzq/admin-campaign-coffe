@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../controller/stock_controller.dart';
 import '../../../../global-component/widget/custom_navbar.dart';
@@ -10,6 +11,95 @@ import '../../../../global-component/stock/header_stock_view.dart';
 
 class StockView extends GetView<StockController> {
   const StockView({super.key});
+
+  void _showAddStockDialog(
+      BuildContext context, String productName, void Function(int) onSubmit) {
+    final TextEditingController controllerInput = TextEditingController();
+    String? errorText;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              title: Text(
+                'Tambah Stok',
+                style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Colors.black),
+              ),
+              content: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextField(
+                  controller: controllerInput,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                  decoration: InputDecoration(
+                    hintText: 'Masukkan jumlah',
+                    hintStyle: GoogleFonts.poppins(color: Colors.grey.shade400),
+                    errorText: errorText,
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.blue.shade100),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade900, width: 2),
+                    ),
+                  ),
+                  cursorColor: Colors.blue.shade900,
+                ),
+              ),
+              actionsPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Batal',
+                      style: GoogleFonts.poppins(color: Colors.blue.shade900)),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade900,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  onPressed: () {
+                    final value = int.tryParse(controllerInput.text);
+                    if (value != null) {
+                      final isValid =
+                          Get.find<StockController>().isValidAmount(value);
+                      if (isValid) {
+                        onSubmit(value);
+                        Navigator.of(context).pop();
+                      } else {
+                        setState(() {
+                          errorText = 'Maksimal 100.000';
+                        });
+                      }
+                    }
+                  },
+                  child: Text('Tambah',
+                      style: GoogleFonts.poppins(color: Colors.white)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +119,6 @@ class StockView extends GetView<StockController> {
                 "Non Coffee": 'assets/non_coffee.svg',
                 "Snack": 'assets/snack.svg',
                 "Main Course": 'assets/main_course.svg',
-                "Noodles": 'assets/noodles.svg',
               };
 
               return SingleChildScrollView(
@@ -137,7 +226,12 @@ class StockView extends GetView<StockController> {
                           title: item['title'],
                           category: selectedCategory,
                           amount: item['amount'],
-                          onAdd: () => controller.incrementStock(item['title']),
+                          onAddTap: () {
+                            _showAddStockDialog(context, item['title'],
+                                (value) {
+                              controller.setStockAmount(item['title'], value);
+                            });
+                          },
                         );
                       },
                     ),

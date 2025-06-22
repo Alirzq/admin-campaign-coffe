@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../app/modules/api/models/product_model.dart';
 import '../app/modules/api/services/product_service.dart';
 
 class StockController extends GetxController {
   final ProductService _productService = ProductService();
   final RxList<Product> _products = <Product>[].obs;
-  final categories =
-      ["Coffee", "Non Coffee", "Snack", "Main Course", "Noodles"].obs;
+  final categories = ["Coffee", "Non Coffee", "Snack", "Main Course"].obs;
   final selectedCategoryIndex = 0.obs;
   final RxMap<String, int> stockAmounts = <String, int>{}.obs;
 
@@ -36,7 +36,7 @@ class StockController extends GetxController {
         .map((product) => {
               'title': product.name,
               'desc': product.description,
-              'amount': stockAmounts[product.name]?.toString() ?? '0',
+              'amount': getFormattedAmount(product.name),
               'image': product.image,
             })
         .toList();
@@ -50,5 +50,32 @@ class StockController extends GetxController {
 
   void selectCategory(int index) {
     selectedCategoryIndex.value = index;
+  }
+
+  // Fungsi validasi input maksimal 100.000
+  bool isValidAmount(int value) {
+    return value <= 100000;
+  }
+
+  // Fungsi format angka ribuan
+  String formatNumber(int value) {
+    final formatter = NumberFormat.decimalPattern('id_ID');
+    return formatter.format(value);
+  }
+
+  // Ambil jumlah stok terformat
+  String getFormattedAmount(String productName) {
+    final value = stockAmounts[productName] ?? 0;
+    return formatNumber(value);
+  }
+
+  // Set jumlah stok dengan validasi
+  bool setStockAmount(String productName, int value) {
+    if (isValidAmount(value)) {
+      stockAmounts[productName] = value;
+      update();
+      return true;
+    }
+    return false;
   }
 }

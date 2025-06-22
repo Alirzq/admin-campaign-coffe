@@ -136,11 +136,11 @@ class PickupInProgressDetailPage extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Process Pickup',
+                      'Make Order',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                   ),

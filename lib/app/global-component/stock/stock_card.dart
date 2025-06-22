@@ -6,7 +6,7 @@ class StockCard extends StatelessWidget {
   final String title;
   final String category;
   final String amount;
-  final VoidCallback onAdd;
+  final void Function() onAddTap;
 
   const StockCard({
     Key? key,
@@ -14,7 +14,7 @@ class StockCard extends StatelessWidget {
     required this.title,
     required this.category,
     required this.amount,
-    required this.onAdd,
+    required this.onAddTap,
   }) : super(key: key);
 
   @override
@@ -56,7 +56,7 @@ class StockCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 imagePath,
-                height: 145,
+                height: 140.2,
                 width: 158,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
@@ -108,7 +108,7 @@ class StockCard extends StatelessWidget {
               Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: onAdd,
+                  onTap: onAddTap,
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.all(8),
