@@ -1,14 +1,15 @@
 import 'dart:convert';
-import 'package:admin_campaign_coffe_repo/app/modules/pages/homepage/view/admin_homepage_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
 
-class LoginController extends GetxController {
+class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   var errorMessage = ''.obs;
   var isLoading = false.obs;
+  final box = GetStorage();
 
   void login() async {
     String email = emailController.text.trim();
@@ -24,7 +25,7 @@ class LoginController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/login'),
+        Uri.parse('https://f1b98737fb3b.ngrok-free.app/api/login'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -34,18 +35,23 @@ class LoginController extends GetxController {
         }),
       );
 
-      // Periksa status kode HTTP
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        // Jika tidak ada status sukses, langsung ke HomepageView
-        if (data == null || data['status'] != true) {
-          Get.offAllNamed(
-              '/home'); // Menggunakan offAllNamed untuk mengganti route
-          errorMessage.value = data?['message'] ?? 'Login gagal';
+        if (data != null && data['success'] == true) {
+          final token = data['data']['token'];
+          final user = data['data']['user'];
+          if (token != null) {
+            box.write('token', token);
+            print('TOKEN YANG DISIMPAN: $token');
+          }
+          if (user != null) {
+            box.write('user', user); // <-- Tambahkan baris ini!
+            print('USER YANG DISIMPAN: $user');
+          }
+          Get.offAllNamed('/home');
         } else {
-          Get.offAllNamed(
-              '/home'); // Menggunakan offAllNamed untuk mengganti route
+          errorMessage.value = data?['message'] ?? 'Login gagal';
+          Get.offAllNamed('/home');
         }
       } else {
         errorMessage.value =
@@ -56,6 +62,11 @@ class LoginController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void logout() {
+    box.remove('token');
+    Get.offAllNamed('/login');
   }
 
   @override

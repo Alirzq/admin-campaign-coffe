@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 
 class OrderInProgressDetailPage extends StatelessWidget {
-  final String orderName;
-  final String orderItems;
-  final String price;
-
-  const OrderInProgressDetailPage({
-    super.key,
-    required this.orderName,
-    required this.orderItems,
-    required this.price,
-  });
+  const OrderInProgressDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final String customerName = args['orderName'] ?? '-';
+    final List items = (args['orderItems'] as List?) ?? [];
+    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final int? orderId = args['orderId'] as int?;
+    final String paymentMethod = args['paymentMethod'] ?? '-';
+    final String location = args['location'] ?? '-';
+    final String status = args['status'] ?? 'inprogress';
+
+    final OrderController controller = Get.find<OrderController>();
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
@@ -67,12 +70,12 @@ class OrderInProgressDetailPage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage:
-                            AssetImage('assets/images/user_dummy.jpg'),
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Color(0xFF0D47A1)),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        orderName,
+                        customerName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -95,56 +98,66 @@ class OrderInProgressDetailPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1.  Chocolate',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2.  Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    ...items.map((item) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${item['quantity']} x ${item['productName'] ?? item['name'] ?? '-'}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 14)),
+                            Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                style: GoogleFonts.poppins(fontSize: 14)),
+                          ],
+                        )),
                     const Divider(height: 24),
-                    _infoRow("Total Order :", "2 items"),
-                    _infoRow("Total Price :", price),
-                    _infoRow("Payment Method :", "OVO"),
-                    _infoRow("Location :", "Jl. Contoh No. 123"),
+                    _infoRow("Total Order :", "${items.length} items"),
+                    _infoRow("Total Price :", "Rp. $totalPrice"),
+                    _infoRow("Payment Method:", paymentMethod),
+                    _infoRow("Location:", location),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 164, 159, 10),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                if (controller != null && orderId != null && status == 'inprogress')
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await controller.markDone(orderId!);
+                        Get.snackbar('Sukses', 'Order selesai (completed)');
+                        Get.back();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 164, 159, 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Selesaikan',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
+                  )
+                else if (status == 'completed')
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Text(
-                      'Make Order',
+                      'Selesai',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

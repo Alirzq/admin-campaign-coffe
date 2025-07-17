@@ -28,18 +28,41 @@ class FullPickupListPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: ListView.builder(
-          itemCount: controller.pickupList.length,
-          itemBuilder: (context, index) {
-            final pickup = controller.pickupList[index];
-            return PickupOrderCard(
-              pickupName: pickup['pickupName']!,
-              pickupItems: pickup['pickupItems']!,
-              price: pickup['price']!,
-              onTap: () => Get.to(() => const PickupDetailPage()),
-            );
-          },
-        ),
+        child: controller.orderList.isEmpty
+            ? Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Center(
+                    child: Text('Belum ada order pickup.',
+                        style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  ),
+                ),
+              )
+            : ListView.builder(
+                itemCount: controller.orderList.length,
+                itemBuilder: (context, index) {
+                  final pickup = controller.orderList[index];
+                  return PickupOrderCard(
+                    pickupName: pickup.customerName,
+                    pickupItems: pickup.items.isNotEmpty ? pickup.items.map((e) => e.productName).join(', ') : '-',
+                    price: 'Rp. ${pickup.totalPrice.toInt()}',
+                    items: pickup.items.map((e) => e.productName).toList(),
+                    onTap: () => Get.to(() => const PickupDetailPage(), arguments: {
+                      'orderId': pickup.id,
+                      'orderName': pickup.customerName,
+                      'orderItems': pickup.items.map((e) => {
+                        'name': e.productName,
+                        'quantity': e.quantity,
+                        'price': e.price,
+                      }).toList(),
+                      'price': pickup.totalPrice.toInt(),
+                      'paymentMethod': pickup.paymentMethod,
+                      'location': pickup.location,
+                      'status': pickup.status,
+                    }),
+                  );
+                },
+              ),
       ),
     );
   }

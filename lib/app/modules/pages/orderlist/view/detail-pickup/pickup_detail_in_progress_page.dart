@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:admin_campaign_coffe_repo/controller/pickup_controller.dart';
 
 class PickupInProgressDetailPage extends StatelessWidget {
-  final String pickupName;
-  final String pickupItems;
-  final String price;
-
-  const PickupInProgressDetailPage({
-    super.key,
-    required this.pickupName,
-    required this.pickupItems,
-    required this.price,
-  });
+  const PickupInProgressDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final String customerName = args['orderName'] ?? '-';
+    final List items = (args['orderItems'] as List?) ?? [];
+    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final String paymentMethod = args['paymentMethod'] ?? '-';
+    final String location = args['location'] ?? '-';
+    final int? orderId = args['orderId'];
+    final String status = args['status'] ?? 'paid';
+    final PickupController controller = Get.find<PickupController>();
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
@@ -67,12 +69,12 @@ class PickupInProgressDetailPage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage:
-                            AssetImage('assets/images/user_dummy.jpg'),
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Color(0xFF0D47A1)),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        pickupName,
+                        customerName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -95,56 +97,96 @@ class PickupInProgressDetailPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
+                    ...items.map((item) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('1.  Chocolate',
+                        Text('${item['quantity']} x ${item['productName'] ?? item['name'] ?? '-'}',
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
+                        Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2.  Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    )),
                     const Divider(height: 24),
-                    _infoRow("Total Pickup :", "2 items"),
-                    _infoRow("Total Price :", price),
-                    _infoRow("Payment Method :", "OVO"),
-                    _infoRow("Location :", "Jl. Contoh No. 123"),
+                    _infoRow("Total Pickup :", "${items.length} items"),
+                    _infoRow("Total Price :", "Rp. $totalPrice"),
+                    _infoRow("Payment Method :", paymentMethod),
+                    _infoRow("Location :", location),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 164, 159, 10),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                if (status == 'completed')
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Make Order',
+                      'Selesai',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                  ),
-                ),
+                  )
+                else if (status == 'paid')
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: orderId != null
+                          ? () async {
+                              await controller.acceptOrder(orderId);
+                              Get.snackbar('Sukses', 'Order diproses (inprogress)');
+                              Get.back();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 25, 164, 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Proses',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
+                else if (status == 'inprogress')
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: orderId != null
+                          ? () async {
+                              await controller.markDone(orderId);
+                              Get.snackbar('Sukses', 'Order selesai (completed)');
+                              Get.back();
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Selesaikan',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
               ],
             ),
           ),

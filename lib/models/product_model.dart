@@ -7,6 +7,7 @@ class Product {
   final int rating;
   final int reviewCount;
   final String image;
+  final int stock;
 
   Product({
     required this.id,
@@ -17,6 +18,7 @@ class Product {
     required this.rating,
     required this.reviewCount,
     required this.image,
+    required this.stock,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,11 @@ class Product {
       rating: json['rating'] as int,
       reviewCount: json['review_count'] as int,
       image: json['image'].toString().replaceAll('`', '').trim(),
+      stock: json['stock'] != null
+          ? (json['stock'] is int
+              ? json['stock']
+              : int.tryParse(json['stock'].toString()) ?? 0)
+          : 0,
     );
   }
 }

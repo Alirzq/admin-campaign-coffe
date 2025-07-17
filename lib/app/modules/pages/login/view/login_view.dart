@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../global-component/widget/custom_button.dart';
 import '../../../../global-component/widget/input_field.dart';
-import '../../../../../controller/login_controller.dart';
+import '../../../../../controller/auth_controller.dart';
 import '../../signup/view/signup_view.dart';
 import '../../homepage/view/admin_homepage_view.dart';
 
 class LoginView extends StatelessWidget {
-  final LoginController controller = Get.put(LoginController());
+  final AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {

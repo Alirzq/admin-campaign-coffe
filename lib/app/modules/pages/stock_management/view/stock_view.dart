@@ -8,6 +8,9 @@ import '../../../../../controller/stock_controller.dart';
 import '../../../../global-component/widget/custom_navbar.dart';
 import '../../../../global-component/stock/stock_card.dart';
 import '../../../../global-component/stock/header_stock_view.dart';
+import '../../../../../models/product_model.dart';
+import '../../../../../controller/product_controller.dart';
+import '../../../../../controller/custom_add_menu_controller.dart';
 
 class StockView extends GetView<StockController> {
   const StockView({super.key});
@@ -96,6 +99,84 @@ class StockView extends GetView<StockController> {
               ],
             );
           },
+        );
+      },
+    );
+  }
+
+  void _showEditProductDialog(BuildContext context, Product product, ProductController productController) {
+    final nameController = TextEditingController(text: product.name);
+    final descController = TextEditingController(text: product.description);
+    final priceController = TextEditingController(text: product.price.toString());
+    final stockController = TextEditingController(text: product.stock.toString());
+    String selectedCategory = product.category;
+    final categoryIdMap = Get.find<CustomAddMenuController>().categoryIdMap;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Produk'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'Nama Produk'),
+                ),
+                TextField(
+                  controller: descController,
+                  decoration: InputDecoration(labelText: 'Deskripsi'),
+                ),
+                TextField(
+                  controller: priceController,
+                  decoration: InputDecoration(labelText: 'Harga'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: stockController,
+                  decoration: InputDecoration(labelText: 'Stok'),
+                  keyboardType: TextInputType.number,
+                ),
+                DropdownButtonFormField<String>(
+                  value: selectedCategory.isNotEmpty ? selectedCategory : null,
+                  items: controller.categories.map((cat) {
+                    return DropdownMenuItem<String>(
+                      value: cat,
+                      child: Text(cat),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) selectedCategory = val;
+                  },
+                  decoration: InputDecoration(labelText: 'Kategori'),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final categoryId = categoryIdMap[selectedCategory] ?? 1;
+                await productController.updateProduct(
+                  id: product.id,
+                  title: nameController.text,
+                  description: descController.text,
+                  price: priceController.text,
+                  stock: stockController.text,
+                  categoryId: categoryId,
+                  rating: product.rating.toDouble(),
+                  reviewCount: product.reviewCount,
+                );
+                Navigator.of(context).pop();
+              },
+              child: Text('Simpan'),
+            ),
+          ],
         );
       },
     );
@@ -228,9 +309,45 @@ class StockView extends GetView<StockController> {
                           amount: item['amount'],
                           onAddTap: () {
                             _showAddStockDialog(context, item['title'],
-                                (value) {
-                              controller.setStockAmount(item['title'], value);
+                                (value) async {
+                              await controller.setStockAmountByName(item['title'], value);
                             });
+                          },
+                          onEditTap: () async {
+                            final productController = Get.find<ProductController>();
+                            final product = controller.products.firstWhereOrNull((p) => p.name == item['title']);
+                            if (product != null) {
+                              final detail = await productController.getProductById(product.id);
+                              _showEditProductDialog(context, detail, productController);
+                            }
+                          },
+                          onDeleteTap: () async {
+                            final productController = Get.find<ProductController>();
+                            // Tampilkan dialog konfirmasi
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Hapus Produk'),
+                                content: Text('Yakin ingin menghapus produk ini?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: Text('Batal'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: Text('Hapus'),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirm == true) {
+                              // Cari id produk dari nama
+                              final product = controller.products.firstWhereOrNull((p) => p.name == item['title']);
+                              if (product != null) {
+                                await productController.deleteProduct(product.id);
+                              }
+                            }
                           },
                         );
                       },

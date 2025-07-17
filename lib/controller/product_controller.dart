@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/product_model.dart';
 import '../services/product_service.dart';
 
-class StockController extends GetxController {
+class ProductController extends GetxController {
   final ProductService _productService = ProductService();
   final RxList<Product> _products = <Product>[].obs;
   final categories = ["Coffee", "Non Coffee", "Snack", "Main Course"].obs;
@@ -18,26 +18,14 @@ class StockController extends GetxController {
 
   Future<void> fetchProducts() async {
     try {
-      print('FETCH PRODUCTS: Memulai fetch produk...');
       final products = await _productService.getProducts();
-      print('FETCH PRODUCTS: Produk berhasil diambil, jumlah: ${products.length}');
       _products.assignAll(products);
     } catch (e) {
-      print('FETCH PRODUCTS ERROR: $e');
       Get.snackbar(
         'Error',
         'Gagal memuat data produk',
         snackPosition: SnackPosition.BOTTOM,
       );
-    }
-  }
-
-  Future<void> searchProducts(String search) async {
-    try {
-      final products = await _productService.getProducts(search: search);
-      _products.assignAll(products);
-    } catch (e) {
-      Get.snackbar('Error', 'Gagal mencari produk', snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -48,13 +36,11 @@ class StockController extends GetxController {
         .map((product) => {
               'title': product.name,
               'desc': product.description,
-              'amount': product.stock.toString(), // ambil langsung dari backend
+              'amount': getFormattedAmount(product.name),
               'image': product.image,
             })
         .toList();
   }
-
-  List<Product> get products => _products;
 
   void incrementStock(String productName) {
     final currentAmount = stockAmounts[productName] ?? 0;
@@ -83,29 +69,60 @@ class StockController extends GetxController {
     return formatNumber(value);
   }
 
-  // Set jumlah stok dengan validasi dan update ke backend
-  Future<bool> setStockAmountByName(String productName, int value) async {
-    if (!isValidAmount(value)) return false;
-    try {
-      // Cari produk berdasarkan nama
-      final product = _products.firstWhereOrNull((p) => p.name == productName);
-      print('UPDATE STOK: Cari produk dengan nama: $productName');
-      if (product == null) {
-        print('UPDATE STOK: Produk tidak ditemukan!');
-        return false;
-      }
-      print('UPDATE STOK: Update stok produk id=${product.id} ke $value');
-      final success = await _productService.updateProductStock(product.id, value);
-      print('UPDATE STOK: Status update ke backend: $success');
-      if (success) {
-        await fetchProducts(); // Refresh data dari backend
+  // Set jumlah stok dengan validasi
+  bool setStockAmount(String productName, int value) {
+    if (isValidAmount(value)) {
+      stockAmounts[productName] = value;
       update();
       return true;
     }
     return false;
+  }
+
+  Future<Product> getProductById(int id) async {
+    try {
+      return await _productService.getProductById(id);
     } catch (e) {
-      print('UPDATE STOK ERROR: $e');
-      return false;
+      Get.snackbar('Error', 'Gagal memuat detail produk', snackPosition: SnackPosition.BOTTOM);
+      rethrow;
+    }
+  }
+
+  Future<void> updateProduct({
+    required int id,
+    required String title,
+    required String description,
+    required String price,
+    required String stock,
+    required int categoryId,
+    double rating = 0,
+    int reviewCount = 0,
+  }) async {
+    try {
+      await _productService.updateProduct(
+        id: id,
+        title: title,
+        description: description,
+        price: price,
+        stock: stock,
+        categoryId: categoryId,
+        rating: rating,
+        reviewCount: reviewCount,
+      );
+      await fetchProducts();
+      Get.snackbar('Sukses', 'Produk berhasil diupdate', snackPosition: SnackPosition.BOTTOM);
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal update produk', snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> deleteProduct(int id) async {
+    try {
+      await _productService.deleteProduct(id);
+      await fetchProducts();
+      Get.snackbar('Sukses', 'Produk berhasil dihapus', snackPosition: SnackPosition.BOTTOM);
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal menghapus produk', snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

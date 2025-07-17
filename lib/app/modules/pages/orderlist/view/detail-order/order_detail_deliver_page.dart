@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 
 class OrderDetailDeliverPage extends StatelessWidget {
+  final int orderId;
   final String orderName;
-  final String orderItems;
-  final String price;
+  final List<Map<String, dynamic>> orderItems;
+  final double totalPrice;
+  final String paymentMethod;
+  final String location;
+  final String status;
 
   const OrderDetailDeliverPage({
     super.key,
+    required this.orderId,
     required this.orderName,
     required this.orderItems,
-    required this.price,
+    required this.totalPrice,
+    required this.paymentMethod,
+    required this.location,
+    required this.status,
   });
 
   @override
@@ -94,56 +103,68 @@ class OrderDetailDeliverPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1. Chocolate',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2. Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    ...orderItems.map((item) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${item['quantity']} x ${item['name'] ?? '-'}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 14)),
+                            Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                style: GoogleFonts.poppins(fontSize: 14)),
+                          ],
+                        )),
                     const Divider(height: 24),
-                    infoRow("Total Order :", "2 items"),
-                    infoRow("Total Price :", price),
-                    infoRow("Payment Method:", "OVO"),
-                    infoRow("Location:", "Jl. Contoh No. 123"),
+                    infoRow("Total Order :", "${orderItems.length} items"),
+                    infoRow("Total Price :", "Rp. ${totalPrice.toInt()}"),
+                    infoRow("Payment Method:", paymentMethod),
+                    infoRow("Location:", location),
                   ],
                 ),
                 const SizedBox(height: 16),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 25, 164, 10),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                if (status == 'delivered' || status == 'completed')
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Deliver',
+                      'Delivered',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
+                  )
+                else
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Panggil controller untuk update status ke delivered
+                        final orderController = Get.find<OrderController>();
+                        await orderController.markDone(orderId);
+                        Get.snackbar('Sukses', 'Order berhasil di-mark delivered');
+                        Get.back();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 25, 164, 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Deliver',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

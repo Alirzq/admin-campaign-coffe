@@ -16,7 +16,7 @@ class EarningsPage extends StatelessWidget {
     final day = DateFormat('EEEE').format(now);
     final date = DateFormat('d').format(now);
     final year = DateFormat('y').format(now);
-    return '$day/$date/$year';
+    return '$day,$date,$year';
   }
 
   @override
@@ -36,13 +36,19 @@ class EarningsPage extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: Colors.blue.shade900),
                 ),
-                Text(
-                  "Rp 500.000",
-                  style: GoogleFonts.poppins(
-                      fontSize: 34,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.blue.shade900),
-                ),
+                Obx(() {
+                  // Filter order selesai (delivered/completed)
+                  final finishedOrders = controller.earnings.where((order) =>
+                    order.status == 'delivered' || order.status == 'completed').toList();
+                  final totalSales = finishedOrders.fold<double>(0, (sum, order) => sum + order.totalPrice);
+                  return Text(
+                    "Rp ${NumberFormat('#,###', 'id_ID').format(totalSales)}",
+                    style: GoogleFonts.poppins(
+                        fontSize: 34,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.blue.shade900),
+                  );
+                }),
               ],
             ),
           ),
@@ -63,14 +69,18 @@ class EarningsPage extends StatelessWidget {
               SizedBox(
                 width: 20,
               ),
-              StatCard(
-                title: "Total Order",
-                value: controller.newOrders.length.toString(),
-                titleColor: const Color.fromARGB(255, 98, 98, 98),
-                valueColor: const Color.fromARGB(255, 98, 98, 98),
-                titleFontWeight: FontWeight.w700,
-                valueFontWeight: FontWeight.w800,
-              ),
+              Obx(() {
+                final finishedOrders = controller.earnings.where((order) =>
+                  order.status == 'delivered' || order.status == 'completed').toList();
+                return StatCard(
+                  title: "Total Order",
+                  value: finishedOrders.length.toString(),
+                  titleColor: const Color.fromARGB(255, 98, 98, 98),
+                  valueColor: const Color.fromARGB(255, 98, 98, 98),
+                  titleFontWeight: FontWeight.w700,
+                  valueFontWeight: FontWeight.w800,
+                );
+              }),
             ],
           ),
           const SizedBox(height: 30),
@@ -118,13 +128,13 @@ class EarningsPage extends StatelessWidget {
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         physics: const ClampingScrollPhysics(),
-                        itemCount: controller.newOrders.length,
+                        itemCount: controller.earnings.length,
                         itemBuilder: (context, index) {
-                          final order = controller.newOrders[index];
+                          final order = controller.earnings[index];
                           return OrderCard(
-                            orderName: order['orderName']!,
-                            orderItems: order['orderItems']!,
-                            price: order['price']!,
+                            orderName: order.customerName,
+                            orderItems: order.items.map((item) => item.productName).join(', '),
+                            price: 'Rp. ${order.totalPrice.toInt()}',
                           );
                         },
                       ),

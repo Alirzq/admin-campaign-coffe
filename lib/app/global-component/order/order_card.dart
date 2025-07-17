@@ -7,6 +7,7 @@ class OrderCard extends StatelessWidget {
   final String orderItems;
   final String price;
   final VoidCallback? onTap;
+  final List<String> items;
 
   const OrderCard({
     Key? key,
@@ -14,6 +15,7 @@ class OrderCard extends StatelessWidget {
     required this.orderItems,
     required this.price,
     this.onTap,
+    this.items = const [],
   }) : super(key: key);
 
   @override
@@ -41,9 +43,14 @@ class OrderCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                     fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(orderItems,
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),
+            Text('Order Items', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
             const Divider(),
+            if (items.isNotEmpty)
+              ...items.map((item) => Text(item, style: GoogleFonts.poppins(fontSize: 14))),
+            if (items.isEmpty)
+              (orderItems.isEmpty || orderItems == '-')
+                ? Text('Belum ada order.', style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey))
+                : Text(orderItems, style: GoogleFonts.poppins(fontSize: 14)),
             Align(
               alignment: Alignment.bottomRight,
               child: Text(price,

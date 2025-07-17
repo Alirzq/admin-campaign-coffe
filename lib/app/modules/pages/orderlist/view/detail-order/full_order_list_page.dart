@@ -34,16 +34,15 @@ class FullOrderListPage extends GetView<OrderController> {
           itemBuilder: (context, index) {
             final order = controller.orderList[index];
             return OrderCard(
-              orderName: order['orderName'] ?? '-',
-              orderItems: order['orderItems'] ?? '-',
-              price: ' ${order['price'] ?? '0'}',
+              orderName: order.customerName,
+              orderItems: order.items.map((e) => e.productName).join(', '),
+              price: 'Rp. ${order.totalPrice.toInt()}',
               onTap: () {
                 Get.to(() => const OrderDetailPage(), arguments: {
-                  'orderName': order['orderName'],
-                  'orderItems': order['orderItems'],
-                  'price': order['price'],
-                  'paymentMethod': order['paymentMethod'],
-                  'location': order['location'],
+                  'orderName': order.customerName,
+                  'orderItems': order.items.map((e) => e.productName).join(', '),
+                  'price': order.totalPrice.toInt(),
+                  // Tambahkan field lain jika ada di model Order
                 });
               },
             );

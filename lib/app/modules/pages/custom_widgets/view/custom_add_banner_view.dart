@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../../../../../../controller/promotion_controller.dart';
 
 class CustomAddBannerView extends StatefulWidget {
   const CustomAddBannerView({super.key});
@@ -14,6 +15,7 @@ class CustomAddBannerView extends StatefulWidget {
 
 class _CustomAddBannerViewState extends State<CustomAddBannerView> {
   File? _selectedImage;
+  final PromotionController promoController = Get.put(PromotionController());
 
   Future<void> _showImagePickerOptions() async {
     showModalBottomSheet(
@@ -196,6 +198,42 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
               ),
             ),
           ),
+          // Tambahkan daftar promo/banner dari API di bawah form
+          const SizedBox(height: 32),
+          Text(
+            'Daftar Banner/Promo',
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          Obx(() {
+            if (promoController.isLoading.value) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (promoController.promotions.isEmpty) {
+              return Center(child: Text('Belum ada promo/banner'));
+            }
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: promoController.promotions.length,
+              itemBuilder: (context, index) {
+                final promo = promoController.promotions[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    leading: promo.image != null
+                        ? Image.network(promo.image!, width: 50, height: 50, fit: BoxFit.cover)
+                        : SvgPicture.asset('assets/banner_icon.svg', width: 40, height: 40),
+                    title: Text(promo.title),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => promoController.deletePromotion(promo.id),
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
         ],
       ),
     );

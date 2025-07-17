@@ -1,30 +1,43 @@
 import 'package:get/get.dart';
+import 'package:admin_campaign_coffe_repo/services/order_service.dart';
+import 'package:admin_campaign_coffe_repo/models/order_model.dart';
 
 class OrderController extends GetxController {
-  final orderList = List.generate(
-    10,
-    (index) => {
-      'orderName': 'Customer ${index + 1}',
-      'orderItems': 'Item A, Item B, Item C',
-      'price': 'Rp. ${(index + 1) * 10000}',
-    },
-  );
+  final OrderService _orderService = OrderService();
 
-  final inProgressList = List.generate(
-    7,
-    (index) => {
-      'orderName': 'InProgress ${index + 1}',
-      'orderItems': 'Cake ${index + 1}',
-      'price': 'Rp. ${(index + 1) * 8000}',
-    },
-  );
+  var orderList = <Order>[].obs;
+  var inProgressList = <Order>[].obs;
+  var deliverList = <Order>[].obs;
 
-  final deliverList = List.generate(
-    5,
-    (index) => {
-      'orderName': 'Delivering ${index + 1}',
-      'orderItems': 'Drink ${index + 1}',
-      'price': 'Rp. ${(index + 1) * 9000}',
-    },
-  );
+  @override
+  void onInit() {
+    fetchAllOrders();
+    super.onInit();
+  }
+
+  Future<void> fetchAllOrders() async {
+    try {
+      orderList.value = await _orderService.getOrdersByStatus('paid');
+      inProgressList.value = await _orderService.getOrdersByStatus('inprogress');
+      deliverList.value = await _orderService.getOrdersByStatus('completed');
+    } catch (e) {
+      print('Error fetching orders: $e');
+    }
+  }
+
+  Future<void> acceptOrder(int id) async {
+    await _orderService.updateOrderStatus(id, 'inprogress');
+    await fetchAllOrders(); // refresh
+  }
+
+  Future<void> markDone(int id) async {
+    await _orderService.updateOrderStatus(id, 'completed');
+    await fetchAllOrders(); // refresh
+  }
+  
+  Future<void> markAsDelivered(int id) async {
+  await _orderService.updateOrderStatus(id, 'completed'); // atau 'delivered'
+  await fetchAllOrders();
+}
+
 }

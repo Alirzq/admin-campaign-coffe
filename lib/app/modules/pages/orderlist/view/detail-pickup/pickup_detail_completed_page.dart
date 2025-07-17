@@ -3,19 +3,17 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PickupDetailCompletedPage extends StatelessWidget {
-  final String pickupName;
-  final String pickupItems;
-  final String price;
-
-  const PickupDetailCompletedPage({
-    super.key,
-    required this.pickupName,
-    required this.pickupItems,
-    required this.price,
-  });
+  const PickupDetailCompletedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final String customerName = args['orderName'] ?? '-';
+    final List<dynamic> items = args['orderItems'] ?? [];
+    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final String paymentMethod = args['paymentMethod'] ?? '-';
+    final String location = args['location'] ?? '-';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -66,12 +64,12 @@ class PickupDetailCompletedPage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage:
-                            AssetImage('assets/images/user_dummy.jpg'),
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Color(0xFF0D47A1)),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        pickupName,
+                        customerName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -94,32 +92,19 @@ class PickupDetailCompletedPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1. Chocolate',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2. Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    ...items.asMap().entries.map((entry) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${entry.key + 1}.  ${entry.value}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 14)),
+                          ],
+                        )),
                     const Divider(height: 24),
-                    infoRow("Total Pickup :", "2 items"),
-                    infoRow("Total Price :", price),
-                    infoRow("Payment Method:", "OVO"),
-                    infoRow("Location:", "Jl. Contoh No. 123"),
+                    infoRow("Total Pickup :", "${items.length} items"),
+                    infoRow("Total Price :", "Rp. $totalPrice"),
+                    infoRow("Payment Method:", paymentMethod),
+                    infoRow("Location:", location),
                   ],
                 ),
                 const SizedBox(height: 16),

@@ -1,22 +1,42 @@
 import 'package:get/get.dart';
+import '../models/earnings_model.dart';
+import '../services/earnings_service.dart';
 
 class EarningsController extends GetxController {
-  var isStoreOpen = true.obs;
+  final earnings = <Earnings>[].obs;
+  final totalEarnings = 0.obs;
+  final isLoading = false.obs;
+  final selectedMonth = ''.obs;
+  final averagePerWeek = 0.obs;
+  final growthPercentage = 0.obs;
 
-  void toggleStore(bool value) {
-    isStoreOpen.value = value;
+
+  final EarningsService _service = EarningsService();
+
+  @override
+  void onInit() {
+    fetchEarnings();
+    super.onInit();
   }
 
-  var newOrders = [
-    {
-      'orderName': 'Order #001',
-      'orderItems': '2x Burger, 1x Fries',
-      'price': 'Rp 120.000',
-    },
-    {
-      'orderName': 'Order #002',
-      'orderItems': '1x Pizza, 2x Coke',
-      'price': 'Rp 150.000',
-    },
-  ].obs;
+  void fetchEarnings({String? month}) async {
+  try {
+    isLoading.value = true;
+    final result = await _service.fetchEarnings(month: month);
+    earnings.assignAll(result.orders);
+    totalEarnings.value = result.total.toInt();
+    averagePerWeek.value = result.averagePerWeek.toInt();
+    growthPercentage.value = result.growthPercentage.toInt();
+  } catch (e) {
+    Get.snackbar("Error", e.toString());
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+
+  void updateMonth(String month) {
+    selectedMonth.value = month;
+    fetchEarnings(month: month);
+  }
 }

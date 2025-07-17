@@ -6,6 +6,7 @@ class PickupOrderCard extends StatelessWidget {
   final String pickupItems;
   final String price;
   final VoidCallback? onTap;
+  final List<String> items;
 
   const PickupOrderCard({
     Key? key,
@@ -13,6 +14,7 @@ class PickupOrderCard extends StatelessWidget {
     required this.pickupItems,
     required this.price,
     this.onTap,
+    this.items = const [],
   }) : super(key: key);
 
   @override
@@ -40,9 +42,12 @@ class PickupOrderCard extends StatelessWidget {
                 style: GoogleFonts.poppins(
                     fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(pickupItems,
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey)),
+            Text('Order Items', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
             const Divider(),
+            if (items.isNotEmpty)
+              ...items.map((item) => Text(item, style: GoogleFonts.poppins(fontSize: 14))),
+            if (items.isEmpty)
+              Text(pickupItems, style: GoogleFonts.poppins(fontSize: 14)),
             Align(
               alignment: Alignment.bottomRight,
               child: Text(price,

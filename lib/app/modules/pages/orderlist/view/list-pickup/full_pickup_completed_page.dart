@@ -29,18 +29,22 @@ class FullPickupCompletedPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView.builder(
-          itemCount: controller.completedPickupList.length,
+          itemCount: controller.deliverList.length,
           itemBuilder: (context, index) {
-            final pickup = controller.completedPickupList[index];
+            final pickup = controller.deliverList[index];
             return PickupOrderCard(
-              pickupName: pickup['pickupName']!,
-              pickupItems: pickup['pickupItems']!,
-              price: pickup['price']!,
-              onTap: () => Get.to(() => PickupDetailCompletedPage(
-                    pickupName: pickup['pickupName']!,
-                    pickupItems: pickup['pickupItems']!,
-                    price: pickup['price']!,
-                  )),
+              pickupName: pickup.customerName,
+              pickupItems: pickup.items.map((e) => e.productName).join(', '),
+              price: 'Rp. ${pickup.totalPrice.toInt()}',
+              items: pickup.items.map((e) => e.productName).toList(),
+              onTap: () => Get.to(() => const PickupDetailCompletedPage(), arguments: {
+                'orderId': pickup.id,
+                'orderName': pickup.customerName,
+                'orderItems': pickup.items.map((e) => e.productName).toList(),
+                'price': pickup.totalPrice.toInt(),
+                'paymentMethod': pickup.paymentMethod,
+                'location': pickup.location,
+              }),
             );
           },
         ),

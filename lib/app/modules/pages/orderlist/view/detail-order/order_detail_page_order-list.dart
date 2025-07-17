@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 
 class OrderDetailPage extends StatelessWidget {
   const OrderDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final String customerName = args['orderName'] ?? '-';
+    final List items = (args['orderItems'] as List?) ?? [];
+    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final int? orderId = args['orderId'] as int?;
+    final String paymentMethod = args['paymentMethod'] ?? '-';
+    final String location = args['location'] ?? '-';
+    final String status = args['status'] ?? '-';
+    final orderController = Get.find<OrderController>();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -57,11 +68,12 @@ class OrderDetailPage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage('assets/profile_dummy.jpg'),
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Color(0xFF0D47A1)),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Cindo',
+                        customerName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -84,38 +96,49 @@ class OrderDetailPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
+                    ...items.map((item) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('1.  Chocolate',
+                        Text('${item['quantity']} x ${item['productName'] ?? item['name'] ?? '-'}',
                             style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
+                        Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
                             style: GoogleFonts.poppins(fontSize: 14)),
                       ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2.  Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    )),
                     const Divider(height: 24),
-                    infoRow("Total Order :", "2 items"),
-                    infoRow("Total Price :", "Rp. 30000"),
-                    infoRow("Payment Method:", "OVO"),
-                    infoRow("Location:", "Jl. Melati No. 5"),
+                    infoRow("Total Order :", "${items.length} items"),
+                    infoRow("Total Price :", "Rp. $totalPrice"),
+                    infoRow("Payment Method:", paymentMethod),
+                    infoRow("Location:", location),
                   ],
                 ),
                 const SizedBox(height: 16),
+                if (status == 'delivered' || status == 'completed')
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      'Delivered',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  )
+                else
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                      onPressed: orderId != null
+                          ? () async {
+                              await orderController.acceptOrder(orderId);
+                              Get.back();
+                            }
+                          : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0D47A1),
                       padding: const EdgeInsets.symmetric(

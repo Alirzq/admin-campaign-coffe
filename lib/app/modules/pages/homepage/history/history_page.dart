@@ -22,23 +22,21 @@ class HistoryPage extends GetView<HistoryController> {
           itemBuilder: (context, index) {
             final order = historyController.orderHistory[index];
             return OrderCard(
-              orderName: order['orderName']!,
-              orderItems: order['orderItems']!,
-              price: order['price']!,
+              orderName: order.customerName,
+              orderItems: order.items.join(', '),
+              price: 'Rp. ${order.totalPrice.toInt()}',
               onTap: () {
-                if (order['orderName']!.toLowerCase().contains('pesanan')) {
+                if (order.customerName.toLowerCase().contains('pesanan')) {
                   Get.to(() => const OrderDetailPage(), arguments: {
-                    'orderName': order['orderName'],
-                    'orderItems': order['orderItems'],
-                    'price': order['price'],
+                    'orderName': order.customerName,
+                    'orderItems': order.items.join(', '),
+                    'price': order.totalPrice.toInt(),
                   });
-                } else if (order['orderName']!
-                    .toLowerCase()
-                    .contains('pickup')) {
+                } else if (order.customerName.toLowerCase().contains('pickup')) {
                   Get.to(() => const PickupDetailPage(), arguments: {
-                    'pickupName': order['orderName'],
-                    'pickupItems': order['orderItems'],
-                    'price': order['price'],
+                    'pickupName': order.customerName,
+                    'pickupItems': order.items.join(', '),
+                    'price': order.totalPrice.toInt(),
                   });
                 }
               },

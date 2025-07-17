@@ -7,6 +7,13 @@ class PickupDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final String customerName = args['orderName'] ?? '-';
+    final List<dynamic> items = args['orderItems'] ?? [];
+    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final String paymentMethod = args['paymentMethod'] ?? '-';
+    final String location = args['location'] ?? '-';
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -57,11 +64,12 @@ class PickupDetailPage extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage('assets/profile_dummy.jpg'),
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: Color(0xFF0D47A1)),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Cindo',
+                        customerName,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
@@ -84,32 +92,31 @@ class PickupDetailPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1.  Chocolate',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('2.  Taro Latte',
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        Text('Rp. 15000',
-                            style: GoogleFonts.poppins(fontSize: 14)),
-                      ],
-                    ),
+                    ...items.map((item) {
+                      if (item is Map) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${item['quantity']} x ${item['productName'] ?? item['name'] ?? '-'}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600, fontSize: 14)),
+                            Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                style: GoogleFonts.poppins(fontSize: 14)),
+                          ],
+                        );
+                      } else if (item is String) {
+                        return Text(item,
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600, fontSize: 14));
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }),
                     const Divider(height: 24),
-                    infoRow("Total Pickup :", "2 items"),
-                    infoRow("Total Price :", "Rp. 30000"),
-                    infoRow("Payment Method:", "OVO"),
-                    infoRow("Location:", "Jl. Melati No. 5"),
+                    infoRow("Total Pickup :", "${items.length} items"),
+                    infoRow("Total Price :", "Rp. $totalPrice"),
+                    infoRow("Payment Method:", paymentMethod),
+                    infoRow("Location:", location),
                   ],
                 ),
                 const SizedBox(height: 16),

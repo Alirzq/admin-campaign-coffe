@@ -27,19 +27,27 @@ class FullInProgressPage extends GetView<OrderController> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView.builder(
-          itemCount: controller.orderList.length,
+          itemCount: controller.inProgressList.length,
           itemBuilder: (context, index) {
-            final order = controller.orderList[index];
+            final order = controller.inProgressList[index];
             return OrderCard(
-              orderName: order['orderName'] ?? '-',
-              orderItems: order['orderItems'] ?? '-',
-              price: ' ${order['price'] ?? '0'}',
+              orderName: order.customerName,
+              orderItems: order.items.map((e) => e.productName).join(', '),
+              price: 'Rp. ${order.totalPrice.toInt()}',
               onTap: () {
-                Get.to(() => OrderInProgressDetailPage(
-                      orderName: order['orderName'] ?? '-',
-                      orderItems: order['orderItems'] ?? '-',
-                      price: 'Rp. ${order['price'] ?? '0'}',
-                    ));
+                Get.to(() => const OrderInProgressDetailPage(), arguments: {
+                  'orderId': order.id,
+                  'orderName': order.customerName,
+                  'orderItems': order.items.map((e) => {
+                    'name': e.productName,
+                    'quantity': e.quantity,
+                    'price': e.price,
+                  }).toList(),
+                  'price': order.totalPrice.toInt(),
+                  'paymentMethod': order.paymentMethod,
+                  'location': order.location,
+                  'status': order.status,
+                });
               },
             );
           },

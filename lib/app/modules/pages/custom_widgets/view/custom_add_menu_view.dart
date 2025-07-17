@@ -16,6 +16,10 @@ class CustomAddMenuView extends StatefulWidget {
 class _CustomAddMenuViewState extends State<CustomAddMenuView> {
   File? _selectedImage;
   final CustomAddMenuController controller = Get.put(CustomAddMenuController());
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController stockController = TextEditingController();
 
   Future<void> _showImagePickerOptions() async {
     showModalBottomSheet(
@@ -174,11 +178,13 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
             ),
           ),
           const SizedBox(height: 24),
-          _buildTextField("Title", "enter your title"),
+          _buildTextField("Title", "enter your title", controller: titleController),
           const SizedBox(height: 16),
-          _buildTextField("Description", "enter your description", maxLines: 3),
+          _buildTextField("Description", "enter your description", maxLines: 3, controller: descriptionController),
           const SizedBox(height: 16),
-          _buildTextField("Price", "enter your price"),
+          _buildTextField("Price", "enter your price", controller: priceController),
+          const SizedBox(height: 16),
+          _buildTextField("Stock", "enter your stock", controller: stockController),
           const SizedBox(height: 24),
           Text(
             "Categories",
@@ -260,7 +266,17 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+  final selectedCategory = controller.categories[controller.selectedCategoryIndex.value];
+  final categoryId = controller.categoryIdMap[selectedCategory];
+  controller.addMenu(
+    title: titleController.text,
+    description: descriptionController.text,
+    price: priceController.text,
+    stock: stockController.text,
+    categoryId: categoryId!,
+  );
+},
               child: Text(
                 'Add',
                 style: GoogleFonts.poppins(
@@ -276,7 +292,7 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
     );
   }
 
-  Widget _buildTextField(String label, String hint, {int maxLines = 1}) {
+  Widget _buildTextField(String label, String hint, {int maxLines = 1, TextEditingController? controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -300,6 +316,7 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
             ],
           ),
           child: TextField(
+            controller: controller,
             maxLines: maxLines,
             decoration: InputDecoration(
               hintText: hint,

@@ -5,6 +5,7 @@ import '../../../../../controller/pickup_controller.dart';
 import 'list-pickup/full_pickup_list_page.dart';
 import 'list-pickup/full_pickup_in_progress_page.dart';
 import 'list-pickup/full_pickup_completed_page.dart';
+import 'package:intl/intl.dart';
 
 class PickupPage extends StatelessWidget {
   const PickupPage({super.key});
@@ -12,6 +13,14 @@ class PickupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PickupController controller = Get.put(PickupController());
+
+    Map<String, String> orderToMap(order) {
+      return {
+        'pickupName': order.customerName,
+        'pickupItems': order.items.map((e) => e.productName).join(', '),
+        'price': 'Rp. ${order.totalPrice.toInt()}',
+      };
+    }
 
     return Expanded(
       child: SingleChildScrollView(
@@ -22,17 +31,17 @@ class PickupPage extends StatelessWidget {
             children: [
               PickupSectionCard(
                 title: "Pickup List",
-                data: controller.pickupList[0],
+                data: controller.orderList.isNotEmpty ? orderToMap(controller.orderList[0]) : {},
                 onTap: () => Get.to(() => const FullPickupListPage()),
               ),
               PickupSectionCard(
                 title: "In-Progress",
-                data: controller.inProgressPickupList[0],
+                data: controller.inProgressList.isNotEmpty ? orderToMap(controller.inProgressList[0]) : {},
                 onTap: () => Get.to(() => const FullPickupInProgressPage()),
               ),
               PickupSectionCard(
                 title: "Completed Pickup",
-                data: controller.completedPickupList[0],
+                data: controller.deliverList.isNotEmpty ? orderToMap(controller.deliverList[0]) : {},
                 onTap: () => Get.to(() => const FullPickupCompletedPage()),
               ),
             ],
@@ -41,4 +50,12 @@ class PickupPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String getCurrentDayDate() {
+  final now = DateTime.now();
+  final day = DateFormat('EEEE').format(now);
+  final date = DateFormat('d').format(now);
+  final year = DateFormat('y').format(now);
+  return '$day, $date/$year'; // Lebih natural
 }
