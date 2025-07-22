@@ -29,32 +29,37 @@ class FullOrderListPage extends GetView<OrderController> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: ListView.builder(
-          itemCount: controller.orderList.length,
-          itemBuilder: (context, index) {
-            final order = controller.orderList[index];
-            return OrderCard(
-              orderName: order.customerName,
-              orderItems: order.items.map((e) => e.productName).join(', '),
-              price: 'Rp. ${order.totalPrice.toInt()}',
-              onTap: () {
-                Get.to(() => const OrderDetailPage(), arguments: {
-                  'orderId': order.id,
-                  'orderName': order.customerName,
-                  'orderItems': order.items.map((e) => {
-                    'name': e.productName,
-                    'quantity': e.quantity,
-                    'price': e.price,
-                  }).toList(),
-                  'price': order.totalPrice.toInt(),
-                  'paymentMethod': order.paymentMethod,
-                  'location': order.location,
-                  'status': order.status,
-                });
-              },
-            );
-          },
-        ),
+        child: Obx(() {
+          if (controller.orderList.isEmpty) {
+            return Center(child: Text('Belum ada order.'));
+          }
+          return ListView.builder(
+            itemCount: controller.orderList.length,
+            itemBuilder: (context, index) {
+              final order = controller.orderList[index];
+              return OrderCard(
+                orderName: order.customerName,
+                orderItems: order.items.map((e) => e.productName).join(', '),
+                price: 'Rp. ${order.totalPrice.toInt()}',
+                onTap: () {
+                  Get.to(() => const OrderDetailPage(), arguments: {
+                    'orderId': order.id,
+                    'orderName': order.customerName,
+                    'orderItems': order.items.map((e) => {
+                      'name': e.productName,
+                      'quantity': e.quantity,
+                      'price': e.price,
+                    }).toList(),
+                    'price': order.totalPrice.toInt(),
+                    'paymentMethod': order.paymentMethod,
+                    'location': order.location,
+                    'status': order.status,
+                  });
+                },
+              );
+            },
+          );
+        }),
       ),
     );
   }

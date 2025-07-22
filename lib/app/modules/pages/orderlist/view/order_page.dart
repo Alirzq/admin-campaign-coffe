@@ -46,11 +46,6 @@ class OrderPage extends StatelessWidget {
                 data: controller.inProgressList.isNotEmpty ? orderToMap(controller.inProgressList[0]) : {},
                 onTap: () => Get.to(() => const FullInProgressPage()),
               ),
-              OrderSectionCard(
-                title: "Deliver Now",
-                data: controller.deliverList.isNotEmpty ? orderToMap(controller.deliverList[0]) : {},
-                onTap: () => Get.to(() => const FullDeliverPage()),
-              ),
             ],
           ),
         ),

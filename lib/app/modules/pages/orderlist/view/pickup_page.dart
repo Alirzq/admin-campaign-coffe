@@ -12,7 +12,7 @@ class PickupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PickupController controller = Get.put(PickupController());
+    final PickupController controller = Get.find<PickupController>();
 
     Map<String, String> orderToMap(order) {
       return {
@@ -29,20 +29,15 @@ class PickupPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              PickupSectionCard(
+              Obx(() => PickupSectionCard(
                 title: "Pickup List",
                 data: controller.orderList.isNotEmpty ? orderToMap(controller.orderList[0]) : {},
                 onTap: () => Get.to(() => const FullPickupListPage()),
-              ),
+              )),
               PickupSectionCard(
                 title: "In-Progress",
                 data: controller.inProgressList.isNotEmpty ? orderToMap(controller.inProgressList[0]) : {},
                 onTap: () => Get.to(() => const FullPickupInProgressPage()),
-              ),
-              PickupSectionCard(
-                title: "Completed Pickup",
-                data: controller.deliverList.isNotEmpty ? orderToMap(controller.deliverList[0]) : {},
-                onTap: () => Get.to(() => const FullPickupCompletedPage()),
               ),
             ],
           ),

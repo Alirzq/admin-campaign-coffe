@@ -20,9 +20,12 @@ class PickupController extends GetxController {
 
   Future<void> fetchAllOrders() async {
     try {
-      orderList.value = await _orderService.getPickupOrdersByStatus('paid');
-      inProgressList.value = await _orderService.getPickupOrdersByStatus('inprogress');
-      deliverList.value = await _orderService.getPickupOrdersByStatus('completed');
+      final paid = await _orderService.getPickupOrdersByStatus('paid');
+      final inprogress = await _orderService.getPickupOrdersByStatus('inprogress');
+      final completed = await _orderService.getPickupOrdersByStatus('completed');
+      orderList.value = paid.where((o) => o.orderType == 'pickup').toList();
+      inProgressList.value = inprogress.where((o) => o.orderType == 'pickup').toList();
+      deliverList.value = completed.where((o) => o.orderType == 'pickup').toList();
     } catch (e) {
       print('Error fetching orders: $e');
     }

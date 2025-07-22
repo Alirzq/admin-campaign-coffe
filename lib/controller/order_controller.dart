@@ -36,8 +36,8 @@ class OrderController extends GetxController {
   }
   
   Future<void> markAsDelivered(int id) async {
-  await _orderService.updateOrderStatus(id, 'completed'); // atau 'delivered'
-  await fetchAllOrders();
-}
+    await _orderService.updateOrderStatus(id, 'completed'); // atau 'delivered'
+    await fetchAllOrders();
+  }
 
 }

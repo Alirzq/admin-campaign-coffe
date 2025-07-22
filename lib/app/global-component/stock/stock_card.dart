@@ -26,7 +26,7 @@ class StockCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.all(4),
+          margin: const EdgeInsets.all(1.85),
           padding: const EdgeInsets.all(8),
           constraints: const BoxConstraints(
             minHeight: 320,
@@ -80,7 +80,7 @@ class StockCard extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
                 maxLines: 2,
@@ -113,7 +113,7 @@ class StockCard extends StatelessWidget {
                           child: Text(
                             'Stok Habis',
                             style: GoogleFonts.poppins(
-                              fontSize: 13,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade700,
                             ),
@@ -122,7 +122,7 @@ class StockCard extends StatelessWidget {
                       : Text(
                           "Amount : $amount",
                           style: GoogleFonts.poppins(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: Colors.blue.shade900,
                           ),
@@ -162,56 +162,28 @@ class StockCard extends StatelessWidget {
         Positioned(
           top: 10,
           right: 10,
-          child: Row(
-            children: [
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onEditTap,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onDeleteTap,
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.85),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
                     ),
-                    child: Icon(Icons.edit, size: 18, color: Colors.blue),
-                  ),
+                  ],
                 ),
+                child: Icon(Icons.delete, size: 18, color: Colors.red),
               ),
-              const SizedBox(width: 8),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onDeleteTap,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Icon(Icons.delete, size: 18, color: Colors.red),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ],

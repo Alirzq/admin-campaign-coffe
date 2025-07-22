@@ -4,7 +4,7 @@ import '../models/category_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class CategoryService {
-  static const String baseUrl ='https://f1b98737fb3b.ngrok-free.app/api/admin';
+  static const String baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin';
   final box = GetStorage();
 
   Future<List<Category>> getCategories() async {

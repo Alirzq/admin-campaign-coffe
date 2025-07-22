@@ -25,7 +25,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://f1b98737fb3b.ngrok-free.app/api/login'),
+        Uri.parse('https://60b17e4d490e.ngrok-free.app/api/login'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -54,8 +54,21 @@ class AuthController extends GetxController {
           Get.offAllNamed('/home');
         }
       } else {
-        errorMessage.value =
-            'Terjadi kesalahan. Kode status: ${response.statusCode}';
+        print('LOGIN ERROR RESPONSE: ${response.body}');
+        try {
+          final data = jsonDecode(response.body);
+          if (data['message'] is Map && data['message']['message'] != null) {
+            errorMessage.value = data['message']['message'];
+          } else if (data['message'] != null && data['message'].toString().isNotEmpty) {
+            errorMessage.value = data['message'].toString();
+          } else {
+            errorMessage.value = response.body;
+          }
+        } catch (_) {
+          errorMessage.value = response.body.isNotEmpty
+              ? response.body
+              : 'Terjadi kesalahan. Kode status: ${response.statusCode}';
+        }
       }
     } catch (e) {
       errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';

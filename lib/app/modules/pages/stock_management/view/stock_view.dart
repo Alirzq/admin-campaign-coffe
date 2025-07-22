@@ -184,6 +184,7 @@ class StockView extends GetView<StockController> {
 
   @override
   Widget build(BuildContext context) {
+    final productController = Get.put(ProductController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -191,92 +192,12 @@ class StockView extends GetView<StockController> {
           const HeaderStockView(),
           Expanded(
             child: Obx(() {
-              final selectedCategory =
-                  controller.categories[controller.selectedCategoryIndex.value];
-              final filteredStock = controller.filteredStock;
-
-              final Map<String, String> categoryIcons = {
-                "Coffee": 'assets/coffee.svg',
-                "Non Coffee": 'assets/non_coffee.svg',
-                "Snack": 'assets/snack.svg',
-                "Main Course": 'assets/main_course.svg',
-              };
-
+              final products = productController.products;
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-                    SizedBox(
-                      height: 120,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: controller.categories.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 25),
-                        itemBuilder: (context, index) {
-                          final isSelected =
-                              index == controller.selectedCategoryIndex.value;
-                          final categoryName = controller.categories[index];
-                          final iconPath = categoryIcons[categoryName] ?? '';
-
-                          return GestureDetector(
-                            onTap: () => controller.selectCategory(index),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 18, vertical: 20),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? Colors.blue.shade100
-                                        : Colors.grey.shade200,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? Colors.blue
-                                          : Colors.transparent,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 5,
-                                        spreadRadius: 2,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: SvgPicture.asset(
-                                    iconPath,
-                                    width: 28,
-                                    height: 28,
-                                    colorFilter: ColorFilter.mode(
-                                      isSelected
-                                          ? Colors.blue.shade900
-                                          : Colors.black,
-                                      BlendMode.srcIn,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  categoryName,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: isSelected
-                                        ? Colors.blue.shade900
-                                        : Colors.black87,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Text(
@@ -299,31 +220,26 @@ class StockView extends GetView<StockController> {
                         crossAxisCount: 2,
                         childAspectRatio: 0.72,
                       ),
-                      itemCount: filteredStock.length,
+                      itemCount: products.length,
                       itemBuilder: (context, index) {
-                        final item = filteredStock[index];
+                        final product = products[index];
                         return StockCard(
-                          imagePath: item['image'],
-                          title: item['title'],
-                          category: selectedCategory,
-                          amount: item['amount'],
+                          imagePath: product.image,
+                          title: product.name,
+                          category: product.category,
+                          amount: product.stock.toString(),
                           onAddTap: () {
-                            _showAddStockDialog(context, item['title'],
+                            _showAddStockDialog(context, product.name,
                                 (value) async {
-                              await controller.setStockAmountByName(item['title'], value);
+                              await controller.setStockAmountByName(
+                                  product.name, value);
                             });
                           },
-                          onEditTap: () async {
-                            final productController = Get.find<ProductController>();
-                            final product = controller.products.firstWhereOrNull((p) => p.name == item['title']);
-                            if (product != null) {
-                              final detail = await productController.getProductById(product.id);
-                              _showEditProductDialog(context, detail, productController);
-                            }
+                          onEditTap: () {
+                            _showEditProductDialog(
+                                context, product, productController);
                           },
                           onDeleteTap: () async {
-                            final productController = Get.find<ProductController>();
-                            // Tampilkan dialog konfirmasi
                             final confirm = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -331,28 +247,25 @@ class StockView extends GetView<StockController> {
                                 content: Text('Yakin ingin menghapus produk ini?'),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
                                     child: Text('Batal'),
                                   ),
                                   TextButton(
-                                    onPressed: () => Navigator.of(context).pop(true),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
                                     child: Text('Hapus'),
                                   ),
                                 ],
                               ),
                             );
                             if (confirm == true) {
-                              // Cari id produk dari nama
-                              final product = controller.products.firstWhereOrNull((p) => p.name == item['title']);
-                              if (product != null) {
-                                await productController.deleteProduct(product.id);
-                              }
+                              await productController.deleteProduct(product.id);
                             }
                           },
                         );
                       },
                     ),
-                    const SizedBox(height: 24),
                   ],
                 ),
               );
@@ -363,4 +276,5 @@ class StockView extends GetView<StockController> {
       bottomNavigationBar: const CustomNavbar(),
     );
   }
+     
 }

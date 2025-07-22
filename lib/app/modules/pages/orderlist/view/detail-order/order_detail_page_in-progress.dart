@@ -121,8 +121,9 @@ class OrderInProgressDetailPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         await controller.markDone(orderId!);
+                        await controller.fetchAllOrders();
                         Get.snackbar('Sukses', 'Order selesai (completed)');
-                        Get.back();
+                        // Tidak perlu Get.back() agar tetap di halaman detail
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 164, 159, 10),
@@ -175,9 +176,16 @@ class OrderInProgressDetailPage extends StatelessWidget {
           Text(title,
               style: GoogleFonts.poppins(
                   fontSize: 13, fontWeight: FontWeight.w500)),
-          Text(value,
+          Flexible(
+            child: Text(
+              value,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w500)),
+                  fontSize: 13, fontWeight: FontWeight.w700),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );

@@ -136,7 +136,9 @@ class OrderDetailPage extends StatelessWidget {
                       onPressed: orderId != null
                           ? () async {
                               await orderController.acceptOrder(orderId);
-                              Get.back();
+                              await orderController.fetchAllOrders();
+                              Get.snackbar('Sukses', 'Order diproses (inprogress)');
+                              // Tidak perlu Get.back() agar tetap di halaman detail
                             }
                           : null,
                     style: ElevatedButton.styleFrom(
@@ -151,7 +153,7 @@ class OrderDetailPage extends StatelessWidget {
                       'Accept',
                       style: GoogleFonts.poppins(
                         color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         fontSize: 16,
                       ),
                     ),
@@ -174,9 +176,16 @@ class OrderDetailPage extends StatelessWidget {
           Text(title,
               style: GoogleFonts.poppins(
                   fontSize: 13, fontWeight: FontWeight.w500)),
-          Text(value,
+          Flexible(
+            child: Text(
+              value,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w500)),
+                  fontSize: 13, fontWeight: FontWeight.w700),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );

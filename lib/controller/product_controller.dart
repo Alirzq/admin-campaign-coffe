@@ -16,9 +16,9 @@ class ProductController extends GetxController {
     fetchProducts();
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts({String? search}) async {
     try {
-      final products = await _productService.getProducts();
+      final products = await _productService.getProducts(search: search);
       _products.assignAll(products);
     } catch (e) {
       Get.snackbar(
@@ -125,4 +125,7 @@ class ProductController extends GetxController {
       Get.snackbar('Error', 'Gagal menghapus produk', snackPosition: SnackPosition.BOTTOM);
     }
   }
+  
+  // Add this getter
+  List<Product> get products => _products;
 }

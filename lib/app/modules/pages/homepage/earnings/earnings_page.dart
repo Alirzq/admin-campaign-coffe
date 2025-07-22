@@ -13,7 +13,7 @@ class EarningsPage extends StatelessWidget {
 
   String getCurrentDayDate() {
     final now = DateTime.now();
-    final day = DateFormat('EEEE').format(now);
+    final day = DateFormat('E').format(now); 
     final date = DateFormat('d').format(now);
     final year = DateFormat('y').format(now);
     return '$day,$date,$year';
@@ -37,10 +37,8 @@ class EarningsPage extends StatelessWidget {
                       color: Colors.blue.shade900),
                 ),
                 Obx(() {
-                  // Filter order selesai (delivered/completed)
-                  final finishedOrders = controller.earnings.where((order) =>
-                    order.status == 'delivered' || order.status == 'completed').toList();
-                  final totalSales = finishedOrders.fold<double>(0, (sum, order) => sum + order.totalPrice);
+                  final completedOrders = controller.earnings.where((order) => order.status == 'completed').toList();
+                  final totalSales = completedOrders.fold<double>(0, (sum, order) => sum + order.totalPrice);
                   return Text(
                     "Rp ${NumberFormat('#,###', 'id_ID').format(totalSales)}",
                     style: GoogleFonts.poppins(
@@ -63,18 +61,18 @@ class EarningsPage extends StatelessWidget {
                 valueColor: const Color.fromARGB(255, 98, 98, 98),
                 titleFontWeight: FontWeight.w700,
                 valueFontWeight: FontWeight.w800,
-                valueFontSize: 17,
+                valueFontSize: 19,
                 valueAlign: TextAlign.center,
               ),
               SizedBox(
                 width: 20,
               ),
               Obx(() {
-                final finishedOrders = controller.earnings.where((order) =>
-                  order.status == 'delivered' || order.status == 'completed').toList();
+                // Total Order dari order status 'completed' saja
+                final completedOrders = controller.earnings.where((order) => order.status == 'completed').toList();
                 return StatCard(
                   title: "Total Order",
-                  value: finishedOrders.length.toString(),
+                  value: completedOrders.length.toString(),
                   titleColor: const Color.fromARGB(255, 98, 98, 98),
                   valueColor: const Color.fromARGB(255, 98, 98, 98),
                   titleFontWeight: FontWeight.w700,
@@ -123,22 +121,33 @@ class EarningsPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Obx(() => SizedBox(
+                Obx(() {
+                  final paidOrders = controller.earnings.where((order) => order.status == 'paid').toList();
+                  if (paidOrders.isEmpty) {
+                    return SizedBox(
                       height: 260,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: controller.earnings.length,
-                        itemBuilder: (context, index) {
-                          final order = controller.earnings[index];
-                          return OrderCard(
-                            orderName: order.customerName,
-                            orderItems: order.items.map((item) => item.productName).join(', '),
-                            price: 'Rp. ${order.totalPrice.toInt()}',
-                          );
-                        },
+                      child: Center(
+                        child: Text('Belum ada order baru.', style: TextStyle(color: Colors.grey)),
                       ),
-                    )),
+                    );
+                  }
+                  return SizedBox(
+                    height: 260,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: paidOrders.length,
+                      itemBuilder: (context, index) {
+                        final order = paidOrders[index];
+                        return OrderCard(
+                          orderName: order.customerName,
+                          orderItems: order.items.map((item) => item.productName).join(', '),
+                          price: 'Rp. ${order.totalPrice.toInt()}',
+                        );
+                      },
+                    ),
+                  );
+                }),
               ],
             ),
           ),

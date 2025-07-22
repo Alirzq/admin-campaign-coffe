@@ -4,7 +4,7 @@ import '../models/product_model.dart';
 import 'package:get_storage/get_storage.dart'; // pastikan sudah import
 
 class ProductService {
-  static const String baseUrl = 'https://f1b98737fb3b.ngrok-free.app/api';
+  static const String baseUrl = 'https://60b17e4d490e.ngrok-free.app/api';
 
   Future<List<Product>> getProducts({String? search}) async {
   try {

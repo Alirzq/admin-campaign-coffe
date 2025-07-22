@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../../../controller/pickup_controller.dart';
 
 class PickupDetailPage extends StatelessWidget {
   const PickupDetailPage({super.key});
@@ -122,7 +123,17 @@ class PickupDetailPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final args = Get.arguments ?? {};
+                      final int? orderId = args['orderId'] as int?;
+                      if (orderId != null) {
+                        final controller = Get.find<PickupController>();
+                        await controller.acceptOrder(orderId);
+                        await controller.fetchAllOrders();
+                        Get.snackbar('Sukses', 'Order diproses (inprogress)');
+                        // Tidak perlu Get.back() agar tetap di halaman detail
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0D47A1),
                       padding: const EdgeInsets.symmetric(
@@ -158,9 +169,16 @@ class PickupDetailPage extends StatelessWidget {
           Text(title,
               style: GoogleFonts.poppins(
                   fontSize: 13, fontWeight: FontWeight.w500)),
-          Text(value,
+          Flexible(
+            child: Text(
+              value,
               style: GoogleFonts.poppins(
-                  fontSize: 13, fontWeight: FontWeight.w500)),
+                  fontSize: 13, fontWeight: FontWeight.w700),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+            ),
+          ),
         ],
       ),
     );

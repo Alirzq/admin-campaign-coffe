@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+import '../../../../controller/product_controller.dart';
 
 class HeaderStockView extends StatelessWidget {
   const HeaderStockView({super.key});
@@ -54,11 +56,18 @@ class HeaderStockView extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(32),
             ),
-            child: const TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Search..',
-              ),
+            child: GetBuilder<ProductController>(
+              builder: (productController) {
+                return TextField(
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Search..',
+                  ),
+                  onChanged: (value) {
+                    productController.fetchProducts(search: value);
+                  },
+                );
+              },
             ),
           ),
         ],

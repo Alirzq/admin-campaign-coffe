@@ -4,7 +4,7 @@ import '../models/order_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class OrderService {
-  static const String baseUrl ='https://f1b98737fb3b.ngrok-free.app/api/admin';
+  static const String baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin';
   final box = GetStorage();
 
   Future<List<Order>> getOrders() async {
@@ -42,7 +42,8 @@ class OrderService {
   }
 
   Future<void> updateOrderStatus(int id, String status) async {
-    if (!(status == 'paid' || status == 'inprogress' || status == 'completed')) {
+    const validStatuses = ['pending', 'paid', 'inprogress', 'completed', 'cancelled'];
+    if (!validStatuses.contains(status)) {
       throw Exception('Status tidak valid');
     }
     final token = box.read('token');
@@ -94,6 +95,7 @@ class OrderService {
         'Content-Type': 'application/json',
       },
     );
+    print('DEBUG PICKUP $endpoint: ${response.body}');
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return List<Order>.from(data['data'].map((json) => Order.fromJson(json)));
