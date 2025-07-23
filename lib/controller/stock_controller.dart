@@ -20,7 +20,8 @@ class StockController extends GetxController {
     try {
       print('FETCH PRODUCTS: Memulai fetch produk...');
       final products = await _productService.getProducts();
-      print('FETCH PRODUCTS: Produk berhasil diambil, jumlah: ${products.length}');
+      print(
+          'FETCH PRODUCTS: Produk berhasil diambil, jumlah: ${products.length}');
       _products.assignAll(products);
     } catch (e) {
       print('FETCH PRODUCTS ERROR: $e');
@@ -37,7 +38,8 @@ class StockController extends GetxController {
       final products = await _productService.getProducts(search: search);
       _products.assignAll(products);
     } catch (e) {
-      Get.snackbar('Error', 'Gagal mencari produk', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Error', 'Gagal mencari produk',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -95,14 +97,15 @@ class StockController extends GetxController {
         return false;
       }
       print('UPDATE STOK: Update stok produk id=${product.id} ke $value');
-      final success = await _productService.updateProductStock(product.id, value);
+      final success =
+          await _productService.updateProductStock(product.id, value);
       print('UPDATE STOK: Status update ke backend: $success');
       if (success) {
         await fetchProducts(); // Refresh data dari backend
-      update();
-      return true;
-    }
-    return false;
+        update();
+        return true;
+      }
+      return false;
     } catch (e) {
       print('UPDATE STOK ERROR: $e');
       return false;

@@ -4,7 +4,7 @@ import '../models/category_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class CategoryService {
-  static const String baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin';
+  static const String baseUrl = 'https://campaign.rplrus.com/api/admin';
   final box = GetStorage();
 
   Future<List<Category>> getCategories() async {
@@ -18,7 +18,8 @@ class CategoryService {
     );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return List<Category>.from(data['data'].map((json) => Category.fromJson(json)));
+      return List<Category>.from(
+          data['data'].map((json) => Category.fromJson(json)));
     } else {
       throw Exception('Failed to load categories');
     }

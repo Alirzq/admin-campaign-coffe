@@ -60,7 +60,7 @@ class HeaderCustomWidgets extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: Colors.blue.shade900,
+                color: const Color.fromARGB(255, 0, 0, 0),
               ),
             ),
           ),

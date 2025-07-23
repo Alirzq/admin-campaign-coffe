@@ -4,7 +4,7 @@ import '../models/order_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class OrderService {
-  static const String baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin';
+  static const String baseUrl = 'https://campaign.rplrus.com/api/admin';
   final box = GetStorage();
 
   Future<List<Order>> getOrders() async {
@@ -42,7 +42,13 @@ class OrderService {
   }
 
   Future<void> updateOrderStatus(int id, String status) async {
-    const validStatuses = ['pending', 'paid', 'inprogress', 'completed', 'cancelled'];
+    const validStatuses = [
+      'pending',
+      'paid',
+      'inprogress',
+      'completed',
+      'cancelled'
+    ];
     if (!validStatuses.contains(status)) {
       throw Exception('Status tidak valid');
     }

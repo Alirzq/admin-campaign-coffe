@@ -44,7 +44,7 @@ class CustomNavbar extends StatelessWidget {
           BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5),
         ],
       ),
-      padding: const EdgeInsets.symmetric(vertical: 25),
+      padding: const EdgeInsets.symmetric(vertical: 22),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Row(
@@ -72,8 +72,8 @@ class CustomNavbar extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       item.iconPath,
-                      width: 26,
-                      height: 30,
+                      width: 28,
+                      height: 32,
                       colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                     ),
                     const SizedBox(height: 9),
