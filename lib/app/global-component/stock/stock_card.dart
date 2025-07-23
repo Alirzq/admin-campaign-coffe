@@ -70,7 +70,8 @@ class StockCard extends StatelessWidget {
                         height: 160,
                         width: double.infinity,
                         color: Colors.grey[200],
-                        child: Icon(Icons.error_outline, color: Colors.grey[400]),
+                        child:
+                            Icon(Icons.error_outline, color: Colors.grey[400]),
                       );
                     },
                   ),
@@ -105,7 +106,8 @@ class StockCard extends StatelessWidget {
                 children: [
                   amount == '0'
                       ? Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.red.shade100,
                             borderRadius: BorderRadius.circular(8),

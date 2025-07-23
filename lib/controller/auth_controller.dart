@@ -25,7 +25,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://60b17e4d490e.ngrok-free.app/api/login'),
+        Uri.parse('https://campaign.rplrus.com/api/login'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -59,7 +59,8 @@ class AuthController extends GetxController {
           final data = jsonDecode(response.body);
           if (data['message'] is Map && data['message']['message'] != null) {
             errorMessage.value = data['message']['message'];
-          } else if (data['message'] != null && data['message'].toString().isNotEmpty) {
+          } else if (data['message'] != null &&
+              data['message'].toString().isNotEmpty) {
             errorMessage.value = data['message'].toString();
           } else {
             errorMessage.value = response.body;

@@ -6,7 +6,7 @@ class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin';
+    httpClient.baseUrl = 'https://campaign.rplrus.com/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {
@@ -34,8 +34,10 @@ class EarningsService extends GetConnect {
       }
     } else {
       // Jika response HTML atau bukan JSON
-      if (response.body is String && response.body.toString().contains('<html')) {
-        throw Exception('Endpoint earnings tidak ditemukan di server (404). Cek URL backend dan route Laravel.');
+      if (response.body is String &&
+          response.body.toString().contains('<html')) {
+        throw Exception(
+            'Endpoint earnings tidak ditemukan di server (404). Cek URL backend dan route Laravel.');
       }
       throw Exception('Gagal memuat earnings: ${response.body}');
     }

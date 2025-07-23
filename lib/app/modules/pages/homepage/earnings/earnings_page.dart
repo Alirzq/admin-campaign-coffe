@@ -13,7 +13,7 @@ class EarningsPage extends StatelessWidget {
 
   String getCurrentDayDate() {
     final now = DateTime.now();
-    final day = DateFormat('E').format(now); 
+    final day = DateFormat('E').format(now);
     final date = DateFormat('d').format(now);
     final year = DateFormat('y').format(now);
     return '$day,$date,$year';
@@ -37,8 +37,11 @@ class EarningsPage extends StatelessWidget {
                       color: Colors.blue.shade900),
                 ),
                 Obx(() {
-                  final completedOrders = controller.earnings.where((order) => order.status == 'completed').toList();
-                  final totalSales = completedOrders.fold<double>(0, (sum, order) => sum + order.totalPrice);
+                  final completedOrders = controller.earnings
+                      .where((order) => order.status == 'completed')
+                      .toList();
+                  final totalSales = completedOrders.fold<double>(
+                      0, (sum, order) => sum + order.totalPrice);
                   return Text(
                     "Rp ${NumberFormat('#,###', 'id_ID').format(totalSales)}",
                     style: GoogleFonts.poppins(
@@ -57,7 +60,7 @@ class EarningsPage extends StatelessWidget {
               StatCard(
                 title: "Today's Date",
                 value: getCurrentDayDate(),
-                titleColor: const Color.fromARGB(255, 98, 98, 98),
+                titleColor: const Color.fromARGB(255, 134, 134, 134),
                 valueColor: const Color.fromARGB(255, 98, 98, 98),
                 titleFontWeight: FontWeight.w700,
                 valueFontWeight: FontWeight.w800,
@@ -69,11 +72,13 @@ class EarningsPage extends StatelessWidget {
               ),
               Obx(() {
                 // Total Order dari order status 'completed' saja
-                final completedOrders = controller.earnings.where((order) => order.status == 'completed').toList();
+                final completedOrders = controller.earnings
+                    .where((order) => order.status == 'completed')
+                    .toList();
                 return StatCard(
                   title: "Total Order",
                   value: completedOrders.length.toString(),
-                  titleColor: const Color.fromARGB(255, 98, 98, 98),
+                  titleColor: const Color.fromARGB(255, 134, 134, 134),
                   valueColor: const Color.fromARGB(255, 98, 98, 98),
                   titleFontWeight: FontWeight.w700,
                   valueFontWeight: FontWeight.w800,
@@ -122,12 +127,15 @@ class EarningsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Obx(() {
-                  final paidOrders = controller.earnings.where((order) => order.status == 'paid').toList();
+                  final paidOrders = controller.earnings
+                      .where((order) => order.status == 'paid')
+                      .toList();
                   if (paidOrders.isEmpty) {
                     return SizedBox(
                       height: 260,
                       child: Center(
-                        child: Text('Belum ada order baru.', style: TextStyle(color: Colors.grey)),
+                        child: Text('Belum ada order baru.',
+                            style: TextStyle(color: Colors.grey)),
                       ),
                     );
                   }
@@ -141,7 +149,9 @@ class EarningsPage extends StatelessWidget {
                         final order = paidOrders[index];
                         return OrderCard(
                           orderName: order.customerName,
-                          orderItems: order.items.map((item) => item.productName).join(', '),
+                          orderItems: order.items
+                              .map((item) => item.productName)
+                              .join(', '),
                           price: 'Rp. ${order.totalPrice.toInt()}',
                         );
                       },

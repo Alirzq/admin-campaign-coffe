@@ -4,16 +4,16 @@ import 'package:get_storage/get_storage.dart';
 import '../models/promotion_model.dart';
 
 class PromotionService {
-  final String baseUrl ='https://60b17e4d490e.ngrok-free.app/api/admin/promotions';
+  final String baseUrl = 'https://campaign.rplrus.com/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');
 
   Map<String, String> get headers => {
-    'Authorization': 'Bearer $token',
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  };
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      };
 
   Future<List<Promotion>> fetchPromotions() async {
     final response = await http.get(Uri.parse(baseUrl), headers: headers);
