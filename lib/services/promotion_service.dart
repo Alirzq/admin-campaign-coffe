@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import '../models/promotion_model.dart';
 
 class PromotionService {
-  final String baseUrl = 'https://campaign.rplrus.com/api/admin/promotions';
+  final String baseUrl ='https://a5bdb374b8e2.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');

@@ -5,7 +5,8 @@ import '../../../../global-component/widget/custom_button.dart';
 import '../../../../global-component/widget/input_field.dart';
 import '../../../../../controller/auth_controller.dart';
 import '../../signup/view/signup_view.dart';
-import '../../homepage/view/admin_homepage_view.dart';
+import 'ResetPassView.dart';
+
 
 class LoginView extends StatelessWidget {
   final AuthController controller = Get.put(AuthController());
@@ -87,7 +88,40 @@ class LoginView extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // Dialog input email untuk reset password
+                      final TextEditingController emailResetController = TextEditingController();
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Reset Password'),
+                            content: TextField(
+                              controller: emailResetController,
+                              decoration: InputDecoration(hintText: 'Enter your email'),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: Text('Send'),
+                                onPressed: () {
+                                  final email = emailResetController.text.trim();
+                                  if (email.isNotEmpty) {
+                                    controller.forgotPassword(email);
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    Get.snackbar('Error', 'Email harus diisi');
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     child: Text("Forgot your password?",
                         style: GoogleFonts.poppins(
                           fontSize: 14,
@@ -136,7 +170,7 @@ class LoginView extends StatelessWidget {
                 // Google Login Button
                 GestureDetector(
                   onTap: () {
-                    // Tambah login Google di sini nanti
+                    controller.loginWithGoogle();
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
