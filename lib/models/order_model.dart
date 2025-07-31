@@ -1,5 +1,6 @@
 import 'package:admin_campaign_coffe_repo/models/product_model.dart';
 import 'package:admin_campaign_coffe_repo/models/user_model.dart';
+import 'package:intl/intl.dart';
 
 class Order {
   final int id;
@@ -7,10 +8,13 @@ class Order {
   final double totalPrice;
   final String status;
   final String orderType;
-  final String createdAt;
+  final DateTime createdAt;
   final List<OrderItem> items;
   final String paymentMethod;
   final String location;
+  final String? address;
+  final String? notes;
+  final User? user;
 
   Order({
     required this.id,
@@ -22,9 +26,38 @@ class Order {
     required this.items,
     required this.paymentMethod,
     required this.location,
+    this.address,
+    this.notes,
+    this.user,
   });
+  
+  // Metode untuk memformat tanggal dan waktu untuk invoice
+  String getFormattedDateTime() {
+    return DateFormat('d MMM y HH:mm A').format(createdAt);
+  }
 
   factory Order.fromJson(Map<String, dynamic> json) {
+    // Parsing created_at dari string ke DateTime
+    DateTime parsedCreatedAt;
+    try {
+      if (json['created_at'] is String) {
+        // Mencoba parse format ISO
+        parsedCreatedAt = DateTime.parse(json['created_at']);
+      } else {
+        // Fallback ke waktu saat ini jika format tidak valid
+        parsedCreatedAt = DateTime.now();
+      }
+    } catch (e) {
+      // Fallback ke waktu saat ini jika terjadi error
+      parsedCreatedAt = DateTime.now();
+    }
+    
+    // Parse user jika ada
+    User? user;
+    if (json['user'] != null) {
+      user = User.fromJson(json['user']);
+    }
+    
     return Order(
       id: json['id'],
       customerName: json['customer_name'] ?? '',
@@ -35,12 +68,15 @@ class Order {
               : (json['total_price'] ?? 0.0),
       status: json['status'] ?? '',
       orderType: json['order_type'] ?? '',
-      createdAt: json['created_at'] ?? '',
+      createdAt: parsedCreatedAt,
       items: (json['items'] as List<dynamic>?)
               ?.map((e) => OrderItem.fromJson(e))
               .toList() ?? [],
       paymentMethod: json['payment_method'] ?? '-',
       location: json['location'] ?? '-',
+      address: json['address'],
+      notes: json['notes'],
+      user: user,
     );
   }
 }

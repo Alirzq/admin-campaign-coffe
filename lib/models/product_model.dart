@@ -30,7 +30,7 @@ class Product {
       description: json['description'] as String,
       rating: json['rating'] as int,
       reviewCount: json['review_count'] as int,
-      image: json['image'].toString().replaceAll('`', '').trim(),
+      image: json['image'],
       stock: json['stock'] != null
           ? (json['stock'] is int
               ? json['stock']

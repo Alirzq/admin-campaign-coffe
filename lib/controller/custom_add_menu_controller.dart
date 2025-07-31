@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../services/product_service.dart';
+import 'dart:io';
 
 class CustomAddMenuController extends GetxController {
   var selectedCategoryIndex = 0.obs;
@@ -40,8 +41,16 @@ class CustomAddMenuController extends GetxController {
     required String price,
     required String stock,
     required int categoryId,
+    File? imageFile,
   }) async {
     try {
+      String? imagePath;
+      
+      // Upload gambar jika ada, dengan type 'menu'
+      if (imageFile != null) {
+        imagePath = await productService.uploadImage(imageFile, 'menu');
+      }
+      
       await productService.addProduct(
         title: title,
         description: description,
@@ -50,6 +59,7 @@ class CustomAddMenuController extends GetxController {
         categoryId: categoryId,
         rating: 0,
         reviewCount: 0,
+        imagePath: imagePath,
       );
       Get.snackbar('Sukses', 'Menu berhasil ditambahkan');
     } catch (e) {

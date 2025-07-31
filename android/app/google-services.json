@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "893688575804",
+    "project_id": "campaigncoffe-f31f6",
+    "storage_bucket": "campaigncoffe-f31f6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893688575804:android:f5db691f663ad4fd371039",
+        "android_client_info": {
+          "package_name": "com.example.admin_campaign_coffe_repo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWMhwPG2ET04HcBWONfn8YExuHMgYoutI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

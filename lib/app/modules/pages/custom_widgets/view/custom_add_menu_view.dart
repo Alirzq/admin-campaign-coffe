@@ -256,6 +256,7 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
                 }),
               )),
           const SizedBox(height: 20),
+          // Ubah bagian tombol Add
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -267,16 +268,17 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
                 ),
               ),
               onPressed: () {
-  final selectedCategory = controller.categories[controller.selectedCategoryIndex.value];
-  final categoryId = controller.categoryIdMap[selectedCategory];
-  controller.addMenu(
-    title: titleController.text,
-    description: descriptionController.text,
-    price: priceController.text,
-    stock: stockController.text,
-    categoryId: categoryId!,
-  );
-},
+                final selectedCategory = controller.categories[controller.selectedCategoryIndex.value];
+                final categoryId = controller.categoryIdMap[selectedCategory];
+                controller.addMenu(
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  price: priceController.text,
+                  stock: stockController.text,
+                  categoryId: categoryId!,
+                  imageFile: _selectedImage,
+                );
+              },
               child: Text(
                 'Add',
                 style: GoogleFonts.poppins(

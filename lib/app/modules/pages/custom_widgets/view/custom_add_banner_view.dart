@@ -14,8 +14,25 @@ class CustomAddBannerView extends StatefulWidget {
 }
 
 class _CustomAddBannerViewState extends State<CustomAddBannerView> {
+  final _titleController = TextEditingController();
   File? _selectedImage;
-  final PromotionController promoController = Get.put(PromotionController());
+  late final PromotionController promoController; // Gunakan late untuk inisialisasi di initState
+
+  @override
+  void initState() {
+    super.initState();
+    // Inisialisasi controller saat widget pertama kali dibuat
+    Get.put(PromotionController());
+    promoController = Get.find<PromotionController>();
+  }
+
+  @override
+  void dispose() {
+    // Hapus controller saat widget dihapus untuk mencegah memory leak
+    Get.delete<PromotionController>();
+    _titleController.dispose();
+    super.dispose();
+  }
 
   Future<void> _showImagePickerOptions() async {
     showModalBottomSheet(
@@ -104,6 +121,31 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
     );
   }
 
+  Future<void> _savePromotion() async {
+    if (_titleController.text.isEmpty) {
+      Get.snackbar('Error', 'Title is required');
+      return;
+    }
+
+    String? imageFilename;
+    if (_selectedImage != null) {
+      imageFilename = await promoController.uploadPromotionImage(_selectedImage!);
+      if (imageFilename == null) {
+        Get.snackbar('Error', 'Failed to upload image');
+        return;
+      }
+    }
+
+    try {
+      // Panggil addPromotion dan abaikan nilai kembaliannya
+      await promoController.addPromotion(_titleController.text, image: imageFilename);
+      Get.snackbar('Success', 'Promotion added successfully');
+      Get.back(); // Kembali setelah operasi selesai
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to add promotion: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,7 +215,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
             ),
           ),
           const SizedBox(height: 24),
-          _buildTextField("Title", "enter your title"),
+          _buildTextField("Title", "enter your title", _titleController),
           const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,
@@ -187,7 +229,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
                 elevation: 4,
                 shadowColor: Colors.black45,
               ),
-              onPressed: () {},
+              onPressed: _savePromotion,
               child: Text(
                 'Finish',
                 style: GoogleFonts.poppins(
@@ -198,7 +240,6 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
               ),
             ),
           ),
-          // Tambahkan daftar promo/banner dari API di bawah form
           const SizedBox(height: 32),
           Text(
             'Daftar Banner/Promo',
@@ -222,7 +263,20 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
                   margin: EdgeInsets.symmetric(vertical: 8),
                   child: ListTile(
                     leading: promo.image != null
-                        ? Image.network(promo.image!, width: 50, height: 50, fit: BoxFit.cover)
+                        ? Image.network(
+                            promo.image!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Error loading promo image: $error');
+                              return SvgPicture.asset(
+                                'assets/banner_icon.svg',
+                                width: 40,
+                                height: 40,
+                              );
+                            },
+                          )
                         : SvgPicture.asset('assets/banner_icon.svg', width: 40, height: 40),
                     title: Text(promo.title),
                     trailing: IconButton(
@@ -239,7 +293,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
     );
   }
 
-  Widget _buildTextField(String label, String hint) {
+  Widget _buildTextField(String label, String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -263,6 +317,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
+            controller: controller,
             decoration: InputDecoration(
               hintText: hint,
               filled: true,

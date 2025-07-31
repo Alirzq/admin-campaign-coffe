@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import '../models/promotion_model.dart';
+import 'dart:io';
 
 class PromotionService {
-  final String baseUrl ='https://a5bdb374b8e2.ngrok-free.app/api/admin/promotions';
+  final String baseUrl = 'https://6fe0ea5b97fd.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');
@@ -36,6 +37,47 @@ class PromotionService {
       return Promotion.fromJson(data['data']);
     } else {
       throw Exception(data['message']);
+    }
+  }
+
+  Future<String> uploadImage(File imageFile) async {
+    try {
+      // Buat request multipart untuk mengunggah gambar
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/admin/upload-image'),
+      );
+
+      // Tambahkan header authorization yang lengkap
+      request.headers.addAll({
+        ...headers,
+        'ngrok-skip-browser-warning': 'any-value', // Tambahkan header ngrok jika diperlukan
+      });
+
+      // Tambahkan field 'type' sebagai 'promotion'
+      request.fields['type'] = 'promotion';
+
+      // Tambahkan file gambar
+      var multipartFile = await http.MultipartFile.fromPath('image', imageFile.path);
+      request.files.add(multipartFile);
+
+      // Kirim request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true && data['data'] != null) {
+          // Return nama file saja, path akan ditambahkan di backend
+          return data['data']['filename'];
+        } else {
+          throw Exception(data['message'] ?? 'Gagal upload gambar');
+        }
+      } else {
+        throw Exception('Gagal upload gambar: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
   }
 

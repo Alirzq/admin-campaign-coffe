@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../models/promotion_model.dart';
 import '../services/promotion_service.dart';
+import 'dart:io';
 
 class PromotionController extends GetxController {
   var promotions = <Promotion>[].obs;
@@ -23,16 +24,32 @@ class PromotionController extends GetxController {
     isLoading.value = false;
   }
 
-  void addPromotion(String title, {String? image}) async {
+  Future<Promotion> addPromotion(String title, {String? image}) async {
     isLoading.value = true;
     try {
       final promo = await service.addPromotion(title, image: image);
-      promotions.add(promo);
+      promotions.add(promo); // Tambahkan ke daftar setelah berhasil
       Get.snackbar('Success', 'Promotion added');
+      return promo; // Kembalikan promo yang berhasil ditambahkan
     } catch (e) {
       Get.snackbar('Error', e.toString());
+      rethrow; // Lempar ulang error agar bisa ditangani di pemanggil
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
+  }
+
+  Future<String?> uploadPromotionImage(File imageFile) async {
+    isLoading.value = true;
+    try {
+      final filename = await service.uploadImage(imageFile);
+      isLoading.value = false;
+      return filename;
+    } catch (e) {
+      isLoading.value = false;
+      Get.snackbar('Error', e.toString());
+      return null;
+    }
   }
 
   void deletePromotion(int id) async {
