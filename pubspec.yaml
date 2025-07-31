@@ -43,6 +43,7 @@ dependencies:
   google_sign_in: ^6.2.1
   printing: ^5.14.2
   pdf: ^3.11.3
+  flutter_launcher_icons: ^0.14.4
   
 
 dev_dependencies:
@@ -80,6 +81,7 @@ flutter:
     - assets/menu_food_icon.svg
     - assets/table_icon.svg
     - assets/person-icon.svg
+    - assets/IconAppAdmin.png
 
 
 
@@ -87,6 +89,16 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Konfigurasi app icon
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/IconAppAdmin.png"
+  image_path_ios: "assets/IconAppAdmin.png"
+  adaptive_icon_background: "#ffffff"  # atau bisa pakai image juga
+  adaptive_icon_foreground: "assets/IconAppAdmin.png"
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

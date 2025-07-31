@@ -27,7 +27,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/login'),
+        Uri.parse('https://e859900cec8a.ngrok-free.app/api/login'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -97,18 +97,20 @@ class AuthController extends GetxController {
       );
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-  Get.defaultDialog(
-    title: 'Reset Password',
-    middleText: 'Silakan cek email Anda untuk mendapatkan token reset password.',
-    textConfirm: 'Reset Password',
-    onConfirm: () {
-      Get.back();
-      Get.to(() => ResetPasswordView());
-    },
-    textCancel: 'Tutup',
-  );
-} else {
-        errorMessage.value = data['message'] ?? 'Gagal mengirim email reset password';
+        Get.defaultDialog(
+          title: 'Reset Password',
+          middleText:
+              'Silakan cek email Anda untuk mendapatkan token reset password.',
+          textConfirm: 'Reset Password',
+          onConfirm: () {
+            Get.back();
+            Get.to(() => ResetPasswordView());
+          },
+          textCancel: 'Tutup',
+        );
+      } else {
+        errorMessage.value =
+            data['message'] ?? 'Gagal mengirim email reset password';
       }
     } catch (e) {
       errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -137,7 +139,8 @@ class AuthController extends GetxController {
         },
       );
       if (response.statusCode == 200) {
-        Get.snackbar('Sukses', 'Password berhasil direset. Silakan login dengan password baru.');
+        Get.snackbar('Sukses',
+            'Password berhasil direset. Silakan login dengan password baru.');
         Get.offAllNamed('/login'); // atau Get.offAll(LoginView());
       } else {
         final data = jsonDecode(response.body);
@@ -165,7 +168,8 @@ class AuthController extends GetxController {
       if (response.statusCode == 200) {
         Get.snackbar('Sukses', data['message']);
       } else {
-        errorMessage.value = data['message'] ?? 'Gagal mengirim ulang email verifikasi';
+        errorMessage.value =
+            data['message'] ?? 'Gagal mengirim ulang email verifikasi';
       }
     } catch (e) {
       errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -176,51 +180,52 @@ class AuthController extends GetxController {
 
   /// Google Sign In (gunakan package google_sign_in)
   Future<void> loginWithGoogle() async {
-  isLoading.value = true;
-  errorMessage.value = '';
-  try {
-    print('Starting Google Sign-In...');
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) {
-      print('User cancelled Google Sign-In');
-      isLoading.value = false;
-      errorMessage.value = 'Login dibatalkan oleh pengguna.';
-      return;
-    }
-    print('Google Sign-In successful, getting authentication...');
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final idToken = googleAuth.idToken;
-    print('ID Token: $idToken');
-    if (idToken == null) {
-      print('ID Token is null');
-      errorMessage.value = 'Google Sign-In gagal: ID Token tidak ditemukan.';
-      isLoading.value = false;
-      return;
-    }
+    isLoading.value = true;
+    errorMessage.value = '';
+    try {
+      print('Starting Google Sign-In...');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        print('User cancelled Google Sign-In');
+        isLoading.value = false;
+        errorMessage.value = 'Login dibatalkan oleh pengguna.';
+        return;
+      }
+      print('Google Sign-In successful, getting authentication...');
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      print('ID Token: $idToken');
+      if (idToken == null) {
+        print('ID Token is null');
+        errorMessage.value = 'Google Sign-In gagal: ID Token tidak ditemukan.';
+        isLoading.value = false;
+        return;
+      }
 
-    print('Sending request to server...');
-    final response = await http.post(
-      Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/auth/google/token'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'token': idToken, 'role': 'admin'}),
-    );
-    print('Server Response: ${response.statusCode} - ${response.body}');
-    final data = jsonDecode(response.body);
-    if (response.statusCode == 200 && data['token'] != null) {
-      box.write('token', data['token']);
-      box.write('user', data['user']);
-      Get.offAllNamed('/home');
-    } else {
-      errorMessage.value = data['message'] ?? 'Login Google gagal';
-      print('Login failed: ${data['message']}');
+      print('Sending request to server...');
+      final response = await http.post(
+        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/auth/google/token'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'token': idToken, 'role': 'admin'}),
+      );
+      print('Server Response: ${response.statusCode} - ${response.body}');
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data['token'] != null) {
+        box.write('token', data['token']);
+        box.write('user', data['user']);
+        Get.offAllNamed('/home');
+      } else {
+        errorMessage.value = data['message'] ?? 'Login Google gagal';
+        print('Login failed: ${data['message']}');
+      }
+    } catch (e) {
+      print('Error during Google Login: $e');
+      errorMessage.value = 'Terjadi kesalahan saat login Google: $e';
+    } finally {
+      isLoading.value = false;
     }
-  } catch (e) {
-    print('Error during Google Login: $e');
-    errorMessage.value = 'Terjadi kesalahan saat login Google: $e';
-  } finally {
-    isLoading.value = false;
   }
-}
 
   @override
   void onClose() {

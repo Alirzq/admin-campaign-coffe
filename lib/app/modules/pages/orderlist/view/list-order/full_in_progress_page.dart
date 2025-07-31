@@ -38,11 +38,13 @@ class FullInProgressPage extends GetView<OrderController> {
                 Get.to(() => const OrderInProgressDetailPage(), arguments: {
                   'orderId': order.id,
                   'orderName': order.customerName,
-                  'orderItems': order.items.map((e) => {
-                    'name': e.productName,
-                    'quantity': e.quantity,
-                    'price': e.price,
-                  }).toList(),
+                  'orderItems': order.items
+                      .map((e) => {
+                            'name': e.productName,
+                            'quantity': e.quantity,
+                            'price': e.price,
+                          })
+                      .toList(),
                   'price': order.totalPrice.toInt(),
                   'paymentMethod': order.paymentMethod,
                   'location': order.location,

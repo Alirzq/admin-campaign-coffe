@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:io';
 
 class ProductService {
-  static const String baseUrl = 'https://6fe0ea5b97fd.ngrok-free.app/api';
+  static const String baseUrl = 'https://e859900cec8a.ngrok-free.app/api';
 
   Future<List<Product>> getProducts({String? search}) async {
     try {
@@ -81,38 +81,40 @@ class ProductService {
     try {
       final box = GetStorage();
       final token = box.read('token');
-      
+
       // Buat request multipart
-      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/admin/upload-image'));
-      
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('$baseUrl/admin/upload-image'));
+
       // Tambahkan header authorization yang lengkap
       request.headers.addAll({
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
       });
-      
+
       // Tambahkan field 'type' (menu atau promotion)
       request.fields['type'] = type;
-      
+
       // Tambahkan file gambar
-      var multipartFile = await http.MultipartFile.fromPath('image', imageFile.path);
+      var multipartFile =
+          await http.MultipartFile.fromPath('image', imageFile.path);
       request.files.add(multipartFile);
-      
+
       // Tambahkan log untuk debugging
       print('UPLOAD IMAGE REQUEST: ${request.url}');
       print('UPLOAD IMAGE HEADERS: ${request.headers}');
       print('UPLOAD IMAGE FIELDS: ${request.fields}');
       print('UPLOAD IMAGE FILE: ${imageFile.path}');
-      
+
       // Kirim request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      
+
       // Tambahkan log response
       print('UPLOAD IMAGE RESPONSE STATUS: ${response.statusCode}');
       print('UPLOAD IMAGE RESPONSE BODY: ${response.body}');
-      
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true && data['data'] != null) {
@@ -122,7 +124,8 @@ class ProductService {
           throw Exception(data['message'] ?? 'Gagal upload gambar');
         }
       } else {
-        throw Exception('Gagal upload gambar: ${response.statusCode} - ${response.body}');
+        throw Exception(
+            'Gagal upload gambar: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       throw Exception('Error: $e');

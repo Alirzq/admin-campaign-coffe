@@ -6,7 +6,7 @@ class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl ='https://6fe0ea5b97fd.ngrok-free.app/api/admin';
+    httpClient.baseUrl = 'https://e859900cec8a.ngrok-free.app/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {

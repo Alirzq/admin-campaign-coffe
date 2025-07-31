@@ -4,7 +4,7 @@ import '../models/history_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class HistoryService {
-  static const String baseUrl = 'https://6fe0ea5b97fd.ngrok-free.app/api/admin';
+  static const String baseUrl = 'https://e859900cec8a.ngrok-free.app/api/admin';
 
   static Future<List<HistoryModel>> fetchOrderHistory() async {
     final box = GetStorage();

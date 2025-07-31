@@ -5,7 +5,8 @@ import '../models/promotion_model.dart';
 import 'dart:io';
 
 class PromotionService {
-  final String baseUrl = 'https://6fe0ea5b97fd.ngrok-free.app/api/admin/promotions';
+  final String baseUrl =
+      'https://e859900cec8a.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');
@@ -51,14 +52,16 @@ class PromotionService {
       // Tambahkan header authorization yang lengkap
       request.headers.addAll({
         ...headers,
-        'ngrok-skip-browser-warning': 'any-value', // Tambahkan header ngrok jika diperlukan
+        'ngrok-skip-browser-warning':
+            'any-value', // Tambahkan header ngrok jika diperlukan
       });
 
       // Tambahkan field 'type' sebagai 'promotion'
       request.fields['type'] = 'promotion';
 
       // Tambahkan file gambar
-      var multipartFile = await http.MultipartFile.fromPath('image', imageFile.path);
+      var multipartFile =
+          await http.MultipartFile.fromPath('image', imageFile.path);
       request.files.add(multipartFile);
 
       // Kirim request
@@ -74,7 +77,8 @@ class PromotionService {
           throw Exception(data['message'] ?? 'Gagal upload gambar');
         }
       } else {
-        throw Exception('Gagal upload gambar: ${response.statusCode} - ${response.body}');
+        throw Exception(
+            'Gagal upload gambar: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       throw Exception('Error: $e');

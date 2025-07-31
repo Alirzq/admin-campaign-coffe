@@ -27,30 +27,32 @@ class FullDeliverPage extends GetView<OrderController> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Obx(() => ListView.builder(
-          itemCount: controller.orderList.length,
-          itemBuilder: (context, index) {
-            final order = controller.orderList[index];
-            return OrderCard(
-              orderName: order.customerName,
-              orderItems: order.items.map((e) => e.productName).join(', '),
-              price: 'Rp. ${order.totalPrice.toInt()}',
-              onTap: () {
-                Get.to(() => OrderDetailDeliverPage(
-                  orderId: order.id,
+              itemCount: controller.orderList.length,
+              itemBuilder: (context, index) {
+                final order = controller.orderList[index];
+                return OrderCard(
                   orderName: order.customerName,
-                  orderItems: order.items.map((e) => {
-                    'name': e.productName,
-                    'price': e.price,
-                  }).toList(),
-                  totalPrice: order.totalPrice,
-                  paymentMethod: order.paymentMethod ?? '-',
-                  location: order.location ?? '-',
-                  status: order.status,
-                ));
+                  orderItems: order.items.map((e) => e.productName).join(', '),
+                  price: 'Rp. ${order.totalPrice.toInt()}',
+                  onTap: () {
+                    Get.to(() => OrderDetailDeliverPage(
+                          orderId: order.id,
+                          orderName: order.customerName,
+                          orderItems: order.items
+                              .map((e) => {
+                                    'name': e.productName,
+                                    'price': e.price,
+                                  })
+                              .toList(),
+                          totalPrice: order.totalPrice,
+                          paymentMethod: order.paymentMethod ?? '-',
+                          location: order.location ?? '-',
+                          status: order.status,
+                        ));
+                  },
+                );
               },
-            );
-          },
-        )),
+            )),
       ),
     );
   }

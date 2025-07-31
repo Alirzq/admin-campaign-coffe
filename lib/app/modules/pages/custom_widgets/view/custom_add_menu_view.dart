@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -91,14 +92,14 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
             Icon(
               icon,
               size: 50,
-              color: const Color(0xFF0D47A1),
+              color: const Color.fromARGB(255, 49, 49, 49),
             ),
             const SizedBox(height: 8),
             Text(
               label,
               style: GoogleFonts.poppins(
                 fontSize: 14,
-                color: const Color(0xFF0D47A1),
+                color: const Color.fromARGB(255, 49, 49, 49),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -178,13 +179,21 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
             ),
           ),
           const SizedBox(height: 24),
-          _buildTextField("Title", "enter your title", controller: titleController),
+          _buildTextField("Title", "enter your title",
+              controller: titleController),
           const SizedBox(height: 16),
-          _buildTextField("Description", "enter your description", maxLines: 3, controller: descriptionController),
+          _buildTextField("Description", "enter your description",
+              maxLines: 3, controller: descriptionController),
           const SizedBox(height: 16),
-          _buildTextField("Price", "enter your price", controller: priceController),
+          _buildTextField("Price", "enter your price",
+              controller: priceController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
           const SizedBox(height: 16),
-          _buildTextField("Stock", "enter your stock", controller: stockController),
+          _buildTextField("Stock", "enter your stock",
+              controller: stockController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly]),
           const SizedBox(height: 24),
           Text(
             "Categories",
@@ -268,7 +277,8 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
                 ),
               ),
               onPressed: () {
-                final selectedCategory = controller.categories[controller.selectedCategoryIndex.value];
+                final selectedCategory = controller
+                    .categories[controller.selectedCategoryIndex.value];
                 final categoryId = controller.categoryIdMap[selectedCategory];
                 controller.addMenu(
                   title: titleController.text,
@@ -294,7 +304,11 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
     );
   }
 
-  Widget _buildTextField(String label, String hint, {int maxLines = 1, TextEditingController? controller}) {
+  Widget _buildTextField(String label, String hint,
+      {int maxLines = 1,
+      TextEditingController? controller,
+      TextInputType? keyboardType,
+      List<TextInputFormatter>? inputFormatters}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,6 +334,8 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             decoration: InputDecoration(
               hintText: hint,
               filled: true,

@@ -36,13 +36,13 @@ class WidgetCard extends StatelessWidget {
               iconPath,
               height: 60,
               width: 60,
-              color: const Color(0xFF014AAD),
+              color: const Color.fromARGB(255, 49, 49, 49),
             ),
             const SizedBox(width: 18),
             Text(
               title,
               style: const TextStyle(
-                color: Color(0xFF014AAD),
+                color: const Color.fromARGB(255, 49, 49, 49),
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
               ),
