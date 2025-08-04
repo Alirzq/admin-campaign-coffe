@@ -1,8 +1,8 @@
-import 'package:admin_campaign_coffe_repo/app/global-component/order/pickup_order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../detail-pickup/pickup_detail_in_progress_page.dart';
 import 'package:admin_campaign_coffe_repo/controller/pickup_controller.dart';
+import 'package:admin_campaign_coffe_repo/app/global-component/order/pickup_order_card.dart';
+import '../detail-pickup/pickup_detail_in_progress_page.dart';
 
 class FullPickupInProgressPage extends StatelessWidget {
   const FullPickupInProgressPage({super.key});
@@ -28,31 +28,69 @@ class FullPickupInProgressPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: ListView.builder(
-          itemCount: controller.inProgressList.length,
-          itemBuilder: (context, index) {
-            final pickup = controller.inProgressList[index];
-            return PickupOrderCard(
-              pickupName: pickup.customerName,
-              pickupItems: pickup.items.map((e) => e.productName).join(', '),
-              price: 'Rp. ${pickup.totalPrice.toInt()}',
-              items: pickup.items.map((e) => e.productName).toList(),
-              onTap: () => Get.to(() => const PickupInProgressDetailPage(), arguments: {
-                'orderId': pickup.id,
-                'orderName': pickup.customerName,
-                'orderItems': pickup.items.map((e) => {
-                  'name': e.productName,
-                  'quantity': e.quantity,
-                  'price': e.price,
-                }).toList(),
-                'price': pickup.totalPrice.toInt(),
-                'paymentMethod': pickup.paymentMethod ?? '-',
-                'location': pickup.location ?? '-',
-                'status': pickup.status,
-              }),
-            );
-          },
-        ),
+        child: Obx(() {
+          if (controller.inProgressList.isEmpty) {
+            return const Center(child: Text('Belum ada pickup.'));
+          }
+          return ListView.builder(
+            itemCount: controller.inProgressList.length,
+            itemBuilder: (context, index) {
+              final pickup = controller.inProgressList[index];
+              return PickupOrderCard(
+                pickupName: pickup.customerName,
+                pickupItems: pickup.items.map((e) => e.productName).join(', '),
+                price: 'Rp. ${pickup.totalPrice.toInt()}',
+                items: pickup.items.map((e) => e.productName).toList(),
+                onTap: () => Get.to(() => const PickupInProgressDetailPage(),
+                    arguments: {
+                      // Primary fields
+                      'id': pickup.id,
+                      'customer_name': pickup.customerName,
+                      'total_price': pickup.totalPrice.toInt(),
+                      'order_type': pickup.orderType,
+                      'created_at': pickup.getFormattedDate(),
+                      'payment_method': pickup.paymentMethod,
+                      'location': pickup.location,
+                      'notes': pickup.notes,
+                      'status': pickup.status,
+
+                      // Detail item structure
+                      'items': pickup.items
+                          .map((item) => {
+                                'id': item.id,
+                                'product_id': item.productId,
+                                'product_name': item.productName,
+                                'product_image': item.productImage,
+                                'price': item.price,
+                                'quantity': item.quantity,
+                                'size': item.size,
+                                'sugar': item.sugar,
+                                'temperature': item.temperature,
+                              })
+                          .toList(),
+
+                      // Alternative field names (optional for compatibility)
+                      'orderId': pickup.id,
+                      'orderName': pickup.customerName,
+                      'price': pickup.totalPrice.toInt(),
+                      'paymentMethod': pickup.paymentMethod,
+                      'orderType': pickup.orderType,
+                      'orderItems': pickup.items
+                          .map((item) => {
+                                'name': item.productName,
+                                'productName': item.productName,
+                                'price': item.price,
+                                'quantity': item.quantity,
+                                'size': item.size,
+                                'sugar': item.sugar,
+                                'temperature': item.temperature,
+                              })
+                          .toList(),
+                    }),
+              );
+            },
+          );
+        }),
       ),
     );
   }

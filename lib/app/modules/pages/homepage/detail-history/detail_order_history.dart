@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 import 'package:intl/intl.dart';
 
-class OrderDetailPage extends StatelessWidget {
-  const OrderDetailPage({super.key});
+class DetailOrderHistory extends StatelessWidget {
+  const DetailOrderHistory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,6 @@ class OrderDetailPage extends StatelessWidget {
     final String orderType = args['order_type'] ?? args['orderType'] ?? '-';
     final String notes = args['notes'] ?? args['note'] ?? '-';
     final String? created_at = args['created_at']; // Sesuai OrderModel
-
-    final orderController = Get.find<OrderController>();
 
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
@@ -80,7 +77,7 @@ class OrderDetailPage extends StatelessWidget {
     }
 
     // Debug print untuk memastikan data yang diterima
-    print('DEBUG - OrderDetailPage Args:');
+    print('DEBUG - DetailOrderHistory Args:');
     print('orderId: $orderId');
     print('customer_name: $customerName');
     print('order_type: $orderType');
@@ -90,6 +87,8 @@ class OrderDetailPage extends StatelessWidget {
     print('location: $location');
     print('items: $items');
     print('total_price: $totalPrice');
+    print('status: $status');
+    print('All args keys: ${args.keys.toList()}');
     print('All args: $args');
 
     // Helper function untuk mendapatkan notes yang lebih informatif
@@ -146,6 +145,10 @@ class OrderDetailPage extends StatelessWidget {
           return type.capitalizeFirst ?? type;
       }
     }
+
+    // Determine if this is a pickup or delivery order for location label
+    bool isPickup = orderType.toLowerCase().contains('pickup');
+    String locationLabel = isPickup ? 'Lokasi Pickup' : 'Alamat Pengiriman';
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -234,6 +237,24 @@ class OrderDetailPage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      // Status badge
+                      if (status.isNotEmpty && status != '-')
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(status),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            _getStatusText(status),
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -266,7 +287,9 @@ class OrderDetailPage extends StatelessWidget {
                           infoRow("Tipe Pesanan", getOrderTypeLabel(orderType)),
                           infoRow("Payment Method",
                               getPaymentMethodLabel(paymentMethod)),
-                          infoRow("Lokasi", location),
+                          infoRow(locationLabel, location),
+                          if (notes.isNotEmpty && notes != '-')
+                            infoRow("Catatan", getNotesDisplay(notes)),
                         ],
                       ),
                     ),
@@ -418,53 +441,23 @@ class OrderDetailPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                if (status == 'delivered' || status == 'completed')
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Delivered',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  )
-                else
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: orderId != null
-                          ? () async {
-                              await orderController.acceptOrder(orderId);
-                              await orderController.fetchAllOrders();
-                              Get.back(); // langsung tutup halaman
-                              Get.snackbar(
-                                  'Sukses', 'Order diproses (inprogress)');
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0D47A1),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Accept',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
+                // Status indicator untuk history (tidak ada button action)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(status),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _getStatusText(status),
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
+                ),
               ],
             ),
           ),
@@ -495,5 +488,48 @@ class OrderDetailPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'selesai':
+      case 'delivered':
+        return Colors.green;
+      case 'pending':
+      case 'menunggu':
+        return Colors.orange;
+      case 'processing':
+      case 'diproses':
+      case 'inprogress':
+        return Colors.blue;
+      case 'cancelled':
+      case 'dibatalkan':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String _getStatusText(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'delivered':
+        return 'Selesai';
+      case 'pending':
+        return 'Menunggu';
+      case 'processing':
+      case 'inprogress':
+        return 'Diproses';
+      case 'cancelled':
+        return 'Dibatalkan';
+      case 'selesai':
+      case 'menunggu':
+      case 'diproses':
+      case 'dibatalkan':
+        return status;
+      default:
+        return status.isNotEmpty ? status : 'Unknown';
+    }
   }
 }

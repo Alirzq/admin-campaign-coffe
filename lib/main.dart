@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/splash',
+      initialRoute: '/home',
       getPages: AppRoutes.routes,
       defaultTransition: Transition.noTransition,
       transitionDuration: const Duration(milliseconds: 300),

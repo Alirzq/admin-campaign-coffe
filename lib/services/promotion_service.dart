@@ -6,7 +6,7 @@ import 'dart:io';
 
 class PromotionService {
   final String baseUrl =
-      'https://e859900cec8a.ngrok-free.app/api/admin/promotions';
+      'https://5c6e77786f80.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');

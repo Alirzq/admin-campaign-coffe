@@ -7,7 +7,7 @@ class OrderService {
   Future<http.Response> getOrders() async {
     final token = box.read('token');
     return await http.get(
-      Uri.parse('https://e859900cec8a.ngrok-free.app/api/login'),
+      Uri.parse('https://5c6e77786f80.ngrok-free.app/api/login'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
