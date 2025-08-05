@@ -27,7 +27,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://22a4a86860d4.ngrok-free.app/api/login'),
+        Uri.parse('https://90b763d4ac5f.ngrok-free.app/api/login'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -91,7 +91,7 @@ class AuthController extends GetxController {
     errorMessage.value = '';
     try {
       final response = await http.post(
-        Uri.parse('https://5c6e77786f80.ngrok-free.app/api/forgot-password'),
+        Uri.parse('https://90b763d4ac5f.ngrok-free.app/api/forgot-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
@@ -130,7 +130,7 @@ class AuthController extends GetxController {
     errorMessage.value = '';
     try {
       final response = await http.post(
-        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/reset-password'),
+        Uri.parse('https://90b763d4ac5f.ngrok-free.app/api/reset-password'),
         body: {
           'email': email,
           'token': token,
@@ -160,7 +160,7 @@ class AuthController extends GetxController {
     errorMessage.value = '';
     try {
       final response = await http.post(
-        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/email/resend'),
+        Uri.parse('https://90b763d4ac5f.ngrok-free.app/api/email/resend'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
@@ -205,7 +205,7 @@ class AuthController extends GetxController {
 
       print('Sending request to server...');
       final response = await http.post(
-        Uri.parse('https://6fe0ea5b97fd.ngrok-free.app/api/auth/google/token'),
+        Uri.parse('https://90b763d4ac5f.ngrok-free.app/api/auth/google/token'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'token': idToken, 'role': 'admin'}),
       );

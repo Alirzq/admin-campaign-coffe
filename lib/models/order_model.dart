@@ -12,7 +12,6 @@ class Order {
   final List<OrderItem> items;
   final String paymentMethod;
   final String location;
-  final String? address;
   final String? notes;
   final User? user;
 
@@ -26,7 +25,6 @@ class Order {
     required this.items,
     required this.paymentMethod,
     required this.location,
-    this.address,
     this.notes,
     this.user,
   });
@@ -103,7 +101,6 @@ class Order {
           [],
       paymentMethod: json['payment_method'] ?? '-',
       location: json['location'] ?? '-',
-      address: json['address'],
       notes: json['notes'],
       user: user,
     );
@@ -120,7 +117,6 @@ class Order {
       'created_at': getRawCreatedAt(),
       'payment_method': paymentMethod,
       'location': location,
-      'address': address,
       'notes': notes,
       'items': items.map((item) => item.toJson()).toList(),
     };

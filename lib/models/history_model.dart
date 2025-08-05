@@ -7,7 +7,7 @@ class HistoryModel {
   final String orderType;
   final String? createdAt;
   final String paymentMethod;
-  final String? address;
+  final String location;
   final String? notes;
   final List<HistoryItemModel> orderItems;
 
@@ -18,9 +18,9 @@ class HistoryModel {
     required this.totalPrice,
     required this.status,
     required this.orderType,
+    required this.location,
     this.createdAt,
     required this.paymentMethod,
-    this.address,
     this.notes,
     required this.orderItems,
   });
@@ -42,7 +42,7 @@ class HistoryModel {
       orderType: json['order_type'] ?? '',
       createdAt: json['created_at'],
       paymentMethod: json['payment_method'] ?? '',
-      address: json['address'],
+      location: json['location'] ?? '',
       notes: json['notes'],
       orderItems: (json['items'] as List?)
               ?.map((e) => HistoryItemModel.fromJson(e))

@@ -138,7 +138,7 @@ class HistoryPage extends GetView<HistoryController> {
                           'order_type': order.orderType,
                           'created_at': order.createdAt,
                           'payment_method': order.paymentMethod,
-                          'location': order.address ?? '-',
+                          'location': order.location ?? '-',
                           'notes': order.notes,
                           'status': order.status,
                           'items': order.orderItems
