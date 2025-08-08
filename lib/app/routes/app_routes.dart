@@ -1,5 +1,7 @@
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_menu_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/profile/profile_page.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/signup/view/emailverificationview.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/login/view/ResetPassView.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_add_menu_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_widgets_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/stock_binding.dart';
@@ -37,6 +39,8 @@ class MyRoutes {
   static const String history = '/history';
   static const String pickup = '/pickup';
   static const String profile = '/profile';
+  static const String emailVerification = '/email-verification';
+  static const String resetPassword = '/reset-password';
 }
 
 class AppRoutes {
@@ -85,6 +89,14 @@ class AppRoutes {
       name: MyRoutes.profile,
       page: () => const ProfilePage(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: MyRoutes.emailVerification,
+      page: () => EmailVerificationView(email: Get.arguments ?? ''),
+    ),
+    GetPage(
+      name: MyRoutes.resetPassword,
+      page: () => ResetPasswordView(),
     ),
   ];
 }

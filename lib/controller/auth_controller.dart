@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../app/modules/pages/login/view/ResetPassView.dart'; // jika dari root controller
+import '../app/modules/pages/login/view/ResetPassView.dart';
 
 class AuthController extends GetxController {
   final TextEditingController emailController = TextEditingController();
@@ -18,7 +18,8 @@ class AuthController extends GetxController {
     String password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      errorMessage.value = 'Email dan password harus diisi!';
+      errorMessage.value = 'Mohon masukkan email dan kata sandi.';
+      Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
       return;
     }
 
@@ -27,54 +28,49 @@ class AuthController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/login'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/login'),
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
           'password': password,
         }),
-      );
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
+      });
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data != null && data['success'] == true) {
-          final token = data['data']['token'];
-          final user = data['data']['user'];
-          if (token != null) {
-            box.write('token', token);
-            print('TOKEN YANG DISIMPAN: $token');
-          }
-          if (user != null) {
-            box.write('user', user); // <-- Tambahkan baris ini!
-            print('USER YANG DISIMPAN: $user');
-          }
-          Get.offAllNamed('/home');
-        } else {
-          errorMessage.value = data?['message'] ?? 'Login gagal';
-          Get.offAllNamed('/home');
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['success'] == true) {
+        final token = data['data']['token'];
+        final user = data['data']['user'];
+        if (token != null) {
+          box.write('token', token);
+          print('TOKEN YANG DISIMPAN: $token');
         }
+        if (user != null) {
+          box.write('user', user);
+          print('USER YANG DISIMPAN: $user');
+        }
+        Get.snackbar(
+          'Sukses',
+          data['data']['message'] ?? 'Login berhasil! Selamat datang kembali.',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.offAllNamed('/home');
       } else {
-        print('LOGIN ERROR RESPONSE: ${response.body}');
-        try {
-          final data = jsonDecode(response.body);
-          if (data['message'] is Map && data['message']['message'] != null) {
-            errorMessage.value = data['message']['message'];
-          } else if (data['message'] != null &&
-              data['message'].toString().isNotEmpty) {
-            errorMessage.value = data['message'].toString();
-          } else {
-            errorMessage.value = response.body;
-          }
-        } catch (_) {
-          errorMessage.value = response.body.isNotEmpty
-              ? response.body
-              : 'Terjadi kesalahan. Kode status: ${response.statusCode}';
+        errorMessage.value = data['data']['message'] ?? 'Login gagal. Silakan coba lagi.';
+        if (data['data']['errors'] != null) {
+          errorMessage.value = data['data']['errors'].values.join(', ');
         }
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
+      errorMessage.value = e.toString().contains('timeout')
+          ? 'Koneksi ke server gagal. Silakan cek internet Anda.'
+          : 'Terjadi kesalahan saat login. Silakan coba lagi.';
+      Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+      print('Error during login: $e');
     } finally {
       isLoading.value = false;
     }
@@ -82,146 +78,218 @@ class AuthController extends GetxController {
 
   void logout() {
     box.remove('token');
+    box.remove('user');
+    Get.snackbar('Sukses', 'Anda telah logout.', backgroundColor: Colors.green, colorText: Colors.white);
     Get.offAllNamed('/login');
   }
 
-  /// Kirim link reset password ke email
   Future<void> forgotPassword(String email) async {
+    if (email.isEmpty) {
+      errorMessage.value = 'Mohon masukkan email Anda.';
+      Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
+      return;
+    }
+
     isLoading.value = true;
     errorMessage.value = '';
+
     try {
       final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/forgot-password'),
+        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/forgot-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
-      );
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
+      });
+
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         Get.defaultDialog(
-          title: 'Reset Password',
-          middleText:
-              'Silakan cek email Anda untuk mendapatkan token reset password.',
-          textConfirm: 'Reset Password',
+          title: 'Reset Kata Sandi',
+          middleText: 'Link reset kata sandi telah dikirim ke email Anda.',
+          textConfirm: 'Lanjutkan',
           onConfirm: () {
             Get.back();
-            Get.to(() => ResetPasswordView());
+            Get.toNamed('/reset-password');
           },
           textCancel: 'Tutup',
+          confirmTextColor: Colors.white,
+          buttonColor: Colors.blue.shade900,
         );
       } else {
-        errorMessage.value =
-            data['message'] ?? 'Gagal mengirim email reset password';
+        errorMessage.value = data['data']['message'] ?? 'Gagal mengirim link reset kata sandi.';
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
+      errorMessage.value = e.toString().contains('timeout')
+          ? 'Koneksi ke server gagal. Silakan cek internet Anda.'
+          : 'Terjadi kesalahan saat mengirim link reset. Silakan coba lagi.';
+      Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+      print('Error during forgot password: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Reset password dengan token dari email
   Future<void> resetPassword({
     required String email,
     required String token,
     required String password,
     required String passwordConfirmation,
   }) async {
+    if (email.isEmpty || token.isEmpty || password.isEmpty || passwordConfirmation.isEmpty) {
+      errorMessage.value = 'Mohon isi semua kolom dengan lengkap.';
+      Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
+      return;
+    }
+
+    if (password != passwordConfirmation) {
+      errorMessage.value = 'Kata sandi dan konfirmasi kata sandi tidak cocok.';
+      Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
+      return;
+    }
+
     isLoading.value = true;
     errorMessage.value = '';
+
     try {
       final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/reset-password'),
-        body: {
+        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/reset-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
           'email': email,
           'token': token,
           'password': password,
           'password_confirmation': passwordConfirmation,
-        },
-      );
-      if (response.statusCode == 200) {
-        Get.snackbar('Sukses',
-            'Password berhasil direset. Silakan login dengan password baru.');
-        Get.offAllNamed('/login'); // atau Get.offAll(LoginView());
-      } else {
-        final data = jsonDecode(response.body);
-        errorMessage.value = data['message'] ?? 'Reset password gagal';
-        Get.snackbar('Error', errorMessage.value);
-      }
-    } catch (e) {
-      errorMessage.value = 'Terjadi kesalahan';
-      Get.snackbar('Error', errorMessage.value);
-    }
-    isLoading.value = false;
-  }
+        }),
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
+      });
 
-  /// Resend email verifikasi
-  Future<void> resendVerificationEmail(String email) async {
-    isLoading.value = true;
-    errorMessage.value = '';
-    try {
-      final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/email/resend'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email}),
-      );
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        Get.snackbar('Sukses', data['message']);
+        Get.snackbar(
+          'Sukses',
+          data['data']['message'] ?? 'Kata sandi berhasil direset. Silakan login dengan kata sandi baru.',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.offAllNamed('/login');
       } else {
-        errorMessage.value =
-            data['message'] ?? 'Gagal mengirim ulang email verifikasi';
+        errorMessage.value = data['data']['message'] ?? 'Gagal mereset kata sandi. Silakan coba lagi.';
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      errorMessage.value = 'Terjadi kesalahan. Silakan coba lagi.';
+      errorMessage.value = e.toString().contains('timeout')
+          ? 'Koneksi ke server gagal. Silakan cek internet Anda.'
+          : 'Terjadi kesalahan saat mereset kata sandi. Silakan coba lagi.';
+      Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+      print('Error during reset password: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Google Sign In (gunakan package google_sign_in)
+  Future<void> resendVerificationEmail(String email) async {
+    if (email.isEmpty) {
+      errorMessage.value = 'Mohon masukkan email Anda.';
+      Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
+      return;
+    }
+
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/email/resend'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
+      });
+
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          'Sukses',
+          data['data']['message'] ?? 'Link verifikasi baru telah dikirim ke email Anda.',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        errorMessage.value = data['data']['message'] ?? 'Gagal mengirim link verifikasi. Silakan coba lagi.';
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } catch (e) {
+      errorMessage.value = e.toString().contains('timeout')
+          ? 'Koneksi ke server gagal. Silakan cek internet Anda.'
+          : 'Terjadi kesalahan saat mengirim link verifikasi. Silakan coba lagi.';
+      Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+      print('Error during resend verification: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> loginWithGoogle() async {
     isLoading.value = true;
     errorMessage.value = '';
+
     try {
       print('Starting Google Sign-In...');
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         print('User cancelled Google Sign-In');
         isLoading.value = false;
-        errorMessage.value = 'Login dibatalkan oleh pengguna.';
+        errorMessage.value = 'Login dengan Google dibatalkan.';
+        Get.snackbar('Peringatan', errorMessage.value, backgroundColor: Colors.orange, colorText: Colors.white);
         return;
       }
       print('Google Sign-In successful, getting authentication...');
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final idToken = googleAuth.idToken;
       print('ID Token: $idToken');
       if (idToken == null) {
         print('ID Token is null');
-        errorMessage.value = 'Google Sign-In gagal: ID Token tidak ditemukan.';
+        errorMessage.value = 'Gagal login dengan Google. Silakan coba lagi.';
         isLoading.value = false;
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
       print('Sending request to server...');
       final response = await http.post(
-        Uri.parse('https://campaign.rplrus.com/api/auth/google/token'),
+        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/auth/google/token'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'token': idToken, 'role': 'admin'}),
-      );
+        body: jsonEncode({'token': idToken}),
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
+      });
+
       print('Server Response: ${response.statusCode} - ${response.body}');
       final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data['token'] != null) {
-        box.write('token', data['token']);
-        box.write('user', data['user']);
+      if (response.statusCode == 200 && data['success'] == true) {
+        box.write('token', data['data']['token']);
+        box.write('user', data['data']['user']);
+        Get.snackbar(
+          'Sukses',
+          data['data']['message'] ?? 'Login dengan Google berhasil! Selamat datang.',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
         Get.offAllNamed('/home');
       } else {
-        errorMessage.value = data['message'] ?? 'Login Google gagal';
-        print('Login failed: ${data['message']}');
+        errorMessage.value = data['data']['message'] ?? 'Gagal login dengan Google. Silakan coba lagi.';
+        Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
+        print('Login failed: ${data['data']['message']}');
       }
     } catch (e) {
       print('Error during Google Login: $e');
-      errorMessage.value = 'Terjadi kesalahan saat login Google: $e';
+      errorMessage.value = e.toString().contains('timeout')
+          ? 'Koneksi ke server gagal. Silakan cek internet Anda.'
+          : 'Terjadi kesalahan saat login dengan Google. Silakan coba lagi.';
+      Get.snackbar('Gagal', errorMessage.value, backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoading.value = false;
     }

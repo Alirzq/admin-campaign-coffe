@@ -7,12 +7,41 @@ import '../../../../../controller/auth_controller.dart';
 import '../../signup/view/signup_view.dart';
 import 'ResetPassView.dart';
 
-
 class LoginView extends StatelessWidget {
   final AuthController controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
+    // Pantau errorMessage untuk menampilkan dialog verifikasi email
+    ever(controller.errorMessage, (String message) {
+      if (message.contains('Email belum diverifikasi')) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Verifikasi Email Diperlukan'),
+              content: Text(
+                  'Email Anda belum diverifikasi. Apakah Anda ingin mengirim ulang link verifikasi?'),
+              actions: [
+                TextButton(
+                  child: Text('Batal'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text('Kirim Ulang'),
+                  onPressed: () {
+                    controller.resendVerificationEmail(controller.emailController.text.trim());
+                    Navigator.of(context).pop();
+                    Get.snackbar('Sukses', 'Link verifikasi telah dikirim ulang.');
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -122,19 +151,20 @@ class LoginView extends StatelessWidget {
                         },
                       );
                     },
-                    child: Text("Forgot your password?",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromARGB(255, 31, 65, 187),
-                        )),
+                    child: Text(
+                      "Forgot your password?",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromARGB(255, 31, 65, 187),
+                      ),
+                    ),
                   ),
                 ),
 
                 // Sign In Button with Loading
                 Obx(() => CustomButton(
-                      text:
-                          controller.isLoading.value ? 'Loading...' : 'Sign in',
+                      text: controller.isLoading.value ? 'Loading...' : 'Sign in',
                       onPressed: () {
                         if (!controller.isLoading.value) {
                           controller.login();
@@ -149,22 +179,26 @@ class LoginView extends StatelessWidget {
                 // Create Account
                 GestureDetector(
                   onTap: () => Get.to(() => SignupView()),
-                  child: Text("Create new account",
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: const Color.fromARGB(255, 73, 73, 73),
-                      )),
+                  child: Text(
+                    "Create new account",
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: const Color.fromARGB(255, 73, 73, 73),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 60),
 
                 // OR
-                Text("Or continue with",
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                    )),
+                Text(
+                  "Or continue with",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ),
                 SizedBox(height: 16),
 
                 // Google Login Button
