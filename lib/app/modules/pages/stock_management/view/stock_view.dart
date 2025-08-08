@@ -31,7 +31,7 @@ class StockView extends GetView<StockController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               title: Text(
-                'Tambah Stok',
+                'Edit Stok',
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -95,7 +95,7 @@ class StockView extends GetView<StockController> {
                       }
                     }
                   },
-                  child: Text('Tambah',
+                  child: Text('Edit',
                       style: GoogleFonts.poppins(color: Colors.white)),
                 ),
               ],

@@ -165,7 +165,7 @@ class PickupDetailPage extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Center(
           child: Container(
@@ -183,8 +183,9 @@ class PickupDetailPage extends StatelessWidget {
               ],
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Header Customer Info
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -238,102 +239,90 @@ class PickupDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Pickup List',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Detail order info
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[50],
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey[200]!),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          infoRow("Order ID", "#ORD${orderId ?? '-'}"),
-                          infoRow("Tanggal", formatDate(created_at)),
-                          infoRow("Tipe Pesanan", getOrderTypeLabel(orderType)),
-                          infoRow("Payment Method",
-                              getPaymentMethodLabel(paymentMethod)),
-                          infoRow("Lokasi", location),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Order items
-                    Text(
-                      'Items',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...items.map((item) {
-                      // Debug print untuk setiap item
-                      print('DEBUG - Item: ${item.toString()}');
-                      if (item is Map) {
-                        print('DEBUG - Item keys: ${item.keys.toList()}');
-                        print('DEBUG - Item size: ${item['size']}');
-                        print(
-                            'DEBUG - Item temperature: ${item['temperature']}');
-                        print('DEBUG - Item sugar: ${item['sugar']}');
-                      }
 
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            // Gambar produk
-                            if (item['product_image'] != null &&
-                                item['product_image'].toString().isNotEmpty)
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                    item['product_image']
+                // Order Information
+                Text(
+                  'Pickup List',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Detail order info
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      infoRow("Order ID", "#ORD${orderId ?? '-'}"),
+                      infoRow("Tanggal", formatDate(created_at)),
+                      infoRow("Tipe Pesanan", getOrderTypeLabel(orderType)),
+                      infoRow("Payment Method",
+                          getPaymentMethodLabel(paymentMethod)),
+                      infoRow("Lokasi", location),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Items Section
+                Text(
+                  'Items',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                // Items List
+                ...items.map((item) {
+                  // Debug print untuk setiap item
+                  print('DEBUG - Item: ${item.toString()}');
+                  if (item is Map) {
+                    print('DEBUG - Item keys: ${item.keys.toList()}');
+                    print('DEBUG - Item size: ${item['size']}');
+                    print('DEBUG - Item temperature: ${item['temperature']}');
+                    print('DEBUG - Item sugar: ${item['sugar']}');
+                  }
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Gambar produk
+                        if (item['product_image'] != null &&
+                            item['product_image'].toString().isNotEmpty)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                                item['product_image']
+                                        .toString()
+                                        .startsWith('http')
+                                    ? item['product_image']
+                                    : 'https://campaign.rplrus.com/' +
+                                        item['product_image']
                                             .toString()
-                                            .startsWith('http')
-                                        ? item['product_image']
-                                        : 'https://campaign.rplrus.com/' +
-                                            item['product_image']
-                                                .toString()
-                                                .replaceFirst(
-                                                    RegExp(r'^/'), ''),
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Icon(Icons.local_cafe,
-                                        color: Colors.grey),
-                                  );
-                                }),
-                              )
-                            else
-                              Container(
+                                            .replaceFirst(RegExp(r'^/'), ''),
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                              return Container(
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
@@ -342,82 +331,94 @@ class PickupDetailPage extends StatelessWidget {
                                 ),
                                 child: const Icon(Icons.local_cafe,
                                     color: Colors.grey),
+                              );
+                            }),
+                          )
+                        else
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(Icons.local_cafe,
+                                color: Colors.grey),
+                          ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  item['product_name'] ??
+                                      item['productName'] ??
+                                      item['name'] ??
+                                      '-',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14)),
+                              const SizedBox(height: 4),
+                              // Size information
+                              if (item['size'] != null &&
+                                  item['size'].toString().isNotEmpty)
+                                Text('Size: ${item['size']}',
+                                    style: GoogleFonts.poppins(
+                                        fontSize: 12, color: Colors.grey[700])),
+                              const SizedBox(height: 2),
+                              // Temperature and Sugar information menggunakan format yang diminta
+                              Builder(
+                                builder: (context) {
+                                  final temp =
+                                      item['temperature']?.toString() ?? '-';
+                                  final sugar =
+                                      item['sugar']?.toString() ?? '-';
+                                  return Text(
+                                      'Temperature: $temp • Sugar: $sugar',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey[700],
+                                          fontFamily: 'Poppins'));
+                                },
                               ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      item['product_name'] ??
-                                          item['productName'] ??
-                                          item['name'] ??
-                                          '-',
+                              // Notes jika ada
+                              if (item['notes'] != null &&
+                                  item['notes'].toString().isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Text('Note: ${item['notes']}',
                                       style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14)),
-                                  const SizedBox(height: 4),
-                                  // Size information
-                                  if (item['size'] != null &&
-                                      item['size'].toString().isNotEmpty)
-                                    Text('Size: ${item['size']}',
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 12,
-                                            color: Colors.grey[700])),
-                                  const SizedBox(height: 2),
-                                  // Temperature and Sugar information menggunakan format yang diminta
-                                  Builder(
-                                    builder: (context) {
-                                      final temp =
-                                          item['temperature']?.toString() ??
-                                              '-';
-                                      final sugar =
-                                          item['sugar']?.toString() ?? '-';
-                                      return Text(
-                                          'Temperature: $temp • Sugar: $sugar',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey[700],
-                                              fontFamily: 'Poppins'));
-                                    },
-                                  ),
-                                  // Notes jika ada
-                                  if (item['notes'] != null &&
-                                      item['notes'].toString().isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      child: Text('Note: ${item['notes']}',
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 12,
-                                              color: Colors.blue[700],
-                                              fontStyle: FontStyle.italic)),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                    'Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
-                                    style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14)),
-                                Text('x${item['quantity']}',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12, color: Colors.grey)),
-                              ],
-                            ),
+                                          fontSize: 12,
+                                          color: Colors.blue[700],
+                                          fontStyle: FontStyle.italic)),
+                                ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                                'Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            Text('x${item['quantity']}',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 12, color: Colors.grey)),
                           ],
                         ),
-                      );
-                    }),
-                    const Divider(height: 24),
-                    infoRow("Total Pickup", "${items.length} items"),
-                    infoRow("Total Price", "Rp. $totalPrice"),
-                  ],
-                ),
+                      ],
+                    ),
+                  );
+                }),
+
+                const Divider(height: 24),
+                infoRow("Total Pickup", "${items.length} items"),
+                infoRow("Total Price", "Rp. $totalPrice"),
+
                 const SizedBox(height: 16),
+
+                // Button Accept/Delivered - Sekarang menyatu dengan card
                 if (status == 'delivered' || status == 'completed')
                   Container(
                     padding:

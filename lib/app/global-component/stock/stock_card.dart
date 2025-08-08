@@ -149,7 +149,7 @@ class StockCard extends StatelessWidget {
                           ],
                         ),
                         child: const Icon(
-                          Icons.add,
+                          Icons.edit,
                           size: 15,
                           color: Colors.white,
                         ),
