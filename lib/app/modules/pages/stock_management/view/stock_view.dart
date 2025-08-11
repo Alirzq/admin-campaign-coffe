@@ -31,7 +31,7 @@ class StockView extends GetView<StockController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               title: Text(
-                'Tambah Stok',
+                'Edit Stok',
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -95,7 +95,7 @@ class StockView extends GetView<StockController> {
                       }
                     }
                   },
-                  child: Text('Tambah',
+                  child: Text('Edit',
                       style: GoogleFonts.poppins(color: Colors.white)),
                 ),
               ],
@@ -195,8 +195,7 @@ class StockView extends GetView<StockController> {
       body: Column(
         children: [
           const HeaderStockView(),
-          // Kategori horizontal
-          SizedBox(height: 16), // Jarak antara header dan kategori
+          SizedBox(height: 16),
           Obx(() {
             final categories = productController.categories;
             final selectedIndex = productController.selectedCategoryIndex.value;
@@ -279,126 +278,133 @@ class StockView extends GetView<StockController> {
           }),
           Expanded(
             child: Obx(() {
-              // Filter produk sesuai kategori terpilih
               final selectedCategory = productController
                   .categories[productController.selectedCategoryIndex.value];
               final products = productController.products
                   .where((p) => p.category == selectedCategory)
                   .toList();
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        "Product Stock",
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await productController.fetchProducts();
+                },
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text(
+                          "Product Stock",
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.72,
-                      ),
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        final product = products[index];
-                        return StockCard(
-                          imagePath: product.image,
-                          title: product.name,
-                          category: product.category,
-                          amount: product.stock.toString(),
-                          onAddTap: () {
-                            _showAddStockDialog(context, product.name,
-                                (value) async {
-                              await controller.setStockAmountByName(
-                                  product.name, value);
-                            });
-                          },
-                          onEditTap: () {
-                            _showEditProductDialog(
-                                context, product, productController);
-                          },
-                          onDeleteTap: () async {
-                            final confirm = await showDialog<bool>(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  title: Text(
-                                    'Hapus Produk',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.black,
+                      const SizedBox(height: 6),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.72,
+                        ),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return StockCard(
+                            imagePath: product.image,
+                            title: product.name,
+                            category: product.category,
+                            amount: product.stock.toString(),
+                            onAddTap: () {
+                              _showAddStockDialog(context, product.name,
+                                  (value) async {
+                                await controller.setStockAmountByName(
+                                    product.name, value);
+                              });
+                            },
+                            onEditTap: () {
+                              _showEditProductDialog(
+                                  context, product, productController);
+                            },
+                            onDeleteTap: () async {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
-                                  ),
-                                  content: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Text(
-                                      'Yakin ingin menghapus produk ini?',
+                                    title: Text(
+                                      'Hapus Produk',
                                       style: GoogleFonts.poppins(
-                                        color: Colors.black87,
-                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black,
                                       ),
                                     ),
-                                  ),
-                                  actionsPadding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
                                       child: Text(
-                                        'Batal',
+                                        'Yakin ingin menghapus produk ini?',
                                         style: GoogleFonts.poppins(
-                                            color: Colors.blue.shade900),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red.shade700,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          color: Colors.black87,
+                                          fontSize: 15,
                                         ),
                                       ),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: Text(
-                                        'Hapus',
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.white),
-                                      ),
                                     ),
-                                  ],
-                                );
-                              },
-                            );
-                            if (confirm == true) {
-                              await productController.deleteProduct(product.id);
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ],
+                                    actionsPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 8),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: Text(
+                                          'Batal',
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.blue.shade900),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red.shade700,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(true),
+                                        child: Text(
+                                          'Hapus',
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              if (confirm == true) {
+                                await productController
+                                    .deleteProduct(product.id);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             }),

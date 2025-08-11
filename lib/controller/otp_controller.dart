@@ -24,7 +24,7 @@ class OtpController extends GetxController {
       Get.offAllNamed('/home');
     }
   }
-
+  
   void resendOtp() {
     errorMessage.value = "OTP has been resent.";
   }

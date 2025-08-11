@@ -38,11 +38,52 @@ class FullOrderListPage extends GetView<OrderController> {
               orderItems: order.items.map((e) => e.productName).join(', '),
               price: 'Rp. ${order.totalPrice.toInt()}',
               onTap: () {
-                Get.to(() => const OrderDetailPage(), arguments: {
+                // Passing data yang benar sesuai dengan field yang dicari di OrderDetailPage
+                Get.to(() => OrderDetailPage(), arguments: {
+                  // Primary fields - sesuai dengan JSON structure
+                  'id': order.id,
+                  'customer_name': order.customerName,
+                  'total_price': order.totalPrice.toInt(),
+                  'order_type': order.orderType,
+                  'created_at':
+                      order.getFormattedDate(), // Format: dd-MM-yyyy HH:mm
+                  'payment_method': order.paymentMethod,
+                  'location': order.location,
+                  'notes': order.notes,
+                  'status': order.status,
+
+                  // Items dengan structure yang benar
+                  'items': order.items
+                      .map((item) => {
+                            'id': item.id,
+                            'product_id': item.productId,
+                            'product_name': item.productName,
+                            'product_image': item.productImage,
+                            'price': item.price,
+                            'quantity': item.quantity,
+                            'size': item.size,
+                            'sugar': item.sugar,
+                            'temperature': item.temperature,
+                          })
+                      .toList(),
+
+                  // Alternative field names untuk backward compatibility
+                  'orderId': order.id,
                   'orderName': order.customerName,
-                  'orderItems': order.items.map((e) => e.productName).join(', '),
                   'price': order.totalPrice.toInt(),
-                  // Tambahkan field lain jika ada di model Order
+                  'paymentMethod': order.paymentMethod,
+                  'orderType': order.orderType,
+                  'orderItems': order.items
+                      .map((item) => {
+                            'name': item.productName,
+                            'productName': item.productName,
+                            'price': item.price,
+                            'quantity': item.quantity,
+                            'size': item.size,
+                            'sugar': item.sugar,
+                            'temperature': item.temperature,
+                          })
+                      .toList(),
                 });
               },
             );

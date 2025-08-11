@@ -81,7 +81,7 @@ class StockCard extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.poppins(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
                 maxLines: 2,
@@ -115,7 +115,7 @@ class StockCard extends StatelessWidget {
                           child: Text(
                             'Stok Habis',
                             style: GoogleFonts.poppins(
-                              fontSize: 11,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade700,
                             ),
@@ -124,7 +124,7 @@ class StockCard extends StatelessWidget {
                       : Text(
                           "Amount : $amount",
                           style: GoogleFonts.poppins(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
                             color: Colors.blue.shade900,
                           ),
@@ -149,7 +149,7 @@ class StockCard extends StatelessWidget {
                           ],
                         ),
                         child: const Icon(
-                          Icons.add,
+                          Icons.edit,
                           size: 15,
                           color: Colors.white,
                         ),

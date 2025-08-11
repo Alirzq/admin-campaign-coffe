@@ -36,18 +36,20 @@ class FullDeliverPage extends GetView<OrderController> {
               price: 'Rp. ${order.totalPrice.toInt()}',
               onTap: () {
                 Get.to(() => OrderDetailDeliverPage(
-                  orderId: order.id,
-                  orderName: order.customerName,
-                  orderItems: order.items.map((e) => {
-                    'name': e.productName,
-                    'quantity': e.quantity,
-                    'price': e.price,
-                  }).toList(),
-                  totalPrice: order.totalPrice,
-                  paymentMethod: order.paymentMethod ?? '-',
-                  location: order.location ?? '-',
-                  status: order.status,
-                ));
+                      orderId: order.id,
+                      orderName: order.customerName,
+                      orderItems: order.items
+                          .map((e) => {
+                                'name': e.productName,
+                                'quantity': e.quantity,
+                                'price': e.price,
+                              })
+                          .toList(),
+                      totalPrice: order.totalPrice,
+                      paymentMethod: order.paymentMethod ?? '-',
+                      location: order.location ?? '-',
+                      status: order.status,
+                    ));
               },
             );
           },

@@ -44,7 +44,7 @@ class CustomNavbar extends StatelessWidget {
           BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 5),
         ],
       ),
-      padding: const EdgeInsets.symmetric(vertical: 22),
+      padding: const EdgeInsets.symmetric(vertical: 18),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Row(

@@ -1,5 +1,6 @@
 import 'package:admin_campaign_coffe_repo/models/product_model.dart';
 import 'package:admin_campaign_coffe_repo/models/user_model.dart';
+import 'package:intl/intl.dart';
 
 class Order {
   final int id;
@@ -7,10 +8,12 @@ class Order {
   final double totalPrice;
   final String status;
   final String orderType;
-  final String createdAt;
+  final DateTime create_at;
   final List<OrderItem> items;
   final String paymentMethod;
   final String location;
+  final String? notes;
+  final User? user;
 
   Order({
     required this.id,
@@ -18,13 +21,69 @@ class Order {
     required this.totalPrice,
     required this.status,
     required this.orderType,
-    required this.createdAt,
+    required this.create_at,
     required this.items,
     required this.paymentMethod,
     required this.location,
+    this.notes,
+    this.user,
   });
 
+  // Metode untuk memformat tanggal dan waktu untuk invoice
+  String getFormattedDateTime() {
+    return DateFormat('d MMM y HH:mm A').format(create_at);
+  }
+
+  // Metode untuk memformat tanggal dalam format dd-MM-yyyy HH:mm
+  String getFormattedDate() {
+    return DateFormat('dd-MM-yyyy HH:mm').format(create_at);
+  }
+
+  // Method untuk mendapatkan raw created_at dalam format string original
+  String getRawCreatedAt() {
+    return DateFormat('yyyy-MM-dd HH:mm').format(create_at);
+  }
+
   factory Order.fromJson(Map<String, dynamic> json) {
+    // Parsing created_at dari string ke DateTime
+    DateTime parsedCreatedAt;
+    try {
+      if (json['created_at'] is String) {
+        String dateStr = json['created_at'];
+
+        // Handle format "2025-07-18 01:13" dari JSON
+        if (dateStr.contains(' ') && !dateStr.contains('T')) {
+          // Format: "2025-07-18 01:13"
+          parsedCreatedAt = DateFormat('yyyy-MM-dd HH:mm').parse(dateStr);
+        }
+        // Handle format ISO 8601
+        else if (dateStr.contains('T')) {
+          parsedCreatedAt = DateTime.parse(dateStr);
+        }
+        // Handle format date only
+        else if (dateStr.contains('-')) {
+          parsedCreatedAt = DateTime.parse(dateStr + ' 00:00:00');
+        }
+        // Try direct parsing
+        else {
+          parsedCreatedAt = DateTime.parse(dateStr);
+        }
+      } else {
+        // Fallback ke waktu saat ini jika format tidak valid
+        parsedCreatedAt = DateTime.now();
+      }
+    } catch (e) {
+      print('Error parsing created_at: ${json['created_at']}, error: $e');
+      // Fallback ke waktu saat ini jika terjadi error
+      parsedCreatedAt = DateTime.now();
+    }
+
+    // Parse user jika ada
+    User? user;
+    if (json['user'] != null) {
+      user = User.fromJson(json['user']);
+    }
+
     return Order(
       id: json['id'],
       customerName: json['customer_name'] ?? '',
@@ -35,13 +94,32 @@ class Order {
               : (json['total_price'] ?? 0.0),
       status: json['status'] ?? '',
       orderType: json['order_type'] ?? '',
-      createdAt: json['created_at'] ?? '',
+      create_at: parsedCreatedAt,
       items: (json['items'] as List<dynamic>?)
               ?.map((e) => OrderItem.fromJson(e))
-              .toList() ?? [],
+              .toList() ??
+          [],
       paymentMethod: json['payment_method'] ?? '-',
       location: json['location'] ?? '-',
+      notes: json['notes'],
+      user: user,
     );
+  }
+
+  // Method untuk convert kembali ke Map (untuk debugging atau export)
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'customer_name': customerName,
+      'total_price': totalPrice,
+      'status': status,
+      'order_type': orderType,
+      'created_at': getRawCreatedAt(),
+      'payment_method': paymentMethod,
+      'location': location,
+      'notes': notes,
+      'items': items.map((item) => item.toJson()).toList(),
+    };
   }
 }
 
@@ -52,6 +130,9 @@ class OrderItem {
   final String? productImage;
   final double price;
   final int quantity;
+  final String? size;
+  final String? sugar;
+  final String? temperature;
 
   OrderItem({
     required this.id,
@@ -60,6 +141,9 @@ class OrderItem {
     this.productImage,
     required this.price,
     required this.quantity,
+    this.size,
+    this.sugar,
+    this.temperature,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
@@ -74,6 +158,24 @@ class OrderItem {
               ? double.tryParse(json['price']) ?? 0.0
               : (json['price'] ?? 0.0),
       quantity: json['quantity'] ?? 0,
+      size: json['size'],
+      sugar: json['sugar'],
+      temperature: json['temperature'],
     );
+  }
+
+  // Method untuk convert kembali ke Map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'product_id': productId,
+      'product_name': productName,
+      'product_image': productImage,
+      'price': price,
+      'quantity': quantity,
+      'size': size,
+      'sugar': sugar,
+      'temperature': temperature,
+    };
   }
 }
