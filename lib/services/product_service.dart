@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:io';
 
 class ProductService {
-  static const String baseUrl = 'https://a7d765cc68b7.ngrok-free.app/api';
+  static const String baseUrl = 'https://campaign.rplrus.com/api';
 
   Future<List<Product>> getProducts({String? search}) async {
     try {

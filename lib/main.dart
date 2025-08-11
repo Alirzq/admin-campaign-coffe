@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      initialRoute: '/splash', // Set splash sebagai rute awal
+      initialRoute: '/home', // Set splash sebagai rute awal
       getPages: AppRoutes.routes,
       defaultTransition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),

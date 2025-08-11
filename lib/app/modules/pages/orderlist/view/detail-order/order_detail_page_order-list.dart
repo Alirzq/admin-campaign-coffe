@@ -359,32 +359,52 @@ class OrderDetailPage extends StatelessWidget {
                   )
                 else
                   Center(
-                    child: ElevatedButton(
-                      onPressed: orderId != null
-                          ? () async {
-                              await orderController.acceptOrder(orderId);
-                              await orderController.fetchAllOrders();
-                              Get.back();
-                              Get.snackbar(
-                                  'Sukses', 'Order diproses (inprogress)');
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0D47A1),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: orderId != null
+                              ? () async {
+                                  await orderController.acceptOrder(orderId);
+                                  await orderController.fetchAllOrders();
+                                  Get.back();
+                                  Get.snackbar(
+                                      'Sukses', 'Order diproses (inprogress)');
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0D47A1),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Accept',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Accept',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                        const SizedBox(width: 12),
+                        IconButton(
+                          onPressed: () {
+                            print('Print order #ORD${orderId ?? '-'}');
+                            Get.snackbar('Print', 'Mencetak struk...');
+                          },
+                          icon: const Icon(Icons.print),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey[200],
+                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
               ],

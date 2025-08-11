@@ -37,8 +37,9 @@ class SignupController extends GetxController {
     errorMessage.value = '';
 
     try {
-      final response = await http.post(
-        Uri.parse('https://a7d765cc68b7.ngrok-free.app/api/register'),
+      final response = await http
+          .post(
+        Uri.parse('https://campaign.rplrus.com/api/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': usernameController.text.trim(),
@@ -46,7 +47,8 @@ class SignupController extends GetxController {
           'password': passwordController.text.trim(),
           'phone': phoneController.text.trim(),
         }),
-      ).timeout(const Duration(seconds: 15), onTimeout: () {
+      )
+          .timeout(const Duration(seconds: 15), onTimeout: () {
         throw Exception('Koneksi ke server gagal. Silakan cek internet Anda.');
       });
 
@@ -62,7 +64,7 @@ class SignupController extends GetxController {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 201 && data['success'] == true) {
+      if (response.statusCode == 200 && data['success'] == true) {
         Get.snackbar(
           'Sukses',
           (data['data'] != null && data['data']['message'] != null)
@@ -71,11 +73,13 @@ class SignupController extends GetxController {
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-        Get.toNamed('/email-verification', arguments: emailController.text.trim());
+        Get.toNamed('/email-verification',
+            arguments: emailController.text.trim());
       } else {
-        errorMessage.value = (data['data'] != null && data['data']['message'] != null)
-            ? data['data']['message']
-            : 'Registrasi gagal. Silakan coba lagi.';
+        errorMessage.value =
+            (data['data'] != null && data['data']['message'] != null)
+                ? data['data']['message']
+                : 'Registrasi gagal. Silakan coba lagi.';
         if (data['data'] != null && data['data']['errors'] != null) {
           errorMessage.value = data['data']['errors'].values.join(', ');
         }
