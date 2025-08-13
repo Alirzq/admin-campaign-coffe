@@ -9,6 +9,8 @@ class StockCard extends StatelessWidget {
   final void Function() onAddTap;
   final void Function()? onEditTap;
   final void Function()? onDeleteTap;
+  final double imageHeightMobile;
+  final double imageHeightTablet;
 
   const StockCard({
     Key? key,
@@ -19,18 +21,27 @@ class StockCard extends StatelessWidget {
     required this.onAddTap,
     this.onEditTap,
     this.onDeleteTap,
+    this.imageHeightMobile = 141.6, // default tinggi gambar mobile
+    this.imageHeightTablet = 169.2, // default tinggi gambar tablet
   }) : super(key: key);
+
+  bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide >= 600;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final bool tablet = isTablet(context);
+
     return Stack(
       children: [
         Container(
           margin: const EdgeInsets.all(1.85),
           padding: const EdgeInsets.all(8),
-          constraints: const BoxConstraints(
-            minHeight: 320,
-            minWidth: 320,
+          constraints: BoxConstraints(
+            minHeight: tablet ? 340 : 320,
+            minWidth: tablet ? 340 : 320,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -47,7 +58,9 @@ class StockCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Gambar dengan tinggi manual
               Container(
+                height: tablet ? imageHeightTablet : imageHeightMobile,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
@@ -62,13 +75,10 @@ class StockCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     imagePath,
-                    height: 140.2,
-                    width: 158,
                     fit: BoxFit.cover,
+                    width: double.infinity,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        height: 160,
-                        width: double.infinity,
                         color: Colors.grey[200],
                         child:
                             Icon(Icons.error_outline, color: Colors.grey[400]),
@@ -77,16 +87,21 @@ class StockCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 1),
+
+              // Judul
               Text(
                 title,
                 style: GoogleFonts.poppins(
-                  fontSize: 13,
+                  fontSize: tablet ? 15 : 13,
                   fontWeight: FontWeight.w700,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 1),
+
+              // Kategori
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
@@ -96,11 +111,14 @@ class StockCard extends StatelessWidget {
                 child: Text(
                   category,
                   style: GoogleFonts.poppins(
-                    fontSize: 9,
+                    fontSize: tablet ? 10 : 9,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
+              const SizedBox(height: 1),
+
+              // Amount dan tombol edit
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -115,7 +133,7 @@ class StockCard extends StatelessWidget {
                           child: Text(
                             'Stok Habis',
                             style: GoogleFonts.poppins(
-                              fontSize: 10,
+                              fontSize: tablet ? 11 : 10,
                               fontWeight: FontWeight.bold,
                               color: Colors.red.shade700,
                             ),
@@ -124,7 +142,7 @@ class StockCard extends StatelessWidget {
                       : Text(
                           "Amount : $amount",
                           style: GoogleFonts.poppins(
-                            fontSize: 10,
+                            fontSize: tablet ? 11 : 10,
                             fontWeight: FontWeight.w700,
                             color: Colors.blue.shade900,
                           ),
@@ -161,6 +179,8 @@ class StockCard extends StatelessWidget {
             ],
           ),
         ),
+
+        // Tombol hapus di pojok kanan atas
         Positioned(
           top: 10,
           right: 10,
@@ -179,11 +199,11 @@ class StockCard extends StatelessWidget {
                     BoxShadow(
                       color: Colors.black.withOpacity(0.08),
                       blurRadius: 4,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
-                child: Icon(Icons.delete, size: 18, color: Colors.red),
+                child: const Icon(Icons.delete, size: 18, color: Colors.red),
               ),
             ),
           ),

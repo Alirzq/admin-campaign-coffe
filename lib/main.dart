@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      initialRoute: '/splash', // Set splash sebagai rute awal
+      initialRoute: '/home', // Set splash sebagai rute awal
       getPages: AppRoutes.routes,
       defaultTransition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
@@ -38,24 +38,11 @@ class MyApp extends StatelessWidget {
   }
 
   void _setOrientationBasedOnDevice(BuildContext context) {
-    final shortestSide = MediaQuery.of(context).size.shortestSide;
-    final isTablet = shortestSide >= 600;
-
-    if (isTablet) {
-      // Tablet: izinkan landscape dan portrait
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    } else {
-      // HP: hanya portrait
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
-    }
+    // Semua perangkat: hanya portrait
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 }
 
