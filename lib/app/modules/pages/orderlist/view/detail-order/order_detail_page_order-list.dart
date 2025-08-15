@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
+import 'package:admin_campaign_coffe_repo/controller/bluetooth_printer_controller.dart';
 import 'package:intl/intl.dart';
 
 class OrderDetailPage extends StatelessWidget {
@@ -32,6 +33,7 @@ class OrderDetailPage extends StatelessWidget {
     final String? created_at = args['created_at'];
 
     final orderController = Get.find<OrderController>();
+    final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
@@ -392,8 +394,18 @@ class OrderDetailPage extends StatelessWidget {
                         const SizedBox(width: 12),
                         IconButton(
                           onPressed: () {
-                            print('Print order #ORD${orderId ?? '-'}');
-                            Get.snackbar('Print', 'Mencetak struk...');
+                            final orderData = {
+                              'id': orderId,
+                              'customer_name': customerName,
+                              'items': items,
+                              'total_price': totalPrice,
+                              'payment_method': paymentMethod,
+                              'location': location,
+                              'order_type': orderType,
+                              'notes': notes,
+                              'created_at': created_at,
+                            };
+                            bluetoothPrinterController.printReceipt(orderData);
                           },
                           icon: const Icon(Icons.print),
                           style: IconButton.styleFrom(
