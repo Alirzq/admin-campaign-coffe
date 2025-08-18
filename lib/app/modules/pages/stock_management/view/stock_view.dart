@@ -311,10 +311,21 @@ class StockView extends GetView<StockController> {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 8),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.72,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                          childAspectRatio:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 0.85
+                                  : 0.72,
+                          crossAxisSpacing:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 16.0
+                                  : 8.0,
+                          mainAxisSpacing:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 16.0
+                                  : 8.0,
                         ),
                         itemCount: products.length,
                         itemBuilder: (context, index) {

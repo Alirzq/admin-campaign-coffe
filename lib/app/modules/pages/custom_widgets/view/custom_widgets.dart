@@ -31,6 +31,12 @@ class CustomWidgetView extends GetView<CustomWidgetController> {
                   iconPath: 'assets/menu_food_icon.svg',
                   onTap: controller.goToAddMenuWidget,
                 ),
+                const SizedBox(height: 30),
+                WidgetCard(
+                  title: 'Bluetooth Printer',
+                  iconPath: 'assets/table_icon.svg',
+                  onTap: controller.goToBluetoothPrinter,
+                ),
               ],
             ),
           ),

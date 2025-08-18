@@ -269,6 +269,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
         padding: const EdgeInsets.all(16),
         children: [
           // Upload Image Section
+          // Bagian yang perlu diupdate pada widget upload image
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -292,6 +293,40 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Tambahkan informasi ukuran yang direkomendasikan
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF0D47A1).withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Color(0xFF0D47A1).withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: 16,
+                          color: Color(0xFF0D47A1),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Ukuran yang direkomendasikan: 1200 x 400 px (Rasio 3:1)',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: Color(0xFF0D47A1),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -372,7 +407,7 @@ class _CustomAddBannerViewState extends State<CustomAddBannerView> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "JPG, PNG up to 10MB",
+                                    "JPG, PNG up to 10MB • 1200x400px recommended",
                                     style: GoogleFonts.poppins(
                                       color: Colors.grey[500],
                                       fontSize: 12,

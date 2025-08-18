@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'app/routes/app_routes.dart';
@@ -20,12 +21,28 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      initialRoute: '/home', // Set splash sebagai rute awal
+      initialRoute: '/splash', // Set splash sebagai rute awal
       getPages: AppRoutes.routes,
       defaultTransition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
       opaqueRoute: true,
+      builder: (context, child) {
+        return OrientationBuilder(
+          builder: (context, orientation) {
+            _setOrientationBasedOnDevice(context);
+            return child!;
+          },
+        );
+      },
     );
+  }
+
+  void _setOrientationBasedOnDevice(BuildContext context) {
+    // Semua perangkat: hanya portrait
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
   }
 }
 

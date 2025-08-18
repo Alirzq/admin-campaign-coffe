@@ -10,14 +10,12 @@ class CustomAddMenuController extends GetxController {
     'Non Coffee',
     'Snack',
     'Main Course',
-    'Noodles',
   ];
   final categoryIcons = {
     'Coffee': 'assets/coffee.svg',
     'Non Coffee': 'assets/non_coffee.svg',
     'Snack': 'assets/snack.svg',
     'Main Course': 'assets/main_course.svg',
-    'Noodles': 'assets/noodles.svg',
   };
   final ProductService productService = ProductService();
   final Map<String, int> categoryIdMap = {
@@ -25,7 +23,6 @@ class CustomAddMenuController extends GetxController {
     'Non Coffee': 2,
     'Snack': 3,
     'Main Course': 4,
-    'Noodles': 4, // Noodles masuk ke Main Course
   };
 
   void selectCategory(int index) {
