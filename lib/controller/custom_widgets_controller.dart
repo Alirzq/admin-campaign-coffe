@@ -1,6 +1,6 @@
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_banner_view.dart';
 import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/custom_add_menu_view.dart';
-import 'package:admin_campaign_coffe_repo/app/modules/pages/bluetooth_printer/view/bluetooth_printer_view.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/custom_widgets/view/bluetooth_printer_view.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_add_menu_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/custom_add_banner_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/bluetooth_printer_binding.dart';

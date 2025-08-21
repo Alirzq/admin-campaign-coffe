@@ -317,6 +317,7 @@ class _CustomAddMenuViewState extends State<CustomAddMenuView> {
               // Show help dialog
               Get.dialog(
                 AlertDialog(
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   title: Text(
