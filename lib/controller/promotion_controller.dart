@@ -24,15 +24,14 @@ class PromotionController extends GetxController {
     isLoading.value = false;
   }
 
+  // Hapus snackbar dari controller, biarkan UI yang handle
   Future<Promotion> addPromotion(String title, {String? image}) async {
     isLoading.value = true;
     try {
       final promo = await service.addPromotion(title, image: image);
       promotions.add(promo); // Tambahkan ke daftar setelah berhasil
-      Get.snackbar('Success', 'Promotion added');
       return promo; // Kembalikan promo yang berhasil ditambahkan
     } catch (e) {
-      Get.snackbar('Error', e.toString());
       rethrow; // Lempar ulang error agar bisa ditangani di pemanggil
     } finally {
       isLoading.value = false;
@@ -47,20 +46,24 @@ class PromotionController extends GetxController {
       return filename;
     } catch (e) {
       isLoading.value = false;
+      // Tetap tampilkan error snackbar karena ini method utility
       Get.snackbar('Error', e.toString());
       return null;
     }
   }
 
-  void deletePromotion(int id) async {
+  // Hapus snackbar dari controller, biarkan UI yang handle
+  Future<void> deletePromotion(int id) async {
     isLoading.value = true;
     try {
       await service.deletePromotion(id);
       promotions.removeWhere((p) => p.id == id);
-      Get.snackbar('Success', 'Promotion deleted');
     } catch (e) {
+      // Tetap tampilkan error snackbar
       Get.snackbar('Error', e.toString());
+      rethrow;
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 }

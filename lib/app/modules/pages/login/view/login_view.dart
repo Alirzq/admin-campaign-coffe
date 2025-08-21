@@ -496,36 +496,36 @@ class LoginView extends StatelessWidget {
                   ),
                   SizedBox(height: 60),
 
-                  // OR
-                  Text(
-                    "Or continue with",
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ),
+                  // // OR
+                  // Text(
+                  //   "Or continue with",
+                  //   style: GoogleFonts.poppins(
+                  //     fontSize: 14,
+                  //     fontWeight: FontWeight.w500,
+                  //     color: const Color.fromARGB(255, 0, 0, 0),
+                  //   ),
+                  // ),
                   SizedBox(height: 16),
 
                   // Google Login Button
-                  GestureDetector(
-                    onTap: () {
-                      controller.loginWithGoogle();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 236, 236, 236),
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Image.network(
-                        "https://img.icons8.com/win10/512/google-logo.png",
-                        width: 60,
-                        height: 30,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     controller.loginWithGoogle();
+                  //   },
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(10),
+                  //     decoration: BoxDecoration(
+                  //       color: Color.fromARGB(255, 236, 236, 236),
+                  //       border: Border.all(color: Colors.grey.shade300),
+                  //       borderRadius: BorderRadius.circular(8),
+                  //     ),
+                  //     child: Image.network(
+                  //       "https://img.icons8.com/win10/512/google-logo.png",
+                  //       width: 60,
+                  //       height: 30,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 16),
                 ],
               ),

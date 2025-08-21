@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../controller/pickup_controller.dart';
+import 'package:admin_campaign_coffe_repo/controller/bluetooth_printer_controller.dart';
 
 class PickupDetailPage extends StatelessWidget {
   const PickupDetailPage({super.key});
@@ -34,6 +35,7 @@ class PickupDetailPage extends StatelessWidget {
     final String? created_at = args['created_at']; // Sesuai OrderModel
 
     final pickupController = Get.find<PickupController>();
+    final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
@@ -438,32 +440,62 @@ class PickupDetailPage extends StatelessWidget {
                   )
                 else
                   Center(
-                    child: ElevatedButton(
-                      onPressed: orderId != null
-                          ? () async {
-                              await pickupController.acceptOrder(orderId);
-                              await pickupController.fetchAllOrders();
-                              Get.back();
-                              Get.snackbar(
-                                  'Sukses', 'Order diproses (inprogress)');
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0D47A1),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: orderId != null
+                              ? () async {
+                                  await pickupController.acceptOrder(orderId);
+                                  await pickupController.fetchAllOrders();
+                                  Get.back();
+                                  Get.snackbar(
+                                      'Sukses', 'Order diproses (inprogress)');
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0D47A1),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Accept',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Accept',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                        const SizedBox(width: 12),
+                        IconButton(
+                          onPressed: () {
+                            final pickupData = {
+                              'id': orderId,
+                              'customer_name': customerName,
+                              'items': items,
+                              'total_price': totalPrice,
+                              'payment_method': paymentMethod,
+                              'location': location,
+                              'order_type': orderType,
+                              'notes': notes,
+                              'created_at': created_at,
+                            };
+                            bluetoothPrinterController.printReceipt(pickupData);
+                          },
+                          icon: const Icon(Icons.print),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey[200],
+                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
               ],
