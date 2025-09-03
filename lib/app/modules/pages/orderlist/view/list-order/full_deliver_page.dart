@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../../controller/order_controller.dart';
 import '../../../../../global-component/order/order_card.dart';
 import '../detail-order/order_detail_deliver_page.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class FullDeliverPage extends GetView<OrderController> {
   const FullDeliverPage({super.key});
@@ -33,7 +34,8 @@ class FullDeliverPage extends GetView<OrderController> {
             return OrderCard(
               orderName: order.customerName,
               orderItems: order.items.map((e) => e.productName).join(', '),
-              price: 'Rp. ${order.totalPrice.toInt()}',
+              price:
+                  CurrencyFormatter.formatCurrencyFromDouble(order.totalPrice),
               onTap: () {
                 Get.to(() => OrderDetailDeliverPage(
                       orderId: order.id,
@@ -46,8 +48,8 @@ class FullDeliverPage extends GetView<OrderController> {
                               })
                           .toList(),
                       totalPrice: order.totalPrice,
-                      paymentMethod: order.paymentMethod ?? '-',
-                      location: order.location ?? '-',
+                      paymentMethod: order.paymentMethod,
+                      location: order.location,
                       status: order.status,
                     ));
               },

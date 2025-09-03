@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../global-component/order/pickup_order_card.dart';
 import '../detail-pickup/pickup_detail_page.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class FullPickupListPage extends StatelessWidget {
   const FullPickupListPage({super.key});
@@ -42,7 +43,8 @@ class FullPickupListPage extends StatelessWidget {
               return PickupOrderCard(
                 pickupName: pickup.customerName,
                 pickupItems: pickup.items.map((e) => e.productName).join(', '),
-                price: 'Rp. ${pickup.totalPrice.toInt()}',
+                price: CurrencyFormatter.formatCurrencyFromDouble(
+                    pickup.totalPrice),
                 items: pickup.items.map((e) => e.productName).toList(),
                 onTap: () => Get.to(() => const PickupDetailPage(), arguments: {
                   // Primary fields

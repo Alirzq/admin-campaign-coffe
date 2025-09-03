@@ -6,6 +6,7 @@ import 'list-pickup/full_pickup_list_page.dart';
 import 'list-pickup/full_pickup_in_progress_page.dart';
 import 'list-pickup/full_pickup_completed_page.dart';
 import 'package:intl/intl.dart';
+import '../../../../../utils/currency_formatter.dart';
 
 class PickupPage extends StatelessWidget {
   const PickupPage({super.key});
@@ -18,7 +19,7 @@ class PickupPage extends StatelessWidget {
       return {
         'pickupName': order.customerName,
         'pickupItems': order.items.map((e) => e.productName).join(', '),
-        'price': 'Rp. ${order.totalPrice.toInt()}',
+        'price': CurrencyFormatter.formatCurrencyFromDouble(order.totalPrice),
       };
     }
 
@@ -30,13 +31,17 @@ class PickupPage extends StatelessWidget {
           child: Column(
             children: [
               Obx(() => PickupSectionCard(
-                title: "Pickup List",
-                data: controller.orderList.isNotEmpty ? orderToMap(controller.orderList[0]) : {},
-                onTap: () => Get.to(() => const FullPickupListPage()),
-              )),
+                    title: "Pickup List",
+                    data: controller.orderList.isNotEmpty
+                        ? orderToMap(controller.orderList[0])
+                        : {},
+                    onTap: () => Get.to(() => const FullPickupListPage()),
+                  )),
               PickupSectionCard(
                 title: "In-Progress",
-                data: controller.inProgressList.isNotEmpty ? orderToMap(controller.inProgressList[0]) : {},
+                data: controller.inProgressList.isNotEmpty
+                    ? orderToMap(controller.inProgressList[0])
+                    : {},
                 onTap: () => Get.to(() => const FullPickupInProgressPage()),
               ),
             ],

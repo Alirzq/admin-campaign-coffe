@@ -7,6 +7,7 @@ import 'list-order/full_in_progress_page.dart';
 import 'list-order/full_deliver_page.dart';
 import 'package:admin_campaign_coffe_repo/app/global-component/order/order_card.dart';
 import 'detail-order/order_detail_page_order-list.dart';
+import '../../../../../utils/currency_formatter.dart';
 
 class OrderPage extends StatelessWidget {
   const OrderPage({super.key});
@@ -20,36 +21,44 @@ class OrderPage extends StatelessWidget {
     Map<String, String> orderToMap(order) {
       return {
         'orderName': order.customerName,
-        'orderItems': order.items.isNotEmpty ? order.items.map((e) => e.productName).join(', ') : '-',
-        'price': 'Rp. ${order.totalPrice.toInt()}',
+        'orderItems': order.items.isNotEmpty
+            ? order.items.map((e) => e.productName).join(', ')
+            : '-',
+        'price': CurrencyFormatter.formatCurrencyFromDouble(order.totalPrice),
       };
     }
 
     List<String> getOrderItems(order) {
-      return order.items.isNotEmpty ? order.items.map((e) => e.productName).toList() : [];
+      return order.items.isNotEmpty
+          ? order.items.map((e) => e.productName).toList()
+          : [];
     }
 
     return Expanded(
       child: Obx(() => SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 24),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              OrderSectionCard(
-                title: "Deliver List",
-                data: controller.orderList.isNotEmpty ? orderToMap(controller.orderList[0]) : {},
-                onTap: () => Get.to(() => const FullOrderListPage()),
+            padding: const EdgeInsets.only(top: 24),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  OrderSectionCard(
+                    title: "Deliver List",
+                    data: controller.orderList.isNotEmpty
+                        ? orderToMap(controller.orderList[0])
+                        : {},
+                    onTap: () => Get.to(() => const FullOrderListPage()),
+                  ),
+                  OrderSectionCard(
+                    title: "In-Progress",
+                    data: controller.inProgressList.isNotEmpty
+                        ? orderToMap(controller.inProgressList[0])
+                        : {},
+                    onTap: () => Get.to(() => const FullInProgressPage()),
+                  ),
+                ],
               ),
-              OrderSectionCard(
-                title: "In-Progress",
-                data: controller.inProgressList.isNotEmpty ? orderToMap(controller.inProgressList[0]) : {},
-                onTap: () => Get.to(() => const FullInProgressPage()),
-              ),
-            ],
-          ),
-        ),
-      )),
+            ),
+          )),
     );
   }
 }

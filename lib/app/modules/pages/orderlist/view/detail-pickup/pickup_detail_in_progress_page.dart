@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:admin_campaign_coffe_repo/controller/pickup_controller.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class PickupInProgressDetailPage extends StatelessWidget {
   const PickupInProgressDetailPage({super.key});
@@ -399,7 +400,9 @@ class PickupInProgressDetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                                'Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                CurrencyFormatter.formatCurrency(
+                                    (item['price'] * (item['quantity'] ?? 1))
+                                        .toInt()),
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold, fontSize: 14)),
                             Text('x${item['quantity']}',
@@ -414,7 +417,8 @@ class PickupInProgressDetailPage extends StatelessWidget {
 
                 const Divider(height: 24),
                 infoRow("Total Pickup", "${items.length} items"),
-                infoRow("Total Price", "Rp. $totalPrice"),
+                infoRow("Total Price",
+                    CurrencyFormatter.formatCurrency(totalPrice)),
 
                 const SizedBox(height: 16),
 

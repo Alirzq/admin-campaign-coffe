@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class PickupDetailCompletedPage extends StatelessWidget {
   const PickupDetailCompletedPage({super.key});
@@ -10,7 +11,9 @@ class PickupDetailCompletedPage extends StatelessWidget {
     final args = Get.arguments ?? {};
     final String customerName = args['orderName'] ?? '-';
     final List<dynamic> items = args['orderItems'] ?? [];
-    final int totalPrice = args['price'] is int ? args['price'] : int.tryParse(args['price']?.toString() ?? '') ?? 0;
+    final int totalPrice = args['price'] is int
+        ? args['price']
+        : int.tryParse(args['price']?.toString() ?? '') ?? 0;
     final String paymentMethod = args['paymentMethod'] ?? '-';
     final String location = args['location'] ?? '-';
 
@@ -102,7 +105,8 @@ class PickupDetailCompletedPage extends StatelessWidget {
                         )),
                     const Divider(height: 24),
                     infoRow("Total Pickup :", "${items.length} items"),
-                    infoRow("Total Price :", "Rp. $totalPrice"),
+                    infoRow("Total Price :",
+                        CurrencyFormatter.formatCurrency(totalPrice)),
                     infoRow("Payment Method:", paymentMethod),
                     infoRow("Location:", location),
                   ],

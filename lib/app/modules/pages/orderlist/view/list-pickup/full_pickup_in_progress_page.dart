@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:admin_campaign_coffe_repo/controller/pickup_controller.dart';
 import 'package:admin_campaign_coffe_repo/app/global-component/order/pickup_order_card.dart';
 import '../detail-pickup/pickup_detail_in_progress_page.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class FullPickupInProgressPage extends StatelessWidget {
   const FullPickupInProgressPage({super.key});
@@ -39,7 +40,8 @@ class FullPickupInProgressPage extends StatelessWidget {
               return PickupOrderCard(
                 pickupName: pickup.customerName,
                 pickupItems: pickup.items.map((e) => e.productName).join(', '),
-                price: 'Rp. ${pickup.totalPrice.toInt()}',
+                price: CurrencyFormatter.formatCurrencyFromDouble(
+                    pickup.totalPrice),
                 items: pickup.items.map((e) => e.productName).toList(),
                 onTap: () => Get.to(() => const PickupInProgressDetailPage(),
                     arguments: {
