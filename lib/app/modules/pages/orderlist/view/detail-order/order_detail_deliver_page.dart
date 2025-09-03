@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class OrderDetailDeliverPage extends StatelessWidget {
   final int orderId;
@@ -109,13 +110,17 @@ class OrderDetailDeliverPage extends StatelessWidget {
                             Text('${item['quantity']} x ${item['name'] ?? '-'}',
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w600, fontSize: 14)),
-                            Text('Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                            Text(
+                                CurrencyFormatter.formatCurrency(
+                                    (item['price'] * (item['quantity'] ?? 1))
+                                        .toInt()),
                                 style: GoogleFonts.poppins(fontSize: 14)),
                           ],
                         )),
                     const Divider(height: 24),
                     infoRow("Total Order :", "${orderItems.length} items"),
-                    infoRow("Total Price :", "Rp. ${totalPrice.toInt()}"),
+                    infoRow("Total Price :",
+                        CurrencyFormatter.formatCurrencyFromDouble(totalPrice)),
                     infoRow("Payment Method:", paymentMethod),
                     infoRow("Location:", location),
                   ],
@@ -123,7 +128,8 @@ class OrderDetailDeliverPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 if (status == 'delivered' || status == 'completed')
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(8),
@@ -144,7 +150,8 @@ class OrderDetailDeliverPage extends StatelessWidget {
                         // Panggil controller untuk update status ke delivered
                         final orderController = Get.find<OrderController>();
                         await orderController.markDone(orderId);
-                        Get.snackbar('Sukses', 'Order berhasil di-mark delivered');
+                        Get.snackbar(
+                            'Sukses', 'Order berhasil di-mark delivered');
                         Get.back();
                       },
                       style: ElevatedButton.styleFrom(

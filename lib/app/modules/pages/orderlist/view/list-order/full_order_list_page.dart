@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../../controller/order_controller.dart';
 import '../../../../../global-component/order/order_card.dart';
 import '../detail-order/order_detail_page_order-list.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class FullOrderListPage extends GetView<OrderController> {
   const FullOrderListPage({super.key});
@@ -40,7 +41,8 @@ class FullOrderListPage extends GetView<OrderController> {
               return OrderCard(
                 orderName: order.customerName,
                 orderItems: order.items.map((e) => e.productName).join(', '),
-                price: 'Rp. ${order.totalPrice.toInt()}',
+                price: CurrencyFormatter.formatCurrencyFromDouble(
+                    order.totalPrice),
                 onTap: () {
                   Get.to(() => const OrderDetailPage(), arguments: {
                     // Primary fields - sesuai dengan JSON structure

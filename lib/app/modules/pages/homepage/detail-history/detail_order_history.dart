@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../../../../../utils/currency_formatter.dart';
 
 class DetailOrderHistory extends StatelessWidget {
   const DetailOrderHistory({Key? key}) : super(key: key);
@@ -422,7 +423,10 @@ class DetailOrderHistory extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                    'Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                    CurrencyFormatter.formatCurrency(
+                                        (item['price'] *
+                                                (item['quantity'] ?? 1))
+                                            .toInt()),
                                     style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14)),
@@ -437,7 +441,8 @@ class DetailOrderHistory extends StatelessWidget {
                     }),
                     const Divider(height: 24),
                     infoRow("Total Order", "${items.length} items"),
-                    infoRow("Total Price", "Rp. $totalPrice"),
+                    infoRow("Total Price",
+                        CurrencyFormatter.formatCurrency(totalPrice)),
                   ],
                 ),
                 const SizedBox(height: 16),

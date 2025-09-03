@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
 import 'package:admin_campaign_coffe_repo/controller/bluetooth_printer_controller.dart';
 import 'package:intl/intl.dart';
+import '../../../../../../utils/currency_formatter.dart';
 
 class OrderDetailPage extends StatelessWidget {
   const OrderDetailPage({super.key});
@@ -326,7 +327,9 @@ class OrderDetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                                'Rp. ${(item['price'] * (item['quantity'] ?? 1)).toInt()}',
+                                CurrencyFormatter.formatCurrency(
+                                    (item['price'] * (item['quantity'] ?? 1))
+                                        .toInt()),
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold, fontSize: 14)),
                             Text('x${item['quantity']}',
@@ -340,7 +343,8 @@ class OrderDetailPage extends StatelessWidget {
                 }),
                 const Divider(height: 24),
                 infoRow("Total Order", "${items.length} items"),
-                infoRow("Total Price", "Rp. $totalPrice"),
+                infoRow("Total Price",
+                    CurrencyFormatter.formatCurrency(totalPrice)),
                 const SizedBox(height: 16),
                 if (status == 'delivered' || status == 'completed')
                   Container(

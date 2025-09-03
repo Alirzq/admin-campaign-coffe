@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../../../controller/earnings_controller.dart';
 import '../../../../global-component/order/order_card.dart';
 import '../../../../global-component/widget/stat_card.dart';
+import '../../../../../utils/currency_formatter.dart';
 
 class EarningsPage extends StatelessWidget {
   EarningsPage({super.key});
@@ -22,7 +23,6 @@ class EarningsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.width > 600;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -50,7 +50,7 @@ class EarningsPage extends StatelessWidget {
                       final totalSales = completedOrders.fold<double>(
                           0, (sum, order) => sum + order.totalPrice);
                       return Text(
-                        "Rp ${NumberFormat('#,###', 'id_ID').format(totalSales)}",
+                        CurrencyFormatter.formatCurrencyFromDouble(totalSales),
                         style: GoogleFonts.poppins(
                             fontSize: isTablet ? 48.0 : 34.0,
                             fontWeight: FontWeight.w700,
@@ -249,7 +249,9 @@ class EarningsPage extends StatelessWidget {
                                 orderItems: order.items
                                     .map((item) => item.productName)
                                     .join(', '),
-                                price: 'Rp. ${order.totalPrice.toInt()}',
+                                price:
+                                    CurrencyFormatter.formatCurrencyFromDouble(
+                                        order.totalPrice),
                               ),
                             );
                           },
