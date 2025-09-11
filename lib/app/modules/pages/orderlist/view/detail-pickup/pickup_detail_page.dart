@@ -452,9 +452,34 @@ class PickupDetailPage extends StatelessWidget {
                               ? () async {
                                   await pickupController.acceptOrder(orderId);
                                   await pickupController.fetchAllOrders();
+
+                                  // Tutup halaman segera
                                   Get.back();
                                   Get.snackbar(
-                                      'Sukses', 'Order diproses (inprogress)');
+                                    'Sukses',
+                                    'Pickup diproses, mencetak struk...',
+                                  );
+
+                                  // Kirim print di background
+                                  final pickupData = {
+                                    'id': orderId,
+                                    'customer_name': customerName,
+                                    'items': items,
+                                    'total_price': totalPrice,
+                                    'payment_method': paymentMethod,
+                                    'location': location,
+                                    'order_type': orderType,
+                                    'notes': notes,
+                                    'created_at': created_at,
+                                  };
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100),
+                                      () async {
+                                    try {
+                                      await bluetoothPrinterController
+                                          .printReceipt(pickupData);
+                                    } catch (_) {}
+                                  });
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -471,31 +496,6 @@ class PickupDetailPage extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        IconButton(
-                          onPressed: () {
-                            final pickupData = {
-                              'id': orderId,
-                              'customer_name': customerName,
-                              'items': items,
-                              'total_price': totalPrice,
-                              'payment_method': paymentMethod,
-                              'location': location,
-                              'order_type': orderType,
-                              'notes': notes,
-                              'created_at': created_at,
-                            };
-                            bluetoothPrinterController.printReceipt(pickupData);
-                          },
-                          icon: const Icon(Icons.print),
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.grey[200],
-                            padding: const EdgeInsets.all(12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                         ),

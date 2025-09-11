@@ -4,7 +4,7 @@ import '../models/order_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class OrderService {
-  static const String baseUrl = 'https://96057b35e6b9.ngrok-free.app/api/admin';
+  static const String baseUrl = 'https://69498c9d5653.ngrok-free.app/api/admin';
   final box = GetStorage();
 
   Future<List<Order>> getOrders() async {

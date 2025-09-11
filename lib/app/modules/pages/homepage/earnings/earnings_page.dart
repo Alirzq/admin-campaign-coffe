@@ -44,12 +44,20 @@ class EarningsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Obx(() {
-                      return Text(
-                        CurrencyFormatter.formatCurrencyFromDouble(controller.monthlySales.value.totalSales),
-                        style: GoogleFonts.poppins(
+                      return GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/monthly-earnings');
+                        },
+                        child: Text(
+                          CurrencyFormatter.formatCurrencyFromDouble(
+                              controller.monthlySales.value.totalSales),
+                          style: GoogleFonts.poppins(
                             fontSize: isTablet ? 48.0 : 34.0,
                             fontWeight: FontWeight.w700,
-                            color: Colors.blue.shade900),
+                            color: Colors.blue.shade900,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
                       );
                     }),
                     Text(

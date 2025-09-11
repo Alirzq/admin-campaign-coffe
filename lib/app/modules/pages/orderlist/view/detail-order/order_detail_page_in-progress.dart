@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:admin_campaign_coffe_repo/controller/order_controller.dart';
+import 'package:admin_campaign_coffe_repo/controller/bluetooth_printer_controller.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../utils/currency_formatter.dart';
 
@@ -33,6 +34,7 @@ class OrderInProgressDetailPage extends StatelessWidget {
     final String? created_at = args['created_at'];
 
     final orderController = Get.find<OrderController>();
+    final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
@@ -337,33 +339,65 @@ class OrderInProgressDetailPage extends StatelessWidget {
                   )
                 else
                   Center(
-                    child: ElevatedButton(
-                      onPressed: orderId != null
-                          ? () async {
-                              await orderController.markDone(orderId);
-                              await orderController.fetchAllOrders();
-                              Get.back();
-                              Get.snackbar(
-                                  'Sukses', 'Order selesai (completed)');
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 164, 159, 10),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: orderId != null
+                              ? () async {
+                                  await orderController.markDone(orderId);
+                                  await orderController.fetchAllOrders();
+                                  Get.back();
+                                  Get.snackbar(
+                                      'Sukses', 'Order selesai (completed)');
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 164, 159, 10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Selesaikan',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Selesaikan',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                        const SizedBox(width: 12),
+                        // Tombol print ulang di kanan tombol Selesaikan
+                        IconButton(
+                          onPressed: () async {
+                            final orderData = {
+                              'id': orderId,
+                              'customer_name': customerName,
+                              'items': items,
+                              'total_price': totalPrice,
+                              'payment_method': paymentMethod,
+                              'location': location,
+                              'order_type': orderType,
+                              'notes': notes,
+                              'created_at': created_at,
+                            };
+                            await bluetoothPrinterController
+                                .printReceipt(orderData);
+                          },
+                          icon: const Icon(Icons.print),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey[200],
+                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
               ],

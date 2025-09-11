@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:admin_campaign_coffe_repo/controller/pickup_controller.dart';
+import 'package:admin_campaign_coffe_repo/controller/bluetooth_printer_controller.dart';
 import '../../../../../../utils/currency_formatter.dart';
 
 class PickupInProgressDetailPage extends StatelessWidget {
@@ -28,88 +29,52 @@ class PickupInProgressDetailPage extends StatelessWidget {
         args['payment_method'] ?? args['paymentMethod'] ?? '-';
     final String location = args['location'] ?? '-';
     final String status = args['status'] ?? 'inprogress';
-
-    // Menggunakan field sesuai OrderModel yang benar
     final String orderType = args['order_type'] ?? args['orderType'] ?? '-';
     final String notes = args['notes'] ?? args['note'] ?? '-';
-    final String? created_at = args['created_at']; // Sesuai OrderModel
+    final String? created_at = args['created_at'];
 
     final PickupController controller = Get.find<PickupController>();
+    final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
-
       try {
         DateTime dt;
-
-        // Handle different date formats
         if (dateStr.contains(' ') && !dateStr.contains('T')) {
-          // Format: "2025-07-18 01:13" atau "18-07-2025 01:13"
           if (dateStr.split('-')[0].length == 4) {
-            // yyyy-MM-dd HH:mm
             dt = DateFormat('yyyy-MM-dd HH:mm').parse(dateStr);
           } else {
-            // dd-MM-yyyy HH:mm
             dt = DateFormat('dd-MM-yyyy HH:mm').parse(dateStr);
           }
-        }
-        // Format ISO 8601 (2023-12-25T10:30:00)
-        else if (dateStr.contains('T')) {
+        } else if (dateStr.contains('T')) {
           dt = DateTime.parse(dateStr);
-        }
-        // Format tanggal saja
-        else if (dateStr.contains('-')) {
+        } else if (dateStr.contains('-')) {
           if (dateStr.split('-')[0].length == 4) {
-            // yyyy-MM-dd
             dt = DateTime.parse(dateStr + ' 00:00:00');
           } else {
-            // dd-MM-yyyy
             dt = DateFormat('dd-MM-yyyy').parse(dateStr);
           }
-        }
-        // Format lain, coba parse langsung
-        else {
+        } else {
           dt = DateTime.parse(dateStr);
         }
-
         return DateFormat('dd-MM-yyyy HH:mm').format(dt);
       } catch (e) {
         print('DEBUG - Error parsing date: $dateStr, error: $e');
-        // Try to return a more user-friendly fallback
         return dateStr.isNotEmpty ? dateStr : '-';
       }
     }
 
-    // Debug print untuk memastikan data yang diterima
-    print('DEBUG - PickupInProgressDetailPage Args:');
-    print('orderId: $orderId');
-    print('customer_name: $customerName');
-    print('order_type: $orderType');
-    print('notes: $notes');
-    print('created_at: $created_at');
-    print('payment_method: $paymentMethod');
-    print('location: $location');
-    print('items: $items');
-    print('total_price: $totalPrice');
-    print('All args: $args');
-
-    // Helper function untuk mendapatkan notes yang lebih informatif
     String getNotesDisplay(String? notes) {
       if (notes == null || notes.isEmpty || notes == '-') return '-';
-
-      // Jika notes berisi informasi ice/hot, tampilkan dengan lebih jelas
       if (notes.toLowerCase().contains('ice') ||
           notes.toLowerCase().contains('hot')) {
         return notes;
       }
-
       return notes;
     }
 
-    // Helper function untuk mendapatkan payment method label
     String getPaymentMethodLabel(String? method) {
       if (method == null || method.isEmpty || method == '-') return '-';
-
       switch (method.toLowerCase()) {
         case 'qris':
           return 'QRIS';
@@ -131,10 +96,8 @@ class PickupInProgressDetailPage extends StatelessWidget {
       }
     }
 
-    // Helper function untuk mendapatkan order type label
     String getOrderTypeLabel(String? type) {
       if (type == null || type.isEmpty || type == '-') return '-';
-
       switch (type.toLowerCase()) {
         case 'delivery':
           return 'Delivery';
@@ -186,7 +149,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Customer Info
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -240,8 +202,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Order Information
                 Text(
                   'Pickup List',
                   style: GoogleFonts.poppins(
@@ -251,7 +211,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Detail order info
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -272,8 +231,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Items Section
                 Text(
                   'Items',
                   style: GoogleFonts.poppins(
@@ -283,18 +240,7 @@ class PickupInProgressDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                // Items List
                 ...items.map((item) {
-                  // Debug print untuk setiap item
-                  print('DEBUG - Item: ${item.toString()}');
-                  if (item is Map) {
-                    print('DEBUG - Item keys: ${item.keys.toList()}');
-                    print('DEBUG - Item size: ${item['size']}');
-                    print('DEBUG - Item temperature: ${item['temperature']}');
-                    print('DEBUG - Item sugar: ${item['sugar']}');
-                  }
-
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.all(12),
@@ -305,7 +251,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Gambar produk
                         if (item['product_image'] != null &&
                             item['product_image'].toString().isNotEmpty)
                           ClipRRect(
@@ -360,14 +305,12 @@ class PickupInProgressDetailPage extends StatelessWidget {
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14)),
                               const SizedBox(height: 4),
-                              // Size information
                               if (item['size'] != null &&
                                   item['size'].toString().isNotEmpty)
                                 Text('Size: ${item['size']}',
                                     style: GoogleFonts.poppins(
                                         fontSize: 12, color: Colors.grey[700])),
                               const SizedBox(height: 2),
-                              // Temperature and Sugar information menggunakan format yang diminta
                               Builder(
                                 builder: (context) {
                                   final temp =
@@ -382,7 +325,6 @@ class PickupInProgressDetailPage extends StatelessWidget {
                                           fontFamily: 'Poppins'));
                                 },
                               ),
-                              // Notes jika ada
                               if (item['notes'] != null &&
                                   item['notes'].toString().isNotEmpty)
                                 Padding(
@@ -414,15 +356,11 @@ class PickupInProgressDetailPage extends StatelessWidget {
                     ),
                   );
                 }),
-
                 const Divider(height: 24),
                 infoRow("Total Pickup", "${items.length} items"),
                 infoRow("Total Price",
                     CurrencyFormatter.formatCurrency(totalPrice)),
-
                 const SizedBox(height: 16),
-
-                // Button Action - Sekarang menyatu dengan card
                 if (status == 'completed')
                   Container(
                     padding:
@@ -445,11 +383,29 @@ class PickupInProgressDetailPage extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: orderId != null
                           ? () async {
-                              await controller.acceptOrder(orderId);
-                              await controller.fetchAllOrders();
-                              Get.back(); // Auto close halaman setelah proses selesai
-                              Get.snackbar(
-                                  'Sukses', 'Order diproses (inprogress)');
+                              try {
+                                await controller.acceptOrder(orderId);
+                                await controller.fetchAllOrders();
+
+                                // Auto close halaman
+                                Get.back();
+
+                                // Single success message
+                                Get.snackbar(
+                                  'Sukses',
+                                  'Order diproses (inprogress)',
+                                  snackPosition: SnackPosition.TOP,
+                                  duration: Duration(seconds: 2),
+                                );
+                              } catch (e) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Gagal memproses order: $e',
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              }
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
@@ -472,33 +428,81 @@ class PickupInProgressDetailPage extends StatelessWidget {
                   )
                 else if (status == 'inprogress')
                   Center(
-                    child: ElevatedButton(
-                      onPressed: orderId != null
-                          ? () async {
-                              await controller.markDone(orderId);
-                              await controller.fetchAllOrders();
-                              Get.back();
-                              Get.snackbar(
-                                  'Sukses', 'Order selesai (completed)');
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 164, 159, 10),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ElevatedButton(
+                          onPressed: orderId != null
+                              ? () async {
+                                  try {
+                                    await controller.markDone(orderId);
+                                    await controller.fetchAllOrders();
+
+                                    // Auto close halaman
+                                    Get.back();
+
+                                    // Single success message
+                                    Get.snackbar(
+                                      'Sukses',
+                                      'Order selesai (completed)',
+                                      snackPosition: SnackPosition.TOP,
+                                      duration: Duration(seconds: 2),
+                                    );
+                                  } catch (e) {
+                                    Get.snackbar(
+                                      'Error',
+                                      'Gagal menyelesaikan order: $e',
+                                      snackPosition: SnackPosition.TOP,
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                  }
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 164, 159, 10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            'Selesaikan',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Selesaikan',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                        const SizedBox(width: 12),
+                        IconButton(
+                          onPressed: () async {
+                            final data = {
+                              'id': orderId,
+                              'customer_name': customerName,
+                              'items': items,
+                              'total_price': totalPrice,
+                              'payment_method': paymentMethod,
+                              'location': location,
+                              'order_type': orderType,
+                              'notes': notes,
+                              'created_at': created_at,
+                            };
+                            await bluetoothPrinterController.printReceipt(data);
+                          },
+                          icon: const Icon(Icons.print),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.grey[200],
+                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
               ],

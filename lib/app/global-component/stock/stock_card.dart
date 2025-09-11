@@ -140,7 +140,7 @@ class StockCard extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          "Amount : $amount",
+                          "Stock : $amount",
                           style: GoogleFonts.poppins(
                             fontSize: tablet ? 11 : 10,
                             fontWeight: FontWeight.w700,

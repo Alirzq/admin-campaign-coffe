@@ -1,12 +1,13 @@
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import '../models/earnings_model.dart';
+import '../utils/error_utils.dart';
 
 class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl = 'https://96057b35e6b9.ngrok-free.app/api/admin';
+    httpClient.baseUrl = 'https://69498c9d5653.ngrok-free.app/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {
@@ -24,7 +25,8 @@ class EarningsService extends GetConnect {
       },
     );
 
-    print('Earnings response: ${response.statusCode}\n${response.body}');
+    // Debug log bisa diaktifkan saat diperlukan
+    // print('Earnings response: ${response.statusCode}\n${response.body}');
 
     if (response.statusCode == 200) {
       try {
@@ -32,12 +34,11 @@ class EarningsService extends GetConnect {
       } catch (e) {
         throw Exception('Format data earnings tidak sesuai.');
       }
-    } else {
-      if (response.body is String && response.body.toString().contains('<html')) {
-        throw Exception('Endpoint earnings tidak ditemukan di server (404). Cek URL backend dan route Laravel.');
-      }
-      throw Exception('Gagal memuat earnings: ${response.body}');
     }
+    // Map error ke pesan ramah
+    final message = ErrorUtils.friendlyMessage(
+        'Gagal memuat earnings (${response.statusCode})');
+    throw Exception(message);
   }
 
   Future<MonthlySales> fetchCurrentMonthlySales() async {
@@ -54,7 +55,7 @@ class EarningsService extends GetConnect {
       },
     );
 
-    print('Monthly Sales response: ${response.statusCode}\n${response.body}');
+    // print('Monthly Sales response: ${response.statusCode}\n${response.body}');
 
     if (response.statusCode == 200) {
       try {
@@ -63,8 +64,8 @@ class EarningsService extends GetConnect {
       } catch (e) {
         throw Exception('Format data monthly sales tidak sesuai.');
       }
-    } else {
-      throw Exception('Gagal memuat monthly sales: ${response.body}');
     }
+    throw Exception(ErrorUtils.friendlyMessage(
+        'Gagal memuat monthly sales (${response.statusCode})'));
   }
 }

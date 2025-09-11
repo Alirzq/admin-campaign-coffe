@@ -5,7 +5,8 @@ import '../models/promotion_model.dart';
 import 'dart:io';
 
 class PromotionService {
-  final String baseUrl = 'https://96057b35e6b9.ngrok-free.app/api/admin/promotions';
+  final String baseUrl =
+      'https://69498c9d5653.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');
@@ -45,7 +46,7 @@ class PromotionService {
       // Buat request multipart untuk mengunggah gambar
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://96057b35e6b9.ngrok-free.app/api/admin/upload-image'),
+        Uri.parse('https://69498c9d5653.ngrok-free.app/api/admin/upload-image'),
       );
 
       // Tambahkan header authorization yang lengkap
