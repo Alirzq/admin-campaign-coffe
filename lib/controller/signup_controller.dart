@@ -39,7 +39,7 @@ class SignupController extends GetxController {
     try {
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/register'),
+        Uri.parse('https://96057b35e6b9.ngrok-free.app/api/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': usernameController.text.trim(),

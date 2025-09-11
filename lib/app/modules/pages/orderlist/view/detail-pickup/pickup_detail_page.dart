@@ -317,7 +317,7 @@ class PickupDetailPage extends StatelessWidget {
                                         .toString()
                                         .startsWith('http')
                                     ? item['product_image']
-                                    : 'https://campaign.rplrus.com/' +
+                                    : 'https://96057b35e6b9.ngrok-free.app/' +
                                         item['product_image']
                                             .toString()
                                             .replaceFirst(RegExp(r'^/'), ''),

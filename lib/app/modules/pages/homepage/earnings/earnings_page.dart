@@ -44,19 +44,18 @@ class EarningsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Obx(() {
-                      final completedOrders = controller.earnings
-                          .where((order) => order.status == 'completed')
-                          .toList();
-                      final totalSales = completedOrders.fold<double>(
-                          0, (sum, order) => sum + order.totalPrice);
                       return Text(
-                        CurrencyFormatter.formatCurrencyFromDouble(totalSales),
+                        CurrencyFormatter.formatCurrencyFromDouble(controller.monthlySales.value.totalSales),
                         style: GoogleFonts.poppins(
                             fontSize: isTablet ? 48.0 : 34.0,
                             fontWeight: FontWeight.w700,
                             color: Colors.blue.shade900),
                       );
                     }),
+                    Text(
+                      "Month: ${controller.monthlySales.value.monthYear}",
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
                   ],
                 ),
               ),

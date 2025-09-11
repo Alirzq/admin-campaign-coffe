@@ -6,7 +6,7 @@ class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl = 'https://campaign.rplrus.com/api/admin';
+    httpClient.baseUrl = 'https://96057b35e6b9.ngrok-free.app/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {
@@ -24,7 +24,7 @@ class EarningsService extends GetConnect {
       },
     );
 
-    print('Earnings response: \\${response.statusCode}\\n${response.body}');
+    print('Earnings response: ${response.statusCode}\n${response.body}');
 
     if (response.statusCode == 200) {
       try {
@@ -33,13 +33,38 @@ class EarningsService extends GetConnect {
         throw Exception('Format data earnings tidak sesuai.');
       }
     } else {
-      // Jika response HTML atau bukan JSON
-      if (response.body is String &&
-          response.body.toString().contains('<html')) {
-        throw Exception(
-            'Endpoint earnings tidak ditemukan di server (404). Cek URL backend dan route Laravel.');
+      if (response.body is String && response.body.toString().contains('<html')) {
+        throw Exception('Endpoint earnings tidak ditemukan di server (404). Cek URL backend dan route Laravel.');
       }
       throw Exception('Gagal memuat earnings: ${response.body}');
+    }
+  }
+
+  Future<MonthlySales> fetchCurrentMonthlySales() async {
+    final savedToken = box.read('token');
+    if (savedToken == null) throw Exception('Admin token not found');
+    final token = 'Bearer $savedToken';
+
+    final response = await get(
+      '/sales/current',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+
+    print('Monthly Sales response: ${response.statusCode}\n${response.body}');
+
+    if (response.statusCode == 200) {
+      try {
+        final data = response.body['data'];
+        return MonthlySales.fromJson(data);
+      } catch (e) {
+        throw Exception('Format data monthly sales tidak sesuai.');
+      }
+    } else {
+      throw Exception('Gagal memuat monthly sales: ${response.body}');
     }
   }
 }

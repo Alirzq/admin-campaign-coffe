@@ -69,14 +69,10 @@ class EarningsItem {
 
 class EarningsResponse {
   final double total;
-  final int averagePerWeek;
-  final int growthPercentage;
   final List<Earnings> orders;
 
   EarningsResponse({
     required this.total,
-    required this.averagePerWeek,
-    required this.growthPercentage,
     required this.orders,
   });
 
@@ -92,9 +88,28 @@ class EarningsResponse {
           : (data['total'] is String)
               ? double.tryParse(data['total']) ?? 0.0
               : (data['total'] ?? 0.0),
-      averagePerWeek: 0, // backend tidak kirim field ini
-      growthPercentage: 0, // backend tidak kirim field ini
       orders: orders,
+    );
+  }
+}
+
+class MonthlySales {
+  final String monthYear;
+  final double totalSales;
+
+  MonthlySales({
+    required this.monthYear,
+    required this.totalSales,
+  });
+
+  factory MonthlySales.fromJson(Map<String, dynamic> json) {
+    return MonthlySales(
+      monthYear: json['month_year'] ?? '',
+      totalSales: (json['total_sales'] is int)
+          ? (json['total_sales'] as int).toDouble()
+          : (json['total_sales'] is String)
+              ? double.tryParse(json['total_sales']) ?? 0.0
+              : (json['total_sales'] ?? 0.0),
     );
   }
 }
