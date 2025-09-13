@@ -40,7 +40,11 @@ class MonthlyEarningsController extends GetxController {
         final month = index + 1;
         final monthString = _toYearMonth(year, month);
         final response = await _service.fetchEarnings(month: monthString);
-        results.add(MonthlyTotalPerMonth(month: month, total: response.total));
+        // Hanya tambahkan bulan yang memiliki data (total > 0)
+        if (response.total > 0) {
+          results
+              .add(MonthlyTotalPerMonth(month: month, total: response.total));
+        }
         await Future.delayed(const Duration(milliseconds: 120));
       }
       results.sort((a, b) => a.month.compareTo(b.month));

@@ -38,6 +38,24 @@ class PickupDetailPage extends StatelessWidget {
     final pickupController = Get.find<PickupController>();
     final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
+    String _formatDateWithMonthName(DateTime date) {
+      const monthNames = [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+      ];
+      return '${date.day}-${monthNames[date.month - 1]}-${date.year}';
+    }
+
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
 
@@ -74,7 +92,7 @@ class PickupDetailPage extends StatelessWidget {
           dt = DateTime.parse(dateStr);
         }
 
-        return DateFormat('dd-MM-yyyy HH:mm').format(dt);
+        return _formatDateWithMonthName(dt);
       } catch (e) {
         print('DEBUG - Error parsing date: $dateStr, error: $e');
         // Try to return a more user-friendly fallback
