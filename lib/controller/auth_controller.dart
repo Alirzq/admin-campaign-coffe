@@ -30,7 +30,7 @@ class AuthController extends GetxController {
     try {
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/login'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
@@ -231,7 +231,7 @@ class AuthController extends GetxController {
     try {
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/forgot-password'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/forgot-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       )
@@ -300,7 +300,7 @@ class AuthController extends GetxController {
     try {
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/reset-password'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/reset-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
@@ -355,7 +355,7 @@ class AuthController extends GetxController {
     try {
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/email/resend'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/email/resend'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       )
@@ -422,7 +422,7 @@ class AuthController extends GetxController {
       print('Sending request to server...');
       final response = await http
           .post(
-        Uri.parse('https://campaign.rplrus.com/api/auth/google/token'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/auth/google/token'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'token': idToken}),
       )

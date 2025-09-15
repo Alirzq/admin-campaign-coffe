@@ -7,7 +7,7 @@ class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl = 'https://campaign.rplrus.com/api/admin';
+    httpClient.baseUrl = 'https://ec89b3b2f480.ngrok-free.app/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {
@@ -25,9 +25,6 @@ class EarningsService extends GetConnect {
       },
     );
 
-    // Debug log bisa diaktifkan saat diperlukan
-    // print('Earnings response: ${response.statusCode}\n${response.body}');
-
     if (response.statusCode == 200) {
       try {
         return EarningsResponse.fromJson(response.body);
@@ -35,19 +32,18 @@ class EarningsService extends GetConnect {
         throw Exception('Format data earnings tidak sesuai.');
       }
     }
-    // Map error ke pesan ramah
-    final message = ErrorUtils.friendlyMessage(
-        'Gagal memuat earnings (${response.statusCode})');
+    final message = ErrorUtils.friendlyMessage('Gagal memuat earnings (${response.statusCode})');
     throw Exception(message);
   }
 
-  Future<MonthlySales> fetchCurrentMonthlySales() async {
+  Future<List<MonthlyEarnings>> fetchEarningsByMonth() async {
     final savedToken = box.read('token');
     if (savedToken == null) throw Exception('Admin token not found');
     final token = 'Bearer $savedToken';
+    print('Token dipakai: $token');
 
     final response = await get(
-      '/sales/current',
+      '/earningsByMonth',
       headers: {
         'Authorization': token,
         'Content-Type': 'application/json',
@@ -55,17 +51,37 @@ class EarningsService extends GetConnect {
       },
     );
 
-    // print('Monthly Sales response: ${response.statusCode}\n${response.body}');
-
     if (response.statusCode == 200) {
       try {
-        final data = response.body['data'];
-        return MonthlySales.fromJson(data);
+        final data = response.body['data'] ?? [];
+        return data.map<MonthlyEarnings>((json) => MonthlyEarnings.fromJson(json)).toList();
       } catch (e) {
-        throw Exception('Format data monthly sales tidak sesuai.');
+        throw Exception('Format data earnings by month tidak sesuai.');
       }
     }
-    throw Exception(ErrorUtils.friendlyMessage(
-        'Gagal memuat monthly sales (${response.statusCode})'));
+    final message = ErrorUtils.friendlyMessage('Gagal memuat earnings by month (${response.statusCode})');
+    throw Exception(message);
+  }
+}
+
+// Tambahkan model untuk earningsByMonth
+class MonthlyEarnings {
+  final String month;
+  final double total;
+
+  MonthlyEarnings({
+    required this.month,
+    required this.total,
+  });
+
+  factory MonthlyEarnings.fromJson(Map<String, dynamic> json) {
+    return MonthlyEarnings(
+      month: json['month'] ?? '',
+      total: (json['total'] is int)
+          ? (json['total'] as int).toDouble()
+          : (json['total'] is String)
+              ? double.tryParse(json['total']) ?? 0.0
+              : (json['total'] ?? 0.0),
+    );
   }
 }

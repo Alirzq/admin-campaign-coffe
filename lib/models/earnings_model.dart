@@ -92,24 +92,3 @@ class EarningsResponse {
     );
   }
 }
-
-class MonthlySales {
-  final String monthYear;
-  final double totalSales;
-
-  MonthlySales({
-    required this.monthYear,
-    required this.totalSales,
-  });
-
-  factory MonthlySales.fromJson(Map<String, dynamic> json) {
-    return MonthlySales(
-      monthYear: json['month_year'] ?? '',
-      totalSales: (json['total_sales'] is int)
-          ? (json['total_sales'] as int).toDouble()
-          : (json['total_sales'] is String)
-              ? double.tryParse(json['total_sales']) ?? 0.0
-              : (json['total_sales'] ?? 0.0),
-    );
-  }
-}

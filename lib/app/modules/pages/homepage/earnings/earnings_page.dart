@@ -50,7 +50,7 @@ class EarningsPage extends StatelessWidget {
                         },
                         child: Text(
                           CurrencyFormatter.formatCurrencyFromDouble(
-                              controller.monthlySales.value.totalSales),
+                              controller.totalEarnings.value),
                           style: GoogleFonts.poppins(
                             fontSize: isTablet ? 48.0 : 34.0,
                             fontWeight: FontWeight.w700,
@@ -60,10 +60,10 @@ class EarningsPage extends StatelessWidget {
                         ),
                       );
                     }),
-                    Text(
-                      "Month: ${controller.monthlySales.value.monthYear}",
+                    Obx(() => Text(
+                      "Month: ${controller.selectedMonth.value}",
                       style: GoogleFonts.poppins(fontSize: 16),
-                    ),
+                    )),
                   ],
                 ),
               ),
@@ -249,16 +249,11 @@ class EarningsPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final order = paidOrders[index];
                             return Container(
-                              margin: EdgeInsets.only(
-                                  bottom: isTablet ? 12.0 : 8.0),
+                              margin: EdgeInsets.only(bottom: isTablet ? 12.0 : 8.0),
                               child: OrderCard(
                                 orderName: order.customerName,
-                                orderItems: order.items
-                                    .map((item) => item.productName)
-                                    .join(', '),
-                                price:
-                                    CurrencyFormatter.formatCurrencyFromDouble(
-                                        order.totalPrice),
+                                orderItems: order.items.map((item) => item.productName).join(', '),
+                                price: CurrencyFormatter.formatCurrencyFromDouble(order.totalPrice),
                               ),
                             );
                           },

@@ -6,7 +6,7 @@ import 'dart:io';
 
 class PromotionService {
   final String baseUrl =
-      'https://campaign.rplrus.com/api/admin/promotions';
+      'https://ec89b3b2f480.ngrok-free.app/api/admin/promotions';
   final box = GetStorage();
 
   String? get token => box.read('token');
@@ -46,7 +46,7 @@ class PromotionService {
       // Buat request multipart untuk mengunggah gambar
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('https://campaign.rplrus.com/api/admin/upload-image'),
+        Uri.parse('https://ec89b3b2f480.ngrok-free.app/api/admin/upload-image'),
       );
 
       // Tambahkan header authorization yang lengkap
