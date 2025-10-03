@@ -89,15 +89,22 @@ class StockCard extends StatelessWidget {
               ),
               const SizedBox(height: 1),
 
-              // Judul
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: tablet ? 15 : 13,
-                  fontWeight: FontWeight.w700,
+              // Judul (scroll horizontal jika panjang)
+              SizedBox(
+                height: tablet ? 20 : 18,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: tablet ? 15 : 13,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    softWrap: false,
+                    overflow: TextOverflow.visible,
+                  ),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 1),
 
@@ -140,7 +147,7 @@ class StockCard extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          "Amount : $amount",
+                          "Stock : $amount",
                           style: GoogleFonts.poppins(
                             fontSize: tablet ? 11 : 10,
                             fontWeight: FontWeight.w700,

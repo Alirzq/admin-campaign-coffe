@@ -36,6 +36,24 @@ class OrderDetailPage extends StatelessWidget {
     final orderController = Get.find<OrderController>();
     final bluetoothPrinterController = Get.find<BluetoothPrinterController>();
 
+    String _formatDateWithMonthName(DateTime date) {
+      const monthNames = [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+      ];
+      return '${date.day}-${monthNames[date.month - 1]}-${date.year}';
+    }
+
     String formatDate(String? dateStr) {
       if (dateStr == null || dateStr.isEmpty || dateStr == '-') return '-';
       try {
@@ -57,7 +75,7 @@ class OrderDetailPage extends StatelessWidget {
         } else {
           dt = DateTime.parse(dateStr);
         }
-        return DateFormat('dd-MM-yyyy HH:mm').format(dt);
+        return _formatDateWithMonthName(dt);
       } catch (e) {
         print('DEBUG - Error parsing date: $dateStr, error: $e');
         return dateStr.isNotEmpty ? dateStr : '-';
@@ -253,7 +271,7 @@ class OrderDetailPage extends StatelessWidget {
                                         .toString()
                                         .startsWith('http')
                                     ? item['product_image']
-                                    : 'https://campaign.rplrus.com/' +
+                                    : 'https://96057b35e6b9.ngrok-free.app/' +
                                         item['product_image']
                                             .toString()
                                             .replaceFirst(RegExp(r'^/'), ''),
@@ -373,9 +391,34 @@ class OrderDetailPage extends StatelessWidget {
                               ? () async {
                                   await orderController.acceptOrder(orderId);
                                   await orderController.fetchAllOrders();
+
+                                  // Tutup halaman segera setelah accept
                                   Get.back();
                                   Get.snackbar(
-                                      'Sukses', 'Order diproses (inprogress)');
+                                    'Sukses',
+                                    'Order diproses, mencetak struk...',
+                                  );
+
+                                  // Kirim perintah cetak di background agar navigasi tidak terhambat
+                                  final orderData = {
+                                    'id': orderId,
+                                    'customer_name': customerName,
+                                    'items': items,
+                                    'total_price': totalPrice,
+                                    'payment_method': paymentMethod,
+                                    'location': location,
+                                    'order_type': orderType,
+                                    'notes': notes,
+                                    'created_at': created_at,
+                                  };
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100),
+                                      () async {
+                                    try {
+                                      await bluetoothPrinterController
+                                          .printReceipt(orderData);
+                                    } catch (_) {}
+                                  });
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -392,31 +435,6 @@ class OrderDetailPage extends StatelessWidget {
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        IconButton(
-                          onPressed: () {
-                            final orderData = {
-                              'id': orderId,
-                              'customer_name': customerName,
-                              'items': items,
-                              'total_price': totalPrice,
-                              'payment_method': paymentMethod,
-                              'location': location,
-                              'order_type': orderType,
-                              'notes': notes,
-                              'created_at': created_at,
-                            };
-                            bluetoothPrinterController.printReceipt(orderData);
-                          },
-                          icon: const Icon(Icons.print),
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.grey[200],
-                            padding: const EdgeInsets.all(12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                         ),

@@ -44,19 +44,26 @@ class EarningsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Obx(() {
-                      final completedOrders = controller.earnings
-                          .where((order) => order.status == 'completed')
-                          .toList();
-                      final totalSales = completedOrders.fold<double>(
-                          0, (sum, order) => sum + order.totalPrice);
-                      return Text(
-                        CurrencyFormatter.formatCurrencyFromDouble(totalSales),
-                        style: GoogleFonts.poppins(
+                      return GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/monthly-earnings');
+                        },
+                        child: Text(
+                          CurrencyFormatter.formatCurrencyFromDouble(
+                              controller.totalEarnings.value),
+                          style: GoogleFonts.poppins(
                             fontSize: isTablet ? 48.0 : 34.0,
                             fontWeight: FontWeight.w700,
-                            color: Colors.blue.shade900),
+                            color: Colors.blue.shade900,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
                       );
                     }),
+                    Obx(() => Text(
+                      "Month: ${controller.selectedMonth.value}",
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    )),
                   ],
                 ),
               ),
@@ -242,16 +249,11 @@ class EarningsPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final order = paidOrders[index];
                             return Container(
-                              margin: EdgeInsets.only(
-                                  bottom: isTablet ? 12.0 : 8.0),
+                              margin: EdgeInsets.only(bottom: isTablet ? 12.0 : 8.0),
                               child: OrderCard(
                                 orderName: order.customerName,
-                                orderItems: order.items
-                                    .map((item) => item.productName)
-                                    .join(', '),
-                                price:
-                                    CurrencyFormatter.formatCurrencyFromDouble(
-                                        order.totalPrice),
+                                orderItems: order.items.map((item) => item.productName).join(', '),
+                                price: CurrencyFormatter.formatCurrencyFromDouble(order.totalPrice),
                               ),
                             );
                           },

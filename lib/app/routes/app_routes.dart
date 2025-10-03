@@ -24,6 +24,7 @@ import '../../binding/history_binding.dart';
 import '../modules/pages/orderlist/view/pickup_page.dart';
 import '../../binding/pickup_binding.dart';
 import 'package:admin_campaign_coffe_repo/binding/profile_binding.dart';
+import 'package:admin_campaign_coffe_repo/app/modules/pages/homepage/earnings/monthly_earnings_page.dart';
 
 class MyRoutes {
   static const String splash = '/splash';
@@ -41,6 +42,7 @@ class MyRoutes {
   static const String profile = '/profile';
   static const String emailVerification = '/email-verification';
   static const String resetPassword = '/reset-password';
+  static const String monthlyEarnings = '/monthly-earnings';
 }
 
 class AppRoutes {
@@ -97,6 +99,10 @@ class AppRoutes {
     GetPage(
       name: MyRoutes.resetPassword,
       page: () => ResetPasswordView(),
+    ),
+    GetPage(
+      name: MyRoutes.monthlyEarnings,
+      page: () => const MonthlyEarningsPage(),
     ),
   ];
 }

@@ -14,11 +14,13 @@ class BluetoothPrinterController extends GetxController {
   var connectionStatus = 'Disconnected'.obs;
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
   final storage = GetStorage();
+  Timer? _statusTimer;
 
   @override
   void onInit() {
     super.onInit();
     initializeBluetooth();
+    _startStatusMonitor();
   }
 
   Future<void> initializeBluetooth() async {
@@ -33,6 +35,13 @@ class BluetoothPrinterController extends GetxController {
     }
   }
 
+  void _startStatusMonitor() {
+    _statusTimer?.cancel();
+    _statusTimer = Timer.periodic(const Duration(seconds: 3), (_) async {
+      await checkConnectionStatus();
+    });
+  }
+
   Future<void> checkConnectionStatus() async {
     try {
       // Check actual bluetooth connection status
@@ -41,14 +50,13 @@ class BluetoothPrinterController extends GetxController {
         bool? actualStatus = await bluetooth.isConnected;
 
         if (actualStatus == true) {
-          // If actually connected, restore from storage
           final String? savedName = storage.read('bluetooth_device_name');
-          isConnected.value = true;
+          if (!isConnected.value) {
+            isConnected.value = true;
+          }
           connectionStatus.value =
               'Connected to ${savedName ?? 'Unknown Device'}';
-          print('Bluetooth printer is actually connected');
         } else {
-          // Clear stored connection info if not actually connected
           await _clearConnectionInfo();
           isConnected.value = false;
           connectionStatus.value = 'Disconnected';
@@ -376,7 +384,7 @@ your printer connection.
     }
   }
 
-  Future<void> printReceipt(Map<String, dynamic> orderData) async {
+  Future<bool> printReceipt(Map<String, dynamic> orderData) async {
     if (!isConnected.value) {
       Get.snackbar(
         'Error',
@@ -385,7 +393,7 @@ your printer connection.
         backgroundColor: Colors.red[100],
         colorText: Colors.red[800],
       );
-      return;
+      return false;
     }
 
     try {
@@ -403,6 +411,7 @@ your printer connection.
         backgroundColor: Colors.green[100],
         colorText: Colors.green[800],
       );
+      return true;
     } catch (e) {
       print('Error printing receipt: $e');
 
@@ -417,6 +426,7 @@ your printer connection.
         backgroundColor: Colors.red[100],
         colorText: Colors.red[800],
       );
+      return false;
     }
   }
 
@@ -463,6 +473,9 @@ your printer connection.
 
   @override
   void onClose() {
+    // Stop monitor timer
+    _statusTimer?.cancel();
+    _statusTimer = null;
     // Don't auto disconnect when controller is closed
     // Let user manually disconnect if needed
     super.onClose();

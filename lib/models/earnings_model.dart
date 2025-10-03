@@ -69,14 +69,10 @@ class EarningsItem {
 
 class EarningsResponse {
   final double total;
-  final int averagePerWeek;
-  final int growthPercentage;
   final List<Earnings> orders;
 
   EarningsResponse({
     required this.total,
-    required this.averagePerWeek,
-    required this.growthPercentage,
     required this.orders,
   });
 
@@ -92,8 +88,6 @@ class EarningsResponse {
           : (data['total'] is String)
               ? double.tryParse(data['total']) ?? 0.0
               : (data['total'] ?? 0.0),
-      averagePerWeek: 0, // backend tidak kirim field ini
-      growthPercentage: 0, // backend tidak kirim field ini
       orders: orders,
     );
   }
