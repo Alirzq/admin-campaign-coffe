@@ -7,7 +7,7 @@ class EarningsService extends GetConnect {
   final box = GetStorage();
 
   EarningsService() {
-    httpClient.baseUrl = 'https://ec89b3b2f480.ngrok-free.app/api/admin';
+    httpClient.baseUrl = 'https://campaign.rplrus.com/api/admin';
   }
 
   Future<EarningsResponse> fetchEarnings({String? month}) async {
@@ -32,7 +32,8 @@ class EarningsService extends GetConnect {
         throw Exception('Format data earnings tidak sesuai.');
       }
     }
-    final message = ErrorUtils.friendlyMessage('Gagal memuat earnings (${response.statusCode})');
+    final message = ErrorUtils.friendlyMessage(
+        'Gagal memuat earnings (${response.statusCode})');
     throw Exception(message);
   }
 
@@ -54,12 +55,15 @@ class EarningsService extends GetConnect {
     if (response.statusCode == 200) {
       try {
         final data = response.body['data'] ?? [];
-        return data.map<MonthlyEarnings>((json) => MonthlyEarnings.fromJson(json)).toList();
+        return data
+            .map<MonthlyEarnings>((json) => MonthlyEarnings.fromJson(json))
+            .toList();
       } catch (e) {
         throw Exception('Format data earnings by month tidak sesuai.');
       }
     }
-    final message = ErrorUtils.friendlyMessage('Gagal memuat earnings by month (${response.statusCode})');
+    final message = ErrorUtils.friendlyMessage(
+        'Gagal memuat earnings by month (${response.statusCode})');
     throw Exception(message);
   }
 }
